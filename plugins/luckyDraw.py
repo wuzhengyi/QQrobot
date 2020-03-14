@@ -45,13 +45,35 @@ async def TopTicket(session: CommandSession):
         return
     user = userSQL()
     rank = user.getTopTicket()
-    await session.send(str(rank))
-    bot = nonebot.get_bot()
-    group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=914349145, no_cache=True)
-    print(group_member_info)
-    QQ = [member[0] for member in rank]
-    print(QQ)
     user.close()
+    # await session.send(str(rank))
+    bot = nonebot.get_bot()
+    QQname = []
+    for QQ in rank:
+        group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0], no_cache=True)
+        QQname.append(group_member_info['card'])
+        if len(QQname) > 5:
+            break
+    message = '奖券排行榜\n' + ''.join(['Top '+str(i+1)+'. '+QQname[i]+'\t '+str(rank[i][1])+'\n' for i in range(len(QQname))])
+    await session.send(message)
+
+@on_command('积分榜', only_to_me=False)
+async def TopScore(session: CommandSession):
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+    user = userSQL()
+    rank = user.getTopScore()
+    user.close()
+    bot = nonebot.get_bot()
+    QQname = []
+    for QQ in rank:
+        group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0], no_cache=True)
+        QQname.append(group_member_info['card'])
+        if len(QQname) > 5:
+            break
+    message = '积分排行榜\n' + ''.join(['Top '+str(i+1)+'. '+QQname[i]+'\t '+str(rank[i][1])+'\n' for i in range(len(QQname))])
+    await session.send(message)
 
 def getRandom() -> int:
     x = random.uniform(0, 1)
@@ -96,6 +118,12 @@ class userSQL():
     def getTopTicket(self) -> [(int, int)]:
         self.c.execute("UPDATE user set ticket = 0 where ticket is null")
         self.c.execute("select QQ, Ticket from user ORDER BY TICKET DESC")
+        ans = self.c.fetchall()
+        return ans
+
+    def getTopScore(self) -> [(int, int)]:
+        self.c.execute("UPDATE user set jf = 0 where jf is null")
+        self.c.execute("select QQ, jf from user ORDER BY jf DESC")
         ans = self.c.fetchall()
         return ans
 
