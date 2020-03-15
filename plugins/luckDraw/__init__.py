@@ -19,10 +19,9 @@ async def sign(session: CommandSession):
         # 签到奖励
         value = random.randint(10, 300)
         user.addDiamond(QQ, value)
-        sumDiamond = user.getDiamond(QQ)
-        user.close()
+        sumDiamond = user.getDiamond(QQ) 
         await session.send('签到成功,你是今天第'+str(count)+'位签到的。恭喜你获得'+str(value)+'个钻石，你当前总共有'+str(sumDiamond)+'个钻石。')
-
+    user.close()
 
 @on_command('查询', only_to_me=False)
 async def query(session: CommandSession):
@@ -57,6 +56,7 @@ async def initGroupList(session: CommandSession):
         QQ = member['user_id']
         if not user.isExist(QQ):
             user.insert(QQ)
+    user.close()
     await session.send('初始化群成员数据成功,已将所有成员注册。')
 
 
