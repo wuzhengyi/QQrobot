@@ -64,7 +64,7 @@ async def backpack(session: CommandSession):
               '精灵球：' + str(evelsBall) + '\n' +\
               '超级球：' + str(superBall) + '\n' +\
               '大师球：' + str(masterBall) + '\n' +\
-              ''.join([consName[i] +'：' + str(cons[i+1]) + '\n' for i in range(len(cons)-1)])
+              ''.join([consName[i] +'：' + str(cons[i]) + '\n' for i in range(len(cons))])
     await session.send(message[:-1])
 
 @on_command('宠物', aliases=('宠物查询', '我的宠物'), only_to_me=False)
@@ -79,7 +79,7 @@ async def pet(session: CommandSession):
     user.close()
 
     message = '我的宠物' + '\n' +\
-              ''.join([pokeName[i-4] +'：' + str(pokemon[i]) + '\n' for i in range(4, len(pokemon))])
+              ''.join([pokeName[i] +'：' + str(pokemon[i]) + '\n' for i in range(len(pokemon))])
     await session.send(message[:-1])
 
 @on_command('初始化', only_to_me=False)

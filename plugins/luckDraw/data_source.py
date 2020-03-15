@@ -112,15 +112,15 @@ class userSQL():
         ans = self.c.fetchone()
         return ans[0]
 
-    def getPokemon(self, QQ: int) -> int:
+    def getPokemon(self, QQ: int) -> tuple:
         self.c.execute("select * from pokemon where QQ=" + str(QQ))
         ans = self.c.fetchone()
-        return ans[0]
+        return ans[4:]
 
-    def getConstellation(self, QQ: int) -> int:
+    def getConstellation(self, QQ: int) -> tuple:
         self.c.execute("select * from Constellation where QQ=" + str(QQ))
         ans = self.c.fetchone()
-        return ans[0]
+        return ans[1:]
 
     def getTopTicket(self) -> [(int, int)]:
         self.c.execute("select QQ, Ticket from user ORDER BY TICKET DESC")
