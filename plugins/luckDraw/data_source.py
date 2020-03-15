@@ -23,6 +23,13 @@ class userSQL():
         self.conn = sqlite3.connect('E:\\酷Q Air\\data\\app\\top.zls520.jf\\user.db')
         self.c = self.conn.cursor()
         
+    def isExist(self, QQ: int) -> bool:
+        self.c.execute("select * from user where QQ=" + str(QQ))
+        ans = self.c.fetchall()
+        if ans == []:
+            return False
+        return True
+
     def insert(self, QQ: int) -> None:
         self.c.execute("INSERT INTO USER (QQ,JF,TICKET) \
                         VALUES ("+str(QQ)+", 0, 0)")
