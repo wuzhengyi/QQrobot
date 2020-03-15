@@ -179,31 +179,43 @@ async def diamonDraw(session: CommandSession):
     times = 0
     if len(args) == 0:
         times = 1
-    elif len(args == 1) and args[0].isdigit():
+    elif len(args) == 1 and args[0].isdigit():
         times = int(args[0])
     else:
         await session.send('格式为 /钻石抽奖 或者 /钻石抽奖 [次数]。')
         return
     QQ = session.ctx['user_id']
     user = userSQL()
-    diamon = user.getDiamond(QQ)
-    if diamon >= times*60:
+    diamond = user.getDiamond(QQ)
+    if diamond >= times*60:
         user.subDiamond(QQ, times*60)
-        for i in range(times):
-            item = getDiamonDrawRandom()
-            if item.isdigit():
-                user.addDiamond(QQ, int(item))
-                await session.send('恭喜你获得'+item+'钻石，你当前的钻石余额为'+str(diamon-60+int(item))+'，欢迎下次光临。')
-            elif item == 'ticket':
-                user.addTicket(QQ, 1)
-                await session.send('恭喜你获得1奖券，欢迎下次光临。')
-            elif item == 'card':
-                cardIndex = random.randint(0, 11)
-                user.addCons(QQ, cardIndex)
-                await session.send('恭喜你获得'+consName[cardIndex]+'卡片，欢迎下次光临。')
-            else:
-                user.addBall(QQ, item)
-                await session.send('恭喜你获得'+ballName[item]+'，欢迎下次光临。')
+        ans = [getDiamonDrawRandom() for i in range(times)]
+        ticketNum = ans.count('ticket')
+        if ticketNum>0:
+            user.addTicket(QQ, ticketNum)
+            await session.send('恭喜你获得'+str(ticketNum)+'奖券，欢迎下次光临。')
+        cardNum = ans.count('card')
+        if cardNum>0:
+            cardIndex = [random.randint(0, 11) for i in range(cardNum)]
+            for i in range(cardNum):
+                user.addCons(QQ, cardIndex[i])
+                await session.send('恭喜你获得'+consName[cardIndex[i]]+'卡片，欢迎下次光临。')
+        diamondSum = sum([i for i in ans if i.isdigit()])
+        if diamondSum>0:
+            user.addDiamond(QQ, diamond)
+            await session.send('恭喜你获得'+str(diamondSum)+'钻石，欢迎下次光临。')
+        evelsBall = ans.count('evelsBall')
+        if evelsBall>0:
+            user.addEvelsBall(QQ, evelsBall)
+            await session.send('恭喜你获得'+str(evelsBall)+'个精灵球，欢迎下次光临。')
+        superBall = ans.count('superBall')
+        if superBall>0:
+            user.addSuperBall(QQ, superBall)
+            await session.send('恭喜你获得'+str(superBall)+'个超级球，欢迎下次光临。')
+        masterBall = ans.count('masterBall')
+        if masterBall>0:
+            user.addMasterBall(QQ, masterBall)
+            await session.send('恭喜你获得'+str(masterBall)+'个大师球，欢迎下次光临。')
     else:
         await session.send('你的钻石不足，快去找老蛋赚钻石吧。')
     user.close()
