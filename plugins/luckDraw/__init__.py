@@ -425,6 +425,81 @@ async def subTicket(session: CommandSession):
     user.close()
     await session.send('减少成功，当前目标用户的奖券为'+str(now))
 
+@on_command('加钻石', only_to_me=False)
+async def addDiamond(session: CommandSession):
+    # 判断目标发起人是否为管理员
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+
+    # 解析命令格式
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip().split()
+    if len(args) != 2:
+        await session.send('格式为：/加钻石 [@某人/QQ号] [钻石数]')
+        return
+    if args[1].isdigit():
+        diamond = int(args[1])
+        if args[0][:6] == '[CQ:at':
+            target = int(args[0][10:-1])
+        elif (args[0]).isdigit():
+            target = int(args[0])
+        else:
+            await session.send('加分目标应为QQ号或@某人，格式为：/加钻石 [@某人/QQ号] [钻石数]')
+            return
+    else:
+        await session.send('钻石数应为一个整数，格式为：/加钻石 [@某人/QQ号] [钻石数]')
+        return
+
+    # 对用户进行加分操作
+    user = userSQL()
+    if not user.isExist(target):
+        user.close()
+        await session.send('QQ为'+str(target)+'的用户不存在')
+        return
+    user.add(target, diamond)
+    now = user.getDiamond(target)
+    user.close()
+    await session.send('增加成功，当前目标用户的钻石为'+str(now))
+
+
+@on_command('减钻石', only_to_me=False)
+async def subDiamond(session: CommandSession):
+    # 判断目标发起人是否为管理员
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+
+    # 解析命令格式
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip().split()
+    if len(args) != 2:
+        await session.send('格式为：/减钻石 [@某人/QQ号] [钻石数]')
+        return
+    if args[1].isdigit():
+        diamond = int(args[1])
+        if args[0][:6] == '[CQ:at':
+            target = int(args[0][10:-1])
+        elif (args[0]).isdigit():
+            target = int(args[0])
+        else:
+            await session.send('减分目标应为QQ号或@某人，格式为：/减钻石 [@某人/QQ号] [钻石数]')
+            return
+    else:
+        await session.send('钻石数应为一个整数，格式为：/减钻石 [@某人/QQ号] [钻石数]')
+        return
+
+    # 对用户进行加分操作
+    user = userSQL()
+    if not user.isExist(target):
+        user.close()
+        await session.send('QQ为'+str(target)+'的用户不存在')
+        return
+    user.subDiamond(target, diamond)
+    now = user.getDiamond(target)
+    user.close()
+    await session.send('减少成功，当前目标用户的钻石为'+str(now))
+
 
 @on_command('注册', only_to_me=False)
 async def register(session: CommandSession):
