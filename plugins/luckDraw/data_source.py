@@ -90,6 +90,15 @@ class userSQL():
         self.c.execute("UPDATE user set Diamond = Diamond+" +
                        str(value)+" where QQ=" + str(QQ))
 
+    def resetScore(self):
+        self.c.execute("UPDATE user set Score = 0")
+
+    def resetTicket(self):
+        self.c.execute("UPDATE user set Ticket = 0")
+
+    def resetDiamond(self):
+        self.c.execute("UPDATE user set Diamond = 0")
+
     def close(self):
         self.conn.commit()
         self.conn.close()

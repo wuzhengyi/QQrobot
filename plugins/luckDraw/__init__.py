@@ -30,9 +30,9 @@ async def query(session: CommandSession):
     diamond = user.getDiamond(QQ)
     user.close()
 
-    message = '个人信息\n' +\
-              '积分：' + str(score) +\
-              '奖券：' + str(ticket) +\
+    message = '个人信息' + '\n'+\
+              '积分：' + str(score) + '\n'+\
+              '奖券：' + str(ticket) + '\n'+\
               '钻石：' + str(diamond)
 
     await session.send(message)
@@ -347,3 +347,36 @@ async def register(session: CommandSession):
     user.insert(target)
     user.close()
     await session.send('注册成功')
+
+@on_command('清空积分', only_to_me=False)
+async def resetScore(session: CommandSession):
+    # 判断目标发起人是否为管理员
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+    user = userSQL()
+    user.resetScore()
+    user.close()
+    await session.send('全体积分清空成功')
+
+@on_command('清空奖券', only_to_me=False)
+async def resetTicket(session: CommandSession):
+    # 判断目标发起人是否为管理员
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+    user = userSQL()
+    user.resetTicket()
+    user.close()
+    await session.send('全体奖券清空成功')
+
+@on_command('清空钻石', only_to_me=False)
+async def resetDiamond(session: CommandSession):
+    # 判断目标发起人是否为管理员
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+    user = userSQL()
+    user.resetDiamond()
+    user.close()
+    await session.send('全体钻石清空成功')
