@@ -1,6 +1,6 @@
 import nonebot
 from nonebot import on_command, CommandSession
-from datasource import userSQL, getRandom, isRoot
+from .data_source import userSQL, getRandom, isRoot
 from os import path
 
 # on_command 装饰器将函数声明为一个命令处理器
