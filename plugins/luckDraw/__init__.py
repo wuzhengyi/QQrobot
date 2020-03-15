@@ -2,6 +2,7 @@ import nonebot
 from nonebot import on_command, CommandSession
 from .data_source import userSQL, getScoreDrawRandom, isRoot
 from os import path
+import random
 
 # on_command 装饰器将函数声明为一个命令处理器
 # 这里 luckyDraw 为命令的名字
@@ -12,9 +13,12 @@ async def sign(session: CommandSession):
     if not user.isExist(QQ):
         user.insert(QQ)
 
-    # TODO: 签到奖励
-    await session.send('签到成功。')
+    # 签到奖励
+    value = random.randint(10, 300)
+    user.addDiamond(QQ, value)
+    sumDiamond = user.getDiamond(QQ)
     user.close()
+    await session.send('签到成功。恭喜你获得'+str(value)+'个钻石，你当前总共有'+str(sumDiamond)+'个钻石。')
 
 
 @on_command('查询', only_to_me=False)
@@ -38,7 +42,7 @@ async def query(session: CommandSession):
     await session.send(message)
 
 
-@on_command('积分抽奖', only_to_me=False)
+@on_command('积分抽奖', aliases=('积分夺宝'), only_to_me=False)
 async def scoreDraw(session: CommandSession):
     QQ = session.ctx['user_id']
     user = userSQL()
@@ -72,7 +76,7 @@ async def scoreDraw2(session: CommandSession):
     user.close()
 
 
-@on_command('奖券抽奖', only_to_me=False)
+@on_command('奖券抽奖', aliases=('奖券夺宝'), only_to_me=False)
 async def ticketDraw(session: CommandSession):
     QQ = session.ctx['user_id']
     user = userSQL()
