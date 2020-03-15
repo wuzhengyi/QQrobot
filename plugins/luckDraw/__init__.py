@@ -12,13 +12,16 @@ async def sign(session: CommandSession):
     user = userSQL()
     if not user.isExist(QQ):
         user.insert(QQ)
-
-    # 签到奖励
-    value = random.randint(10, 300)
-    user.addDiamond(QQ, value)
-    sumDiamond = user.getDiamond(QQ)
-    user.close()
-    await session.send('签到成功。恭喜你获得'+str(value)+'个钻石，你当前总共有'+str(sumDiamond)+'个钻石。')
+    if user.isSigned(QQ):
+        await session.send('你今天已经签过到啦，明天再来吧。')
+    else:
+        count = user.sign(QQ)
+        # 签到奖励
+        value = random.randint(10, 300)
+        user.addDiamond(QQ, value)
+        sumDiamond = user.getDiamond(QQ)
+        user.close()
+        await session.send('签到成功,你是今天第'+str(count)+'位签到的。恭喜你获得'+str(value)+'个钻石，你当前总共有'+str(sumDiamond)+'个钻石。')
 
 
 @on_command('查询', only_to_me=False)
@@ -42,7 +45,22 @@ async def query(session: CommandSession):
     await session.send(message)
 
 
-@on_command('积分抽奖', aliases=('积分夺宝'), only_to_me=False)
+@on_command('初始化', only_to_me=False)
+async def initGroupList(session: CommandSession):
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+    bot = nonebot.get_bot()
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    user = userSQL()
+    for member in memberList:
+        QQ = member['user_id']
+        if not user.isExist(QQ):
+            user.insert(QQ)
+    await session.send('初始化群成员数据成功,已将所有成员注册。')
+
+
+@on_command('积分抽奖', aliases=('积分夺宝',), only_to_me=False)
 async def scoreDraw(session: CommandSession):
     QQ = session.ctx['user_id']
     user = userSQL()
@@ -76,7 +94,7 @@ async def scoreDraw2(session: CommandSession):
     user.close()
 
 
-@on_command('奖券抽奖', aliases=('奖券夺宝'), only_to_me=False)
+@on_command('奖券抽奖', aliases=('奖券夺宝',), only_to_me=False)
 async def ticketDraw(session: CommandSession):
     QQ = session.ctx['user_id']
     user = userSQL()
@@ -354,7 +372,7 @@ async def register(session: CommandSession):
     await session.send('注册成功')
 
 
-@on_command('清空积分', only_to_me=False)
+@on_command('清空积分', aliases=('积分清零',), only_to_me=False)
 async def resetScore(session: CommandSession):
     # 判断目标发起人是否为管理员
     QQ = session.ctx['user_id']
@@ -366,7 +384,7 @@ async def resetScore(session: CommandSession):
     await session.send('全体积分清空成功')
 
 
-@on_command('清空奖券', only_to_me=False)
+@on_command('清空奖券', aliases=('奖券清零',), only_to_me=False)
 async def resetTicket(session: CommandSession):
     # 判断目标发起人是否为管理员
     QQ = session.ctx['user_id']
@@ -378,7 +396,7 @@ async def resetTicket(session: CommandSession):
     await session.send('全体奖券清空成功')
 
 
-@on_command('清空钻石', only_to_me=False)
+@on_command('清空钻石', aliases=('钻石清零',), only_to_me=False)
 async def resetDiamond(session: CommandSession):
     # 判断目标发起人是否为管理员
     QQ = session.ctx['user_id']

@@ -33,8 +33,37 @@ class userSQL():
         return True
 
     def insert(self, QQ: int) -> None:
-        self.c.execute("INSERT INTO USER (QQ,SCORE,TICKET,Diamond) \
-                        VALUES ("+str(QQ)+", 0, 0, 0)")
+        self.c.execute("INSERT INTO USER (QQ) \
+                        VALUES ("+str(QQ)+")")
+        self.c.execute("INSERT INTO pokemon (QQ) \
+                        VALUES ("+str(QQ)+")")
+        self.c.execute("INSERT INTO constellation (QQ) \
+                        VALUES ("+str(QQ)+")")
+    
+    def _isNewDate(self) -> bool:
+        self.c.execute("select * from common where signdate=date('now')")
+        ans = self.c.fetchall()
+        if ans == []:
+            self.c.execute("INSERT INTO common (signDate) VALUES (date('now'))")
+            self.c.execute("UPDATE user set sign = 0")
+            return True
+        return False
+
+    def isSigned(self, QQ: int) -> bool:
+        if self._isNewDate():
+            return True
+        self.c.execute("select sign from user where QQ=" + str(QQ))
+        ans = self.c.fetchall()
+        if ans == [] or ans[0][0] == 0:
+            return False
+        return True
+
+    def sign(self, QQ: int) -> int:
+        self.c.execute("UPDATE common set signnum = signnum+1 where signdate=date('now')")
+        self.c.execute("UPDATE user set sign = 1 where QQ=" + str(QQ))
+        self.c.execute("select signnum from common where signdate=date('now')")
+        ans = self.c.fetchone()
+        return ans[0]
 
     def getScore(self, QQ: int) -> int:
         self.c.execute("select SCORE from user where QQ=" + str(QQ))
