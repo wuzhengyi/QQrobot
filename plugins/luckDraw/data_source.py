@@ -185,6 +185,18 @@ class userSQL():
         self.c.execute("UPDATE pokemon set " + ball +
                        "="+ball+"+1 where QQ=" + str(QQ))
 
+    def addEvelsBall(self, QQ: int, value: int) -> None:
+        self.c.execute("UPDATE pokemon set EvelsBall = EvelsBall+" +
+                       str(value)+" where QQ=" + str(QQ))
+
+    def addSuperBall(self, QQ: int, value: int) -> None:
+        self.c.execute("UPDATE pokemon set SuperBall = SuperBall+" +
+                       str(value)+" where QQ=" + str(QQ))
+
+    def addMasterBall(self, QQ: int, value: int) -> None:
+        self.c.execute("UPDATE pokemon set MasterBall = MasterBall+" +
+                       str(value)+" where QQ=" + str(QQ))
+
     def resetScore(self):
         self.c.execute("UPDATE user set Score = 0")
 
