@@ -30,9 +30,9 @@ async def query(session: CommandSession):
     diamond = user.getDiamond(QQ)
     user.close()
 
-    message = '个人信息' + '\n'+\
-              '积分：' + str(score) + '\n'+\
-              '奖券：' + str(ticket) + '\n'+\
+    message = '个人信息' + '\n' +\
+              '积分：' + str(score) + '\n' +\
+              '奖券：' + str(ticket) + '\n' +\
               '钻石：' + str(diamond)
 
     await session.send(message)
@@ -50,7 +50,7 @@ async def scoreDraw(session: CommandSession):
             user.addTicket(QQ, 1)
         else:
             user.addScore(QQ, item)
-        await session.send('恭喜您获得'+str(item)+'积分奖励，您当前的积分余额为'+str(score-20+item)+'，欢迎下次光临。')
+        await session.send('恭喜您获得'+str(item)+'积分，您当前的积分余额为'+str(score-20+item)+'，欢迎下次光临。')
     else:
         await session.send('您的积分不足20，快去找老蛋赚积分吧。')
     user.close()
@@ -66,7 +66,7 @@ async def scoreDraw2(session: CommandSession):
         user.subScore(QQ, 100)
         user.addScore(QQ, sum(items))
         user.addTicket(QQ, items.count(0))
-        await session.send('恭喜您获得'+' '.join([str(j)+'积分' if j != 0 else '1奖券' for j in items]) + ' 奖励，您当前的积分余额为'+str(score-100+sum(items))+'，欢迎下次光临。')
+        await session.send('恭喜您获得\n'+' '.join([str(j)+'积分' if j != 0 else '1奖券' for j in items]) + '，\n您当前的积分余额为'+str(score-100+sum(items))+'，欢迎下次光临。')
     else:
         await session.send('您的积分不足100，快去找老蛋赚积分吧。')
     user.close()
@@ -82,9 +82,10 @@ async def ticketDraw(session: CommandSession):
         user.subTicket(QQ, 1)
         if item == 0:
             user.addTicket(QQ, 1)
+            await session.send('恭喜您获得1奖券，您当前的奖券余额为'+str(ticket)+'，欢迎下次光临。')
         else:
             user.addScore(QQ, item)
-        await session.send('恭喜您获得'+str(item)+'积分奖励，您当前的奖券余额为'+str(ticket-1)+'，欢迎下次光临。')
+            await session.send('恭喜您获得'+str(item)+'积分，您当前的奖券余额为'+str(ticket-1)+'，欢迎下次光临。')
     else:
         await session.send('您的奖券不足，快去找老蛋赚奖券吧。')
     user.close()
@@ -95,12 +96,12 @@ async def ticketDraw2(session: CommandSession):
     QQ = session.ctx['user_id']
     user = userSQL()
     ticket = user.getTicket(QQ)
-    if ticket >= 100:
+    if ticket >= 5:
         items = [getScoreDrawRandom() for i in range(5)]
         user.subTicket(QQ, 5)
         user.addScore(QQ, sum(items))
         user.addTicket(QQ, items.count(0))
-        await session.send('恭喜您获得'+' '.join([str(j)+'积分' if j != 0 else '1奖券' for j in items]) + ' 奖励，欢迎下次光临。')
+        await session.send('恭喜您获得\n'+' '.join([str(j)+'积分' if j != 0 else '1奖券' for j in items]) + '，\n您当前的奖券余额为'+str(ticket-5+items.count(0))+'，欢迎下次光临。')
     else:
         await session.send('您的奖券不足，快去找老蛋赚奖券吧。')
     user.close()
@@ -348,6 +349,7 @@ async def register(session: CommandSession):
     user.close()
     await session.send('注册成功')
 
+
 @on_command('清空积分', only_to_me=False)
 async def resetScore(session: CommandSession):
     # 判断目标发起人是否为管理员
@@ -359,6 +361,7 @@ async def resetScore(session: CommandSession):
     user.close()
     await session.send('全体积分清空成功')
 
+
 @on_command('清空奖券', only_to_me=False)
 async def resetTicket(session: CommandSession):
     # 判断目标发起人是否为管理员
@@ -369,6 +372,7 @@ async def resetTicket(session: CommandSession):
     user.resetTicket()
     user.close()
     await session.send('全体奖券清空成功')
+
 
 @on_command('清空钻石', only_to_me=False)
 async def resetDiamond(session: CommandSession):
