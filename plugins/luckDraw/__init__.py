@@ -179,7 +179,7 @@ async def diamonDraw(session: CommandSession):
     times = 0
     if len(args) == 0:
         times = 1
-    elif len(args == 1) and args[0].isdigit():
+    elif len(args) == 1 and args[0].isdigit():
         times = int(args[0])
     else:
         await session.send('格式为 /钻石抽奖 或者 /钻石抽奖 [次数]。')
