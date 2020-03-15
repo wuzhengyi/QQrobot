@@ -2,26 +2,42 @@ import sqlite3
 import random
 
 rootList = [942858979, 914349145]
-# pokeName_database = ['xiaolada', 'bobo', 'miaomiao', 'wasidan', 'apashe',
-#                      'dashetou', 'pikaqiu', 'pipi', 'pangding', 'yibu', 'jilidan', 'dailong', 'menghuan']
+pokeName_database = ['xiaolada', 'bobo', 'miaomiao', 'wasidan', 'apashe',
+                     'dashetou', 'pikaqiu', 'pipi', 'pangding', 'yibu', 'jilidan', 'dailong', 'menghuan']
 # pokeName_chinese = ['小拉达', '波波', '喵喵', '瓦斯弹', '阿柏蛇',
 #                     '大舌头', '皮卡丘', '皮皮', '胖丁', '伊布', '吉利蛋', '袋龙', '梦幻']
 # pokeName = zip(pokeName_database, pokeName_chinese)
 
-# cons_database = ['Alies', 'Taurus', 'Gemini', 'Cancer', 'Virgo',
-#                  'Libra', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
-# cons_chinese = ['白羊座', '金牛座', '双子座', '巨蟹座',
-#                 '处女座', '天秤座', '射手座', '摩羯座', '水瓶座', '双鱼座']
+cons_database = ['Alies', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
+                 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
+# cons_chinese = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座',
+#                 '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座']
 # consName = zip(cons_database, cons_chinese)
 
 pokeName = ['小拉达', '波波', '喵喵', '瓦斯弹', '阿柏蛇',
-                    '大舌头', '皮卡丘', '皮皮', '胖丁', '伊布', '吉利蛋', '袋龙', '梦幻']
-consName = ['白羊座', '金牛座', '双子座', '巨蟹座',
-                '处女座', '天秤座', '射手座', '摩羯座', '水瓶座', '双鱼座']
+            '大舌头', '皮卡丘', '皮皮', '胖丁', '伊布', '吉利蛋', '袋龙', '梦幻']
+consName = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座',
+            '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座']
+
+ballName = {'evelsBall': '精灵球', 'superBall': '超级球', 'masterBall': '大师球'}
+
 
 def getScoreDrawRandom() -> int:
     seq = [1350, 710, 288, 50, 30, 20, 10, 8, 5, 0]
     prob = [0.0001, 0.002, 0.0109, 0.03, 0.06, 0.227, 0.46, 0.1, 0.01, 0.1]
+    x = random.uniform(0, 1)
+    cumprob = 0.0
+    for item, item_pro in zip(seq, prob):
+        cumprob += item_pro
+        if x < cumprob:
+            break
+    return item
+
+
+def getDiamonDrawRandom() -> int:
+    seq = ['evelsBall', 'superBall', 'masterBall',
+           '30', '60', '120', '300', 'card', 'ticket']
+    prob = [0.49999, 0.24, 0.012, 0.08, 0.06, 0.04, 0.02, 0.048, 0.00001]
     x = random.uniform(0, 1)
     cumprob = 0.0
     for item, item_pro in zip(seq, prob):
@@ -160,6 +176,14 @@ class userSQL():
     def addDiamond(self, QQ: int, value: int) -> None:
         self.c.execute("UPDATE user set Diamond = Diamond+" +
                        str(value)+" where QQ=" + str(QQ))
+
+    def addCons(self, QQ: int, index: int) -> None:
+        self.c.execute("UPDATE Constellation set " +
+                       cons_database[index]+"="+cons_database[index]+"+1 where QQ=" + str(QQ))
+
+    def addBall(self, QQ: int, ball: str) -> None:
+        self.c.execute("UPDATE pokemon set " + ball +
+                       "="+ball+"+1 where QQ=" + str(QQ))
 
     def resetScore(self):
         self.c.execute("UPDATE user set Score = 0")
