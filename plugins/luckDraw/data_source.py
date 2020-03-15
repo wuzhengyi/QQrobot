@@ -2,7 +2,22 @@ import sqlite3
 import random
 
 rootList = [942858979, 914349145]
+# pokeName_database = ['xiaolada', 'bobo', 'miaomiao', 'wasidan', 'apashe',
+#                      'dashetou', 'pikaqiu', 'pipi', 'pangding', 'yibu', 'jilidan', 'dailong', 'menghuan']
+# pokeName_chinese = ['小拉达', '波波', '喵喵', '瓦斯弹', '阿柏蛇',
+#                     '大舌头', '皮卡丘', '皮皮', '胖丁', '伊布', '吉利蛋', '袋龙', '梦幻']
+# pokeName = zip(pokeName_database, pokeName_chinese)
 
+# cons_database = ['Alies', 'Taurus', 'Gemini', 'Cancer', 'Virgo',
+#                  'Libra', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
+# cons_chinese = ['白羊座', '金牛座', '双子座', '巨蟹座',
+#                 '处女座', '天秤座', '射手座', '摩羯座', '水瓶座', '双鱼座']
+# consName = zip(cons_database, cons_chinese)
+
+pokeName = ['小拉达', '波波', '喵喵', '瓦斯弹', '阿柏蛇',
+                    '大舌头', '皮卡丘', '皮皮', '胖丁', '伊布', '吉利蛋', '袋龙', '梦幻']
+consName = ['白羊座', '金牛座', '双子座', '巨蟹座',
+                '处女座', '天秤座', '射手座', '摩羯座', '水瓶座', '双鱼座']
 
 def getScoreDrawRandom() -> int:
     seq = [1350, 710, 288, 50, 30, 20, 10, 8, 5, 0]
@@ -39,12 +54,13 @@ class userSQL():
                         VALUES ("+str(QQ)+")")
         self.c.execute("INSERT INTO constellation (QQ) \
                         VALUES ("+str(QQ)+")")
-    
+
     def _isNewDate(self) -> bool:
         self.c.execute("select * from common where signdate=date('now')")
         ans = self.c.fetchall()
         if ans == []:
-            self.c.execute("INSERT INTO common (signDate) VALUES (date('now'))")
+            self.c.execute(
+                "INSERT INTO common (signDate) VALUES (date('now'))")
             self.c.execute("UPDATE user set sign = 0")
             return True
         return False
@@ -59,7 +75,8 @@ class userSQL():
         return True
 
     def sign(self, QQ: int) -> int:
-        self.c.execute("UPDATE common set signnum = signnum+1 where signdate=date('now')")
+        self.c.execute(
+            "UPDATE common set signnum = signnum+1 where signdate=date('now')")
         self.c.execute("UPDATE user set sign = 1 where QQ=" + str(QQ))
         self.c.execute("select signnum from common where signdate=date('now')")
         ans = self.c.fetchone()
@@ -67,18 +84,43 @@ class userSQL():
 
     def getScore(self, QQ: int) -> int:
         self.c.execute("select SCORE from user where QQ=" + str(QQ))
-        ans = self.c.fetchall()
-        return ans[0][0]
+        ans = self.c.fetchone()
+        return ans[0]
 
     def getTicket(self, QQ: int) -> int:
         self.c.execute("select Ticket from user where QQ=" + str(QQ))
-        ans = self.c.fetchall()
-        return ans[0][0]
+        ans = self.c.fetchone()
+        return ans[0]
 
     def getDiamond(self, QQ: int) -> int:
         self.c.execute("select Diamond from user where QQ=" + str(QQ))
-        ans = self.c.fetchall()
-        return ans[0][0]
+        ans = self.c.fetchone()
+        return ans[0]
+
+    def getEvelsBall(self, QQ: int) -> int:
+        self.c.execute("select evelsball from pokemon where QQ=" + str(QQ))
+        ans = self.c.fetchone()
+        return ans[0]
+
+    def getSuperBall(self, QQ: int) -> int:
+        self.c.execute("select Superball from pokemon where QQ=" + str(QQ))
+        ans = self.c.fetchone()
+        return ans[0]
+
+    def getMasterBall(self, QQ: int) -> int:
+        self.c.execute("select Masterball from pokemon where QQ=" + str(QQ))
+        ans = self.c.fetchone()
+        return ans[0]
+
+    def getPokemon(self, QQ: int) -> int:
+        self.c.execute("select * from pokemon where QQ=" + str(QQ))
+        ans = self.c.fetchone()
+        return ans[0]
+
+    def getConstellation(self, QQ: int) -> int:
+        self.c.execute("select * from Constellation where QQ=" + str(QQ))
+        ans = self.c.fetchone()
+        return ans[0]
 
     def getTopTicket(self) -> [(int, int)]:
         self.c.execute("select QQ, Ticket from user ORDER BY TICKET DESC")

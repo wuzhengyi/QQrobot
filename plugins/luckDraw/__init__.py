@@ -1,6 +1,6 @@
 import nonebot
 from nonebot import on_command, CommandSession
-from .data_source import userSQL, getScoreDrawRandom, isRoot
+from .data_source import userSQL, getScoreDrawRandom, isRoot, pokeName, consName
 from os import path
 import random
 
@@ -19,9 +19,10 @@ async def sign(session: CommandSession):
         # 签到奖励
         value = random.randint(10, 300)
         user.addDiamond(QQ, value)
-        sumDiamond = user.getDiamond(QQ) 
+        sumDiamond = user.getDiamond(QQ)
         await session.send('签到成功,你是今天第'+str(count)+'位签到的。恭喜你获得'+str(value)+'个钻石，你当前总共有'+str(sumDiamond)+'个钻石。')
     user.close()
+
 
 @on_command('查询', only_to_me=False)
 async def query(session: CommandSession):
@@ -43,6 +44,43 @@ async def query(session: CommandSession):
 
     await session.send(message)
 
+
+@on_command('物品', aliases=('物品查询', '背包', '背包查询'), only_to_me=False)
+async def backpack(session: CommandSession):
+    QQ = session.ctx['user_id']
+    user = userSQL()
+    if not user.isExist(QQ):
+        user.close()
+        await session.send('请先发送”/签到“进行注册')
+        return
+    evelsBall = user.getEvelsBall(QQ)
+    superBall = user.getSuperBall(QQ)
+    masterBall = user.getMasterBall(QQ)
+    cons = user.getConstellation(QQ)
+
+    user.close()
+
+    message = '我的背包' + '\n' +\
+              '精灵球：' + str(evelsBall) + '\n' +\
+              '超级球：' + str(superBall) + '\n' +\
+              '大师球：' + str(masterBall) + '\n' +\
+              ''.join([consName[i] +'：' + str(cons[i+1]) + '\n' for i in range(len(cons)-1)])
+    await session.send(message[:-1])
+
+@on_command('宠物', aliases=('宠物查询', '我的宠物'), only_to_me=False)
+async def pet(session: CommandSession):
+    QQ = session.ctx['user_id']
+    user = userSQL()
+    if not user.isExist(QQ):
+        user.close()
+        await session.send('请先发送”/签到“进行注册')
+        return
+    pokemon = user.getPokemon(QQ)
+    user.close()
+
+    message = '我的宠物' + '\n' +\
+              ''.join([pokeName[i-4] +'：' + str(pokemon[i]) + '\n' for i in range(4, len(pokemon))])
+    await session.send(message[:-1])
 
 @on_command('初始化', only_to_me=False)
 async def initGroupList(session: CommandSession):
