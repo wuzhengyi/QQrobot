@@ -164,7 +164,7 @@ async def scoreDraw2(session: CommandSession):
         user.subScore(QQ, 100)
         user.addScore(QQ, sum(items))
         user.addTicket(QQ, items.count(0))
-        await session.send('恭喜你获得\n'+' '.join([str(j)+'积分' if j != 0 else '1奖券' for j in items]) + '，\n你当前的积分余额为'+str(score-100+sum(items))+'，欢迎下次光临。')
+        await session.send('恭喜你获得\n'+' '.join([getImage(str(j)+'score')+'\n'+str(j)+'积分' if j != 0 else getImage('ticket')+'\n1奖券' for j in items]) + '，\n你当前的积分余额为'+str(score-100+sum(items))+'，欢迎下次光临。')
     else:
         await session.send('你的积分不足100，快去找老蛋赚积分吧。')
     user.close()
@@ -199,7 +199,7 @@ async def ticketDraw2(session: CommandSession):
         user.subTicket(QQ, 5)
         user.addScore(QQ, sum(items))
         user.addTicket(QQ, items.count(0))
-        await session.send('恭喜你获得\n'+' '.join([str(j)+'积分' if j != 0 else '1奖券' for j in items]) + '，\n你当前的奖券余额为'+str(ticket-5+items.count(0))+'，欢迎下次光临。')
+        await session.send('恭喜你获得\n'+' '.join([getImage(str(j)+'score')+'\n'+str(j)+'积分' if j != 0 else getImage('ticket')+'\n1奖券' for j in items]) + '，\n你当前的奖券余额为'+str(ticket-5+items.count(0))+'，欢迎下次光临。')
     else:
         await session.send('你的奖券不足，快去找老蛋赚奖券吧。')
     user.close()
