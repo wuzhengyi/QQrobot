@@ -2,7 +2,7 @@ from nonebot import on_command, CommandSession
 import paramiko
 
 __plugin_name__ = '服务器显卡查询'
-__plugin_usage__ = """
+__plugin_usage__ = r"""
 使用指南：
 nvidia [服务器名]
 

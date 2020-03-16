@@ -6,7 +6,7 @@ from os import path
 import random
 
 __plugin_name__ = '抽奖系统'
-__plugin_usage__ = """
+__plugin_usage__ = r"""
 抽奖系统支持功能：
 签到
 查询
@@ -234,7 +234,7 @@ async def diamonDraw(session: CommandSession):
                 if num > 0:
                     user.addCons(QQ, i, num)
                     message = message + '恭喜你获得' + \
-                        str(num)+'张'+consName[cardIndex[i]]+'卡片\n'
+                        str(num)+'张'+consName[i]+'卡片\n'
         diamondSum = sum([int(i) for i in ans if i.isdigit()])
         if diamondSum > 0:
             user.addDiamond(QQ, diamondSum)
