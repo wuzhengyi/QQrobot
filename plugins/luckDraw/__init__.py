@@ -35,6 +35,9 @@ __plugin_usage__ = r"""
 减积分 [@某人/QQ号] [数量]
 加钻石 [@某人/QQ号] [数量]
 减钻石 [@某人/QQ号] [数量]
+祈福/老板发钱/桃园结义/普度众生/悬壶济世 [下限] [上限]
+祈福/老板发钱/桃园结义/普度众生/悬壶济世 (默认60)
+祈福/老板发钱/桃园结义/普度众生/悬壶济世 [金额]
 """
 
 # on_command 装饰器将函数声明为一个命令处理器
@@ -646,3 +649,32 @@ async def resetBackpack(session: CommandSession):
     user.resetBackpack()
     user.close()
     await session.send('全体背包清空成功')
+
+
+@on_command('祈福', aliases=('老板发钱', '桃园结义', '普度众生', '悬壶济世'), only_to_me=False)
+async def bless(session: CommandSession):
+    # 判断目标发起人是否为管理员
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+
+    # 解析命令格式
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip().split()
+    args = [int(i) for i in args if i.isdigit()]
+    if len(args) > 2:
+        await session.send('格式为:\n/祈福 [下限] [上限]\n或 /祈福\n或 /祈福 [金额]')
+        return
+    elif len(args) == 2:
+        args.sort()
+        money = random.randint(args[0], args[1])
+    elif len(args) == 1:
+        money = args[0]
+    else:
+        money = 60
+
+    # 对用户进行加钻石操作
+    user = userSQL()
+    user.addAllDiamond(money)
+    user.close()
+    await session.send('增加成功，全体用户增加%d钻石。'%money)
