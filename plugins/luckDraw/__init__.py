@@ -201,7 +201,7 @@ async def diamonDraw(session: CommandSession):
             for i in range(12):
                 num = cardIndex.count(i)
                 if num > 0:
-                    user.addCons(QQ, cardIndex[i], num)
+                    user.addCons(QQ, i, num)
                     message = message + '恭喜你获得'+str(num)+'张'+consName[cardIndex[i]]+'卡片\n'
         diamondSum = sum([int(i) for i in ans if i.isdigit()])
         if diamondSum > 0:
@@ -587,3 +587,14 @@ async def resetDiamond(session: CommandSession):
     user.resetDiamond()
     user.close()
     await session.send('全体钻石清空成功')
+
+@on_command('清空背包', aliases=('背包清零',), only_to_me=False)
+async def resetDiamond(session: CommandSession):
+    # 判断目标发起人是否为管理员
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+    user = userSQL()
+    user.resetBackpack()
+    user.close()
+    await session.send('全体背包清空成功')

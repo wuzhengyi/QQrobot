@@ -206,6 +206,16 @@ class userSQL():
     def resetDiamond(self):
         self.c.execute("UPDATE user set Diamond = 0")
 
+    def resetBackpack(self):
+        self.resetCons()
+        self.resetBall()
+
+    def resetCons(self):
+        self.c.execute("UPDATE constellation set "+','.join(cons_database)+ " = 0")
+
+    def resetBall(self):
+        self.c.execute("UPDATE constellation set evelsBall, superBall, masterBall = 0")
+
     def close(self):
         self.conn.commit()
         self.conn.close()
