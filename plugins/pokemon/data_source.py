@@ -42,7 +42,38 @@ class Choice(Enum):
     B = 1
     C = 2
     D = 3
-    NULL = 4
+
+
+@unique
+class PokeLevel(Enum):
+    A = 0
+    B = 1
+    C = 2
+    D = 3
+    S = 4
+
+
+catchProb = {PokeLevel.D: {'evelsBall': 0.4, 'superBall': 0.8, 'masterBall': 1.0},
+             PokeLevel.C: {'evelsBall': 0.3, 'superBall': 0.6, 'masterBall': 1.0},
+             PokeLevel.B: {'evelsBall': 0.25, 'superBall': 0.5, 'masterBall': 1.0},
+             PokeLevel.A: {'evelsBall': 0.2, 'superBall': 0.4, 'masterBall': 1.0},
+             PokeLevel.S: {'evelsBall': 0.05, 'superBall': 0.1, 'masterBall': 1.0}}
+
+escapeProb = {PokeLevel.D: 0.1, PokeLevel.C: 0.15,
+              PokeLevel.B: 0.2, PokeLevel.A: 0.1, PokeLevel.S: 0.01}
+
+
+def getPokeLevel(name: str) -> PokeLevel:
+    if name in ['xiaolada', 'bobo']:
+        return PokeLevel.D
+    elif name in ['miaomiao', 'wasidan', 'apashe', 'dashetou']:
+        return PokeLevel.C
+    elif name in ['pikaqiu', 'pipi', 'pangding', 'yibu']:
+        return PokeLevel.B
+    elif name in ['jilidan', 'dailong']:
+        return PokeLevel.A
+    else:
+        return PokeLevel.S
 
 
 class Pokemon():
@@ -60,7 +91,7 @@ class Pokemon():
         self.state = State.scene
         return '欢迎来到宝可梦的世界，请选择你需要探索的地点:\nA.精灵乐园\nB.海底遗迹\nC.无尽森林\nD.精灵联盟'
 
-    def next(self, choice: Choice = Choice.NULL) -> str:
+    def next(self, choice: Choice) -> str:
         if self.state is State.scene:
             return self._dealScene(choice)
         elif self.state is State.catch:
@@ -83,7 +114,7 @@ class Pokemon():
             superBallNum = self._getBallNum('superBall')
             masterBallNum = self._getBallNum('masterBall')
             return '%s\n野生的%s出现了，接下来你要做什么？\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑' % \
-                (getImage(self._getPokemonNameEng), pokemonName, getBallEmoji('evelsBall'), evelsBallNum, getBallEmoji(
+                (getImage(self._getPokemonNameEng()), pokemonName, getBallEmoji('evelsBall'), evelsBallNum, getBallEmoji(
                     'superBall'), superBallNum, getBallEmoji('asterBall'), masterBallNum, '[CQ:emoji, id=127939]')
         else:
             return '对不起，当前只开放了场景A.精灵乐园，请您重新选择'
@@ -100,23 +131,31 @@ class Pokemon():
             return '对不起，你没有足够的%s,请重新选择。' % ballName[name]
         # 消耗对应精灵球
         self._subBallNum(name)
-        # TODO：捕捉
+        # 开始捕捉
         pokemonName = self._getPokemonNameChn()
-        if False:  # TODO:如果捕捉到
+        if random.uniform(0, 1) <= self._getCatchProb(name):
+            # 如果捕捉到
             self.reset()
-            return '%s\n恭喜你获得了可爱的%s，快打开宠物看看吧。' % (getImage(self._getPokemonNameEng), pokemonName)
+            return '%s\n恭喜你获得了可爱的%s，快打开宠物看看吧。' % (getImage(self._getPokemonNameEng()), pokemonName)
         else:
-            if False:  # TODO：宝可梦没有逃跑
+            if random.uniform(0, 1) <= self._getEscapeProb():
+                # 宝可梦逃跑
+                self.reset()
+                return '很可惜，%s可恶的逃跑了，再进入游戏寻找你的伙伴吧。' % pokemonName
+            else:
+                # 宝可梦没有逃跑
                 evelsBallNum = self._getBallNum('evelsBall')
                 superBallNum = self._getBallNum('superBall')
                 masterBallNum = self._getBallNum('masterBall')
                 return '很可惜，%s捕捉失败，请再试一次吧。\n%s\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑' % \
-                    (pokemonName, getImage(self._getPokemonNameEng), getBallEmoji('evelsBall'), evelsBallNum, getBallEmoji(
+                    (pokemonName, getImage(self._getPokemonNameEng()), getBallEmoji('evelsBall'), evelsBallNum, getBallEmoji(
                         'superBall'), superBallNum, getBallEmoji('asterBall'), masterBallNum, '[CQ:emoji, id=127939]')
 
-            else:
-                self.reset()
-                return '很可惜，%s可恶的逃跑了，再进入游戏寻找你的伙伴吧。' % pokemonName
+    def _getCatchProb(self, ball: str) -> float:
+        return catchProb[getPokeLevel(self._getPokemonNameEng())][ball]
+
+    def _getEscapeProb(self) -> float:
+        return escapeProb[getPokeLevel(self._getPokemonNameEng())]
 
     def _getSenceAPokemon(self) -> int:
         prob = [0.19, 0.19, 0.1, 0.1, 0.1, 0.07999,
