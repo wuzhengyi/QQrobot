@@ -8,7 +8,7 @@ import random
 
 __plugin_name__ = '抽奖系统'
 __plugin_usage__ = r"""
-抽奖系统支持功能：
+抽奖系统支持功能:
 签到
 查询
 物品/物品查询/背包/背包查询
@@ -19,7 +19,7 @@ __plugin_usage__ = r"""
 奖券五连
 钻石抽奖/钻石夺宝 [空|次数]
 
-管理功能：
+管理功能:
 初始化
 注册 [@某人/QQ号]
 奖券榜
@@ -71,9 +71,9 @@ async def query(session: CommandSession):
     user.close()
 
     message = '个人信息' + '\n' +\
-              '积分：' + str(score) + '\n' +\
-              '奖券：' + str(ticket) + '\n' +\
-              '钻石：' + str(diamond)
+              '积分:' + str(score) + '\n' +\
+              '奖券:' + str(ticket) + '\n' +\
+              '钻石:' + str(diamond)
 
     await session.send(message)
 
@@ -94,10 +94,10 @@ async def backpack(session: CommandSession):
     user.close()
 
     message = '我的背包' + '\n' +\
-              getImage('evelsBall')+'精灵球：' + str(evelsBall) + '\n' +\
-              getImage('superBall')+'超级球：' + str(superBall) + '\n' +\
-              getImage('masterBall')+'大师球：' + str(masterBall) + '\n' +\
-              ''.join([getConsImage(i) + consName[i] + '：' + str(cons[i]) +
+              getBallImage('evelsBall')+'精灵球:' + str(evelsBall) + '\n' +\
+              getBallImage('superBall')+'超级球:' + str(superBall) + '\n' +\
+              getBallImage('masterBall')+'大师球:' + str(masterBall) + '\n' +\
+              ''.join([getConsImage(i) + consName[i] + ':' + str(cons[i]) +
                        '\n' for i in range(len(cons))])
     print(message)
     await session.send(message[:-1])
@@ -115,7 +115,7 @@ async def pet(session: CommandSession):
     user.close()
 
     message = '我的宠物' + '\n' +\
-              ''.join([pokeName[i] + '：' + str(pokemon[i]) +
+              ''.join([pokeName[i] + ':' + str(pokemon[i]) +
                        '\n' for i in range(len(pokemon))])
     await session.send(message[:-1])
 
@@ -342,7 +342,7 @@ async def addScore(session: CommandSession):
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
     if len(args) != 2:
-        await session.send('格式为：/加积分 [@某人/QQ号] [积分数]')
+        await session.send('格式为:/加积分 [@某人/QQ号] [积分数]')
         return
     if args[1].isdigit():
         score = int(args[1])
@@ -351,10 +351,10 @@ async def addScore(session: CommandSession):
         elif (args[0]).isdigit():
             target = int(args[0])
         else:
-            await session.send('加分目标应为QQ号或@某人，格式为：/加积分 [@某人/QQ号] [积分数]')
+            await session.send('加分目标应为QQ号或@某人，格式为:/加积分 [@某人/QQ号] [积分数]')
             return
     else:
-        await session.send('积分数应为一个整数，格式为：/加积分 [@某人/QQ号] [积分数]')
+        await session.send('积分数应为一个整数，格式为:/加积分 [@某人/QQ号] [积分数]')
         return
 
     # 对用户进行加分操作
@@ -380,7 +380,7 @@ async def subScore(session: CommandSession):
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
     if len(args) != 2:
-        await session.send('格式为：/减积分 [@某人/QQ号] [积分数]')
+        await session.send('格式为:/减积分 [@某人/QQ号] [积分数]')
         return
     if args[1].isdigit():
         score = int(args[1])
@@ -389,10 +389,10 @@ async def subScore(session: CommandSession):
         elif (args[0]).isdigit():
             target = int(args[0])
         else:
-            await session.send('减分目标应为QQ号或@某人，格式为：/减积分 [@某人/QQ号] [积分数]')
+            await session.send('减分目标应为QQ号或@某人，格式为:/减积分 [@某人/QQ号] [积分数]')
             return
     else:
-        await session.send('积分数应为一个整数，格式为：/减积分 [@某人/QQ号] [积分数]')
+        await session.send('积分数应为一个整数，格式为:/减积分 [@某人/QQ号] [积分数]')
         return
 
     # 对用户进行加分操作
@@ -418,7 +418,7 @@ async def addTicket(session: CommandSession):
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
     if len(args) != 2:
-        await session.send('格式为：/加奖券 [@某人/QQ号] [奖券数]')
+        await session.send('格式为:/加奖券 [@某人/QQ号] [奖券数]')
         return
     if args[1].isdigit():
         ticket = int(args[1])
@@ -427,10 +427,10 @@ async def addTicket(session: CommandSession):
         elif (args[0]).isdigit():
             target = int(args[0])
         else:
-            await session.send('加分目标应为QQ号或@某人，格式为：/加奖券 [@某人/QQ号] [奖券数]')
+            await session.send('加分目标应为QQ号或@某人，格式为:/加奖券 [@某人/QQ号] [奖券数]')
             return
     else:
-        await session.send('奖券数应为一个整数，格式为：/加奖券 [@某人/QQ号] [奖券数]')
+        await session.send('奖券数应为一个整数，格式为:/加奖券 [@某人/QQ号] [奖券数]')
         return
 
     # 对用户进行加分操作
@@ -456,7 +456,7 @@ async def subTicket(session: CommandSession):
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
     if len(args) != 2:
-        await session.send('格式为：/减奖券 [@某人/QQ号] [奖券数]')
+        await session.send('格式为:/减奖券 [@某人/QQ号] [奖券数]')
         return
     if args[1].isdigit():
         ticket = int(args[1])
@@ -465,10 +465,10 @@ async def subTicket(session: CommandSession):
         elif (args[0]).isdigit():
             target = int(args[0])
         else:
-            await session.send('减分目标应为QQ号或@某人，格式为：/减奖券 [@某人/QQ号] [奖券数]')
+            await session.send('减分目标应为QQ号或@某人，格式为:/减奖券 [@某人/QQ号] [奖券数]')
             return
     else:
-        await session.send('奖券数应为一个整数，格式为：/减奖券 [@某人/QQ号] [奖券数]')
+        await session.send('奖券数应为一个整数，格式为:/减奖券 [@某人/QQ号] [奖券数]')
         return
 
     # 对用户进行加分操作
@@ -494,7 +494,7 @@ async def addDiamond(session: CommandSession):
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
     if len(args) != 2:
-        await session.send('格式为：/加钻石 [@某人/QQ号] [钻石数]')
+        await session.send('格式为:/加钻石 [@某人/QQ号] [钻石数]')
         return
     if args[1].isdigit():
         diamond = int(args[1])
@@ -503,10 +503,10 @@ async def addDiamond(session: CommandSession):
         elif (args[0]).isdigit():
             target = int(args[0])
         else:
-            await session.send('加分目标应为QQ号或@某人，格式为：/加钻石 [@某人/QQ号] [钻石数]')
+            await session.send('加分目标应为QQ号或@某人，格式为:/加钻石 [@某人/QQ号] [钻石数]')
             return
     else:
-        await session.send('钻石数应为一个整数，格式为：/加钻石 [@某人/QQ号] [钻石数]')
+        await session.send('钻石数应为一个整数，格式为:/加钻石 [@某人/QQ号] [钻石数]')
         return
 
     # 对用户进行加分操作
@@ -532,7 +532,7 @@ async def subDiamond(session: CommandSession):
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
     if len(args) != 2:
-        await session.send('格式为：/减钻石 [@某人/QQ号] [钻石数]')
+        await session.send('格式为:/减钻石 [@某人/QQ号] [钻石数]')
         return
     if args[1].isdigit():
         diamond = int(args[1])
@@ -541,10 +541,10 @@ async def subDiamond(session: CommandSession):
         elif (args[0]).isdigit():
             target = int(args[0])
         else:
-            await session.send('减分目标应为QQ号或@某人，格式为：/减钻石 [@某人/QQ号] [钻石数]')
+            await session.send('减分目标应为QQ号或@某人，格式为:/减钻石 [@某人/QQ号] [钻石数]')
             return
     else:
-        await session.send('钻石数应为一个整数，格式为：/减钻石 [@某人/QQ号] [钻石数]')
+        await session.send('钻石数应为一个整数，格式为:/减钻石 [@某人/QQ号] [钻石数]')
         return
 
     # 对用户进行加分操作
@@ -570,14 +570,14 @@ async def register(session: CommandSession):
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip()
     if len(args) != 1:
-        await session.send('格式为：/注册 [@某人/QQ号]')
+        await session.send('格式为:/注册 [@某人/QQ号]')
         return
     if args[:6] == '[CQ:at':
         target = int(args[10:-1])
     elif args.isdigit():
         target = int(args)
     else:
-        await session.send('注册目标应为QQ号或@某人，格式为：/注册 [@某人/QQ号]')
+        await session.send('注册目标应为QQ号或@某人，格式为:/注册 [@某人/QQ号]')
         return
 
     user = userSQL()
