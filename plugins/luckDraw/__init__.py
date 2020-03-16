@@ -53,7 +53,7 @@ async def sign(session: CommandSession):
     else:
         count = user.sign(QQ)
         # 签到奖励
-        value = random.randint(10, 300)
+        value = random.randint(300, 600)
         user.addDiamond(QQ, value)
         sumDiamond = user.getDiamond(QQ)
         await session.send('签到成功,你是今天第'+str(count)+'位签到的。恭喜你获得'+str(value)+'个钻石，你当前总共有'+str(sumDiamond)+'个钻石。')
@@ -677,4 +677,4 @@ async def bless(session: CommandSession):
     user = userSQL()
     user.addAllDiamond(money)
     user.close()
-    await session.send('增加成功，全体用户增加%d钻石。'%money)
+    await session.send('增加成功，全体用户增加%d钻石。' % money)

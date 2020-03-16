@@ -1,7 +1,8 @@
 import sqlite3
 import random
 
-rootList = [942858979, 914349145]
+# rootList = [942858979, 914349145]
+rootList = [942858979]
 pokeName_database = ['xiaolada', 'bobo', 'miaomiao', 'wasidan', 'apashe',
                      'dashetou', 'pikaqiu', 'pipi', 'pangding', 'yibu', 'jilidan', 'dailong', 'menghuan']
 # pokeName_chinese = ['小拉达', '波波', '喵喵', '瓦斯弹', '阿柏蛇',
