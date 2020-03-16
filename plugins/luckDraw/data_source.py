@@ -51,10 +51,13 @@ def isRoot(QQ: int) -> bool:
     return QQ in rootList
 
 
-# def getImage(name: str) -> str:
-#     name = name + '.png' if name not in cons_database else name + '.jpg'
-#     CQimage = '[CQ:image,file=kululu\%s]' % name
-#     return CQimage
+def getImage(name: str) -> str:
+    if name in cons_database:
+        return getConsImage(cons_database.index(name))
+    elif name in ballName:
+        return getBallImage(name)
+    else:
+        return '[CQ:image,file=kululu\%s.png]' % name
 
 def getBallImage(name: str) -> str:
     if name == 'evelsBall':
