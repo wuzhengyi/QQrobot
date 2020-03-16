@@ -262,7 +262,7 @@ class userSQL():
         self.resetBall()
 
     def resetPokemon(self):
-        self.c.execute("UPDATE constellation SET " +
+        self.c.execute("UPDATE pokemon SET " +
                        '=0,'.join(pokeName_database) + "=0")
 
     def resetCons(self):
