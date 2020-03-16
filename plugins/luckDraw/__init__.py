@@ -118,7 +118,8 @@ async def pet(session: CommandSession):
 
     message = '我的宠物' + '\n' +\
               ''.join([pokeName[i] + ':' + str(pokemon[i]) +
-                       '\n' for i in range(len(pokemon))])
+                       '\n' for i in range(len(pokemon)-1)])
+    message = pokeName[-1] + ':' + str(pokemon[-1]) + '\n' if pokemon[-1] != 0 else ''
     await session.send(message[:-1])
 
 

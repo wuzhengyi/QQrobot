@@ -135,8 +135,11 @@ class Pokemon():
         pokemonName = self._getPokemonNameChn()
         if random.uniform(0, 1) <= self._getCatchProb(name):
             # 如果捕捉到
+            message = '%s\n恭喜你获得了可爱的%s，快打开宠物看看吧。' % (
+                getImage(self._getPokemonNameEng()), pokemonName)
+            self._addPokemon(self._getPokemonNameEng())
             self.reset()
-            return '%s\n恭喜你获得了可爱的%s，快打开宠物看看吧。' % (getImage(self._getPokemonNameEng()), pokemonName)
+            return message
         else:
             if random.uniform(0, 1) <= self._getEscapeProb():
                 # 宝可梦逃跑
@@ -208,5 +211,13 @@ class Pokemon():
         c = conn.cursor()
         c.execute("UPDATE pokemon set %s = %s-%d where QQ=%d" %
                   (ball, ball, value, self.QQ))
+        conn.commit()
+        conn.close()
+
+    def _addPokemon(self, name: str, value: int = 1) -> None:
+        conn = sqlite3.connect('user.db')
+        c = conn.cursor()
+        c.execute("UPDATE pokemon set %s = %s+%d where QQ=%d" %
+                  (name, name, value, str(self.QQ)))
         conn.commit()
         conn.close()
