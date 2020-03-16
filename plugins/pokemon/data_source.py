@@ -78,13 +78,13 @@ class Pokemon():
             # 随机精灵宝可梦
             self.pokemonIndex = self._getSenceAPokemon()
             # 获得宝可梦的姓名，精灵球的数目。
-            pokemonName = self._getPokemonName()
+            pokemonName = self._getPokemonNameChn()
             evelsBallNum = self._getBallNum('evelsBall')
             superBallNum = self._getBallNum('superBall')
             masterBallNum = self._getBallNum('masterBall')
-            return '野生的%s出现了，接下来你要做什么？\n\
-                                A.精灵球（%d个）\nB.超级球（%d个）\n\
-                                C.大师球（%d个）\nD.逃跑' % (pokemonName, evelsBallNum, superBallNum, masterBallNum)
+            return '%s\n野生的%s出现了，接下来你要做什么？\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑' % \
+                (getImage(self._getPokemonNameEng), pokemonName, getBallEmoji('evelsBall'), evelsBallNum, getBallEmoji(
+                    'superBall'), superBallNum, getBallEmoji('asterBall'), masterBallNum, '[CQ:emoji, id=127939]')
         else:
             return '对不起，当前只开放了场景A.精灵乐园，请您重新选择'
 
@@ -101,18 +101,18 @@ class Pokemon():
         # 消耗对应精灵球
         self._subBallNum(name)
         # TODO：捕捉
-        pokemonName = self._getPokemonName()
+        pokemonName = self._getPokemonNameChn()
         if False:  # TODO:如果捕捉到
             self.reset()
-            return '恭喜你获得了可爱的%s，快打开宠物看看吧。' % pokemonName
+            return '%s\n恭喜你获得了可爱的%s，快打开宠物看看吧。' % (getImage(self._getPokemonNameEng), pokemonName)
         else:
             if False:  # TODO：宝可梦没有逃跑
                 evelsBallNum = self._getBallNum('evelsBall')
                 superBallNum = self._getBallNum('superBall')
                 masterBallNum = self._getBallNum('masterBall')
-                return '很可惜，%s捕捉失败，请再试一次吧。\n\
-                                A.精灵球（%d个）\nB.超级球（%d个）\n\
-                                C.大师球（%d个）\nD.逃跑' % (pokemonName, evelsBallNum, superBallNum, masterBallNum)
+                return '很可惜，%s捕捉失败，请再试一次吧。\n%s\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑' % \
+                    (pokemonName, getImage(self._getPokemonNameEng), getBallEmoji('evelsBall'), evelsBallNum, getBallEmoji(
+                        'superBall'), superBallNum, getBallEmoji('asterBall'), masterBallNum, '[CQ:emoji, id=127939]')
 
             else:
                 self.reset()
@@ -150,8 +150,11 @@ class Pokemon():
             self.state = State.init
         return self.state
 
-    def _getPokemonName(self) -> str:
+    def _getPokemonNameChn(self) -> str:
         return pokeNameChn[self.pokemonIndex]
+
+    def _getPokemonNameEng(self) -> str:
+        return pokeNameEng[self.pokemonIndex]
 
     def _getBallNum(self, ball: str) -> int:
         conn = sqlite3.connect('user.db')
