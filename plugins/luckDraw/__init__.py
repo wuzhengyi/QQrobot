@@ -99,7 +99,6 @@ async def backpack(session: CommandSession):
               getBallImage('masterBall')+'大师球:' + str(masterBall) + '\n' +\
               ''.join([getConsImage(i) + consName[i] + ':' + str(cons[i]) +
                        '\n' for i in range(len(cons))])
-    print(message)
     await session.send(message[:-1])
 
 
