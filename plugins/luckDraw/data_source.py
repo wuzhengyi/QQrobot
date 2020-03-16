@@ -177,9 +177,9 @@ class userSQL():
         self.c.execute("UPDATE user set Diamond = Diamond+" +
                        str(value)+" where QQ=" + str(QQ))
 
-    def addCons(self, QQ: int, index: int) -> None:
+    def addCons(self, QQ: int, index: int, value: int = 1) -> None:
         self.c.execute("UPDATE Constellation set " +
-                       cons_database[index]+"="+cons_database[index]+"+1 where QQ=" + str(QQ))
+                       cons_database[index]+"="+cons_database[index]+"+"+str(value)+" where QQ=" + str(QQ))
 
     def addBall(self, QQ: int, ball: str) -> None:
         self.c.execute("UPDATE pokemon set " + ball +

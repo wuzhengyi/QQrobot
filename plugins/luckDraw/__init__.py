@@ -188,34 +188,38 @@ async def diamonDraw(session: CommandSession):
     user = userSQL()
     diamond = user.getDiamond(QQ)
     if diamond >= times*60:
+        message = ''
         user.subDiamond(QQ, times*60)
         ans = [getDiamonDrawRandom() for i in range(times)]
         ticketNum = ans.count('ticket')
         if ticketNum > 0:
             user.addTicket(QQ, ticketNum)
-            await session.send('恭喜你获得'+str(ticketNum)+'奖券，欢迎下次光临。')
+            message = message + '恭喜你获得'+str(ticketNum)+'奖券\n'
         cardNum = ans.count('card')
         if cardNum > 0:
             cardIndex = [random.randint(0, 11) for i in range(cardNum)]
-            for i in range(cardNum):
-                user.addCons(QQ, cardIndex[i])
-                await session.send('恭喜你获得'+consName[cardIndex[i]]+'卡片，欢迎下次光临。')
+            for i in range(12):
+                num = cardIndex.count(i)
+                if num > 0:
+                    user.addCons(QQ, cardIndex[i], num)
+                    message = message + '恭喜你获得'+str(num)+'张'+consName[cardIndex[i]]+'卡片\n'
         diamondSum = sum([int(i) for i in ans if i.isdigit()])
         if diamondSum > 0:
             user.addDiamond(QQ, diamondSum)
-            await session.send('恭喜你获得'+str(diamondSum)+'钻石，欢迎下次光临。')
+            message = message + '恭喜你获得'+str(diamondSum)+'钻石\n'
         evelsBall = ans.count('evelsBall')
         if evelsBall > 0:
             user.addEvelsBall(QQ, evelsBall)
-            await session.send('恭喜你获得'+str(evelsBall)+'个精灵球，欢迎下次光临。')
+            message = message + '恭喜你获得'+str(evelsBall)+'个精灵球\n'
         superBall = ans.count('superBall')
         if superBall > 0:
             user.addSuperBall(QQ, superBall)
-            await session.send('恭喜你获得'+str(superBall)+'个超级球，欢迎下次光临。')
+            message = message + '恭喜你获得'+str(superBall)+'个超级球\n'
         masterBall = ans.count('masterBall')
         if masterBall > 0:
             user.addMasterBall(QQ, masterBall)
-            await session.send('恭喜你获得'+str(masterBall)+'个大师球，欢迎下次光临。')
+            message = message + '恭喜你获得'+str(masterBall)+'个大师球\n欢迎下次光临。'
+        await session.send(message)
     else:
         await session.send('你的钻石不足，快去找老蛋赚钻石吧。')
     user.close()
