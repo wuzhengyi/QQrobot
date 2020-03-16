@@ -52,7 +52,14 @@ def isRoot(QQ: int) -> bool:
 
 
 def getImage(name: str) -> str:
-    return '[CQ:image,file=image\\%s.png"]' % (name)
+    name = name + '.png' if name not in cons_database else name + '.jpg'
+    CQimage = '[CQ:image,file=kululu\%s]' % name
+    return CQimage
+
+
+def getConsImage(index: int) -> str:
+    return '[CQ:emoji, id=%d]'%(index+9800)
+    # return getImage(cons_database[index])
 
 
 class userSQL():
