@@ -234,7 +234,7 @@ async def topTicket(session: CommandSession):
     for QQ in rank:
         try:
             group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0], no_cache=False)
-            QQname.append((group_member_info['card'], QQ[1]))
+            QQname.append((group_member_info['card'] or group_member_info['nickname'], QQ[1]))
         except:  # 非本群人员
             pass
         if len(QQname) > 5:
@@ -257,7 +257,7 @@ async def topDiamond(session: CommandSession):
     for QQ in rank:
         try:
             group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0], no_cache=False)
-            QQname.append((group_member_info['card'], QQ[1]))
+            QQname.append((group_member_info['card'] or group_member_info['nickname'], QQ[1]))
         except:  # 非本群人员
             pass
         if len(QQname) > 5:
@@ -280,7 +280,7 @@ async def topScore(session: CommandSession):
     for QQ in rank:
         try:
             group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0], no_cache=False)
-            QQname.append((group_member_info['card'], QQ[1]))
+            QQname.append((group_member_info['card'] or group_member_info['nickname'], QQ[1]))
         except:  # 非本群人员
             pass
         if len(QQname) > 5:
