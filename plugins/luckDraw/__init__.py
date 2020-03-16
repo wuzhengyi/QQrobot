@@ -1,7 +1,7 @@
 import nonebot
 from nonebot import on_command, CommandSession
 from .data_source import userSQL, getScoreDrawRandom, getDiamonDrawRandom, isRoot
-from .data_source import getImage, getConsImage
+from .data_source import getBallImage, getConsImage
 from .data_source import pokeName, consName, ballName
 from os import path
 import random
