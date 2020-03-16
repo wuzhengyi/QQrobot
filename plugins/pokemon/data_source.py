@@ -218,6 +218,6 @@ class Pokemon():
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
         c.execute("UPDATE pokemon set %s = %s+%d where QQ=%d" %
-                  (name, name, value, str(self.QQ)))
+                  (name, name, value, self.QQ))
         conn.commit()
         conn.close()
