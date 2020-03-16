@@ -1,6 +1,6 @@
 import nonebot
 from nonebot import on_command, CommandSession
-from .data_source import userSQL, getScoreDrawRandom, getDiamonDrawRandom, isRoot
+from .data_source import userSQL, getScoreDrawRandom, getDiamonDrawRandom, isRoot, getImage
 from .data_source import pokeName, consName, ballName
 from os import path
 import random
@@ -93,9 +93,9 @@ async def backpack(session: CommandSession):
     user.close()
 
     message = '我的背包' + '\n' +\
-              '精灵球：' + str(evelsBall) + '\n' +\
-              '超级球：' + str(superBall) + '\n' +\
-              '大师球：' + str(masterBall) + '\n' +\
+              getImage('evelsBall')+'精灵球：' + str(evelsBall) + '\n' +\
+              getImage('superBall')+'超级球：' + str(superBall) + '\n' +\
+              getImage('masterBall')+'大师球：' + str(masterBall) + '\n' +\
               ''.join([consName[i] + '：' + str(cons[i]) +
                        '\n' for i in range(len(cons))])
     await session.send(message[:-1])

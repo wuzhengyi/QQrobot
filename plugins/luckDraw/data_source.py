@@ -51,6 +51,10 @@ def isRoot(QQ: int) -> bool:
     return QQ in rootList
 
 
+def getImage(name: str) -> str:
+    return '[CQ:image,file=image\\%s.png"]' % (name)
+
+
 class userSQL():
     def __init__(self):
         self.conn = sqlite3.connect('user.db')
