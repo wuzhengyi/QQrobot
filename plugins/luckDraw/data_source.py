@@ -59,7 +59,8 @@ def getImage(name: str) -> str:
     else:
         return '[CQ:image,file=kululu\%s.png]' % name
 
-def getBallImage(name: str) -> str:
+
+def getBallEmoji(name: str) -> str:
     if name == 'evelsBall':
         return '[CQ:emoji, id=9917]'
     elif name == 'superBall':
@@ -67,8 +68,17 @@ def getBallImage(name: str) -> str:
     else:
         return '[CQ:emoji, id=127936]'
 
+
+def getBallImage(name: str) -> str:
+    return '[CQ:image,file=kululu\%s.png]' % name
+
+
+def getConsEmoji(index: int) -> str:
+    return '[CQ:emoji, id=%d]' % (index+9800)
+
+
 def getConsImage(index: int) -> str:
-    return '[CQ:emoji, id=%d]'%(index+9800)
+    return '[CQ:image,file=kululu\%s.jpg]' % cons_database[index]
 
 
 class userSQL():

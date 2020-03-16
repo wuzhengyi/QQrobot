@@ -1,7 +1,7 @@
 import nonebot
 from nonebot import on_command, CommandSession
 from .data_source import userSQL, getScoreDrawRandom, getDiamonDrawRandom, isRoot
-from .data_source import getImage, getBallImage, getConsImage
+from .data_source import getImage, getBallImage, getConsImage, getBallEmoji, getConsEmoji
 from .data_source import pokeName, consName, ballName
 from os import path
 import random
@@ -94,10 +94,10 @@ async def backpack(session: CommandSession):
     user.close()
 
     message = '我的背包' + '\n' +\
-              getBallImage('evelsBall')+'精灵球:' + str(evelsBall) + '\n' +\
-              getBallImage('superBall')+'超级球:' + str(superBall) + '\n' +\
-              getBallImage('masterBall')+'大师球:' + str(masterBall) + '\n' +\
-              ''.join([getConsImage(i) + consName[i] + ':' + str(cons[i]) +
+              getBallEmoji('evelsBall')+'精灵球:' + str(evelsBall) + '\n' +\
+              getBallEmoji('superBall')+'超级球:' + str(superBall) + '\n' +\
+              getBallEmoji('masterBall')+'大师球:' + str(masterBall) + '\n' +\
+              ''.join([getConsEmoji(i) + consName[i] + ':' + str(cons[i]) +
                        '\n' for i in range(len(cons))])
     await session.send(message[:-1])
 
@@ -227,7 +227,8 @@ async def diamonDraw(session: CommandSession):
         ticketNum = ans.count('ticket')
         if ticketNum > 0:
             user.addTicket(QQ, ticketNum)
-            message = message + getImage('ticket')+ '\n恭喜你获得'+str(ticketNum)+'奖券\n'
+            message = message + getImage('ticket') + \
+                '\n恭喜你获得'+str(ticketNum)+'奖券\n'
         cardNum = ans.count('card')
         if cardNum > 0:
             cardIndex = [random.randint(0, 11) for i in range(cardNum)]
@@ -240,22 +241,28 @@ async def diamonDraw(session: CommandSession):
         diamondSum = sum([int(i) for i in ans if i.isdigit()])
         if diamondSum > 0:
             user.addDiamond(QQ, diamondSum)
-            if diamondSum in [30,60,120,300]:
-                message = message + getImage(str(diamondSum)+'diamond')+ '\n恭喜你获得'+str(diamondSum)+'钻石\n'
+            if diamondSum in [30, 60, 120, 300]:
+                message = message + \
+                    getImage(str(diamondSum)+'diamond') + \
+                    '\n恭喜你获得'+str(diamondSum)+'钻石\n'
             else:
                 message = message + '恭喜你获得'+str(diamondSum)+'钻石\n'
         evelsBall = ans.count('evelsBall')
         if evelsBall > 0:
             user.addEvelsBall(QQ, evelsBall)
-            message = message + getBallImage('evelsBall')+ '\n恭喜你获得'+str(evelsBall)+'个精灵球\n'
+            message = message + \
+                getBallImage('evelsBall') + '\n恭喜你获得'+str(evelsBall)+'个精灵球\n'
         superBall = ans.count('superBall')
         if superBall > 0:
             user.addSuperBall(QQ, superBall)
-            message = message + getBallImage('superBall')+ '\n恭喜你获得'+str(superBall)+'个超级球\n'
+            message = message + \
+                getBallImage('superBall') + '\n恭喜你获得'+str(superBall)+'个超级球\n'
         masterBall = ans.count('masterBall')
         if masterBall > 0:
             user.addMasterBall(QQ, masterBall)
-            message = message + getBallImage('masterBall')+ '\n恭喜你获得'+str(masterBall)+'个大师球\n欢迎下次光临。'
+            message = message + \
+                getBallImage('masterBall') + '\n恭喜你获得' + \
+                str(masterBall)+'个大师球\n欢迎下次光临。'
         await session.send(message)
     else:
         await session.send('你的钻石不足，快去找老蛋赚钻石吧。')
