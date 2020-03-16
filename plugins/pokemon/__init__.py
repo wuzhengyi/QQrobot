@@ -27,8 +27,8 @@ async def chooseA(session: CommandSession):
     QQ = session.ctx['user_id']
     if QQ in GameList:
         game = GameList[QQ]
-        game.next(Choice.A)
-        await session.send(game.next(Choice.A))
+        message = game.next(Choice.A)
+        await session.send(message)
 
 @on_command('B', only_to_me=False)
 async def chooseB(session: CommandSession):
@@ -36,8 +36,8 @@ async def chooseB(session: CommandSession):
     QQ = session.ctx['user_id']
     if QQ in GameList:
         game = GameList[QQ]
-        game.next(Choice.B)
-        await session.send(game.next(Choice.B))
+        message = game.next(Choice.B)
+        await session.send(message)
 
 @on_command('C', only_to_me=False)
 async def chooseC(session: CommandSession):
@@ -45,8 +45,8 @@ async def chooseC(session: CommandSession):
     QQ = session.ctx['user_id']
     if QQ in GameList:
         game = GameList[QQ]
-        game.next(Choice.C)
-        await session.send(game.next(Choice.C))
+        message = game.next(Choice.C)
+        await session.send(message)
 
 @on_command('D', only_to_me=False)
 async def chooseD(session: CommandSession):
@@ -54,5 +54,5 @@ async def chooseD(session: CommandSession):
     QQ = session.ctx['user_id']
     if QQ in GameList:
         game = GameList[QQ]
-        game.next(Choice.D)
-        await session.send(game.next(Choice.D))
+        message = game.next(Choice.D)
+        await session.send(message)
