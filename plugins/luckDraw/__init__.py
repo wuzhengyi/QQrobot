@@ -12,7 +12,7 @@ __plugin_usage__ = r"""
 签到
 查询
 物品/物品查询/背包/背包查询
-宠物/宠物查询/我的宠物 
+宠物/宠物查询/我的宠物/宝可梦
 积分抽奖/积分夺宝
 积分五连
 奖券抽奖/奖券夺宝
@@ -25,16 +25,21 @@ __plugin_usage__ = r"""
 奖券榜
 积分榜
 钻石榜
-清空奖券
-清空积分
-清空钻石
-清空背包
+清空奖券/奖券清零
+清空积分/积分清零
+清空钻石/钻石清零
+清空背包/背包清零
+清空宠物/宠物清零
+清空精灵球/精灵球清零
+清空星座卡/星座卡清零
 加奖券 [@某人/QQ号] [数量]
 减奖券 [@某人/QQ号] [数量]
 加积分 [@某人/QQ号] [数量]
 减积分 [@某人/QQ号] [数量]
 加钻石 [@某人/QQ号] [数量]
 减钻石 [@某人/QQ号] [数量]
+加物品 [@某人/QQ号] [物品] [数目]
+减物品 [@某人/QQ号] [物品] [数目]
 祈福/老板发钱/桃园结义/普度众生/悬壶济世 [下限] [上限]
 祈福/老板发钱/桃园结义/普度众生/悬壶济世 (默认60)
 祈福/老板发钱/桃园结义/普度众生/悬壶济世 [金额]
@@ -105,7 +110,7 @@ async def backpack(session: CommandSession):
     await session.send(message[:-1])
 
 
-@on_command('宠物', aliases=('宠物查询', '我的宠物'), only_to_me=False)
+@on_command('宠物', aliases=('宠物查询', '我的宠物', '宝可梦',), only_to_me=False)
 async def pet(session: CommandSession):
     QQ = session.ctx['user_id']
     user = userSQL()
@@ -653,6 +658,42 @@ async def resetBackpack(session: CommandSession):
     await session.send('全体背包清空成功')
 
 
+@on_command('清空宠物', aliases=('宠物清零',), only_to_me=False)
+async def resetPokemon(session: CommandSession):
+    # 判断目标发起人是否为管理员
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+    user = userSQL()
+    user.resetPokemon()
+    user.close()
+    await session.send('全体宠物清空成功')
+
+
+@on_command('清空精灵球', aliases=('精灵球清零',), only_to_me=False)
+async def resetBall(session: CommandSession):
+    # 判断目标发起人是否为管理员
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+    user = userSQL()
+    user.resetBall()
+    user.close()
+    await session.send('全体精灵球清空成功')
+
+
+@on_command('清空星座卡', aliases=('星座卡清零',), only_to_me=False)
+async def resetCons(session: CommandSession):
+    # 判断目标发起人是否为管理员
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+    user = userSQL()
+    user.resetCons()
+    user.close()
+    await session.send('全体星座卡清空成功')
+
+
 @on_command('祈福', aliases=('老板发钱', '桃园结义', '普度众生', '悬壶济世'), only_to_me=False)
 async def bless(session: CommandSession):
     # 判断目标发起人是否为管理员
@@ -680,3 +721,55 @@ async def bless(session: CommandSession):
     user.addAllDiamond(money)
     user.close()
     await session.send('增加成功，全体用户增加%d钻石。' % money)
+
+
+@on_command('加物品', only_to_me=False)
+async def addItem(session: CommandSession):
+    # 判断目标发起人是否为管理员
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip().split()
+    if len(args) != 3 or not args[2].isdigit():
+        await session.send('格式为 /加物品 [@某人/QQ号] [物品] [数目]。')
+        return
+    value = int(args[2])
+    item = args[1]
+    if args[0][:6] == '[CQ:at':
+        target = int(args[0][10:-1])
+    elif (args[0]).isdigit():
+        target = int(args[0])
+    else:
+        await session.send('加物品目标应为QQ号或@某人，格式为 /加物品 [@某人/QQ号] [物品] [数目]。')
+        return
+    user = userSQL()
+    user.addItem(target, item, value)
+    user.close()
+    await session.send('添加成功')
+
+
+@on_command('减物品', only_to_me=False)
+async def subItem(session: CommandSession):
+    # 判断目标发起人是否为管理员
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip().split()
+    if len(args) != 3 or not args[2].isdigit():
+        await session.send('格式为 /减物品 [@某人/QQ号] [物品] [数目]。')
+        return
+    value = int(args[2])
+    item = args[1]
+    if args[0][:6] == '[CQ:at':
+        target = int(args[0][10:-1])
+    elif (args[0]).isdigit():
+        target = int(args[0])
+    else:
+        await session.send('减物品目标应为QQ号或@某人，格式为 /减物品 [@某人/QQ号] [物品] [数目]。')
+        return
+    user = userSQL()
+    user.subItem(target, item, value)
+    user.close()
+    await session.send('减少成功')

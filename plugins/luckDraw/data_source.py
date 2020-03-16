@@ -5,22 +5,18 @@ import random
 rootList = [942858979]
 pokeName_database = ['xiaolada', 'bobo', 'miaomiao', 'wasidan', 'apashe',
                      'dashetou', 'pikaqiu', 'pipi', 'pangding', 'yibu', 'jilidan', 'dailong', 'menghuan']
-# pokeName_chinese = ['小拉达', '波波', '喵喵', '瓦斯弹', '阿柏蛇',
-#                     '大舌头', '皮卡丘', '皮皮', '胖丁', '伊布', '吉利蛋', '袋龙', '梦幻']
-# pokeName = zip(pokeName_database, pokeName_chinese)
-
-cons_database = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
-                 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
-# cons_chinese = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座',
-#                 '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座']
-# consName = zip(cons_database, cons_chinese)
-
 pokeName = ['小拉达', '波波', '喵喵', '瓦斯弹', '阿柏蛇',
             '大舌头', '皮卡丘', '皮皮', '胖丁', '伊布', '吉利蛋', '袋龙', '梦幻']
 consName = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座',
             '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座']
+cons_database = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
+                 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
+pokeNameCov = dict(zip(pokeName, pokeName_database))
+consNameCov = dict(zip(consName, cons_database))
+
 
 ballName = {'evelsBall': '精灵球', 'superBall': '超级球', 'masterBall': '大师球'}
+ballNameCov = {'精灵球': 'evelsBAll', '超级球': 'superBall', '大师球': 'masterBall'}
 
 
 def getScoreDrawRandom() -> int:
@@ -215,9 +211,9 @@ class userSQL():
         self.c.execute("UPDATE Constellation set " +
                        cons_database[index]+"="+cons_database[index]+"+"+str(value)+" where QQ=" + str(QQ))
 
-    def addBall(self, QQ: int, ball: str) -> None:
-        self.c.execute("UPDATE pokemon set " + ball +
-                       "="+ball+"+1 where QQ=" + str(QQ))
+    def addBall(self, QQ: int, ball: str, value: int = 1) -> None:
+        self.c.execute("UPDATE pokemon set %s=%s+%d where QQ=%d" %
+                       (ball, ball, value, QQ))
 
     def addEvelsBall(self, QQ: int, value: int) -> None:
         self.c.execute("UPDATE pokemon set EvelsBall = EvelsBall+" +
@@ -231,6 +227,27 @@ class userSQL():
         self.c.execute("UPDATE pokemon set MasterBall = MasterBall+" +
                        str(value)+" where QQ=" + str(QQ))
 
+    def addItem(self, QQ: int, item: str, value: int) -> None:
+        if item in ballNameCov:
+            self.addBall(QQ, ballNameCov[item], value)
+        elif item in pokeNameCov:
+            self.c.execute("UPDATE pokemon set %s=%s+%d where QQ=%d" %
+                           (pokeNameCov[item], pokeNameCov[item], value, QQ))
+        elif item in consNameCov:
+            self.c.execute("UPDATE Constellation set %s=%s+%d where QQ=%d" %
+                           (consNameCov[item], consNameCov[item], value, QQ))
+
+    def subItem(self, QQ: int, item: str, value: int) -> None:
+        if item in ballNameCov:
+            self.c.execute("UPDATE pokemon set %s=%s-%d where QQ=%d" %
+                           (ballNameCov[item], ballNameCov[item], value, QQ))
+        elif item in pokeNameCov:
+            self.c.execute("UPDATE pokemon set %s=%s-%d where QQ=%d" %
+                           (pokeNameCov[item], pokeNameCov[item], value, QQ))
+        elif item in consNameCov:
+            self.c.execute("UPDATE Constellation set %s=%s-%d where QQ=%d" %
+                           (consNameCov[item], consNameCov[item], value, QQ))
+
     def resetScore(self):
         self.c.execute("UPDATE user set Score = 0")
 
@@ -243,6 +260,10 @@ class userSQL():
     def resetBackpack(self):
         self.resetCons()
         self.resetBall()
+
+    def resetPokemon(self):
+        self.c.execute("UPDATE constellation SET " +
+                       '=0,'.join(pokeName_database) + "=0")
 
     def resetCons(self):
         self.c.execute("UPDATE constellation SET " +
