@@ -1,6 +1,15 @@
 from nonebot import on_command, CommandSession
 import paramiko
 
+__plugin_name__ = '服务器显卡查询'
+__plugin_usage__ = """
+使用指南：
+nvidia [服务器名]
+
+当前支持的服务器有：
+gemini leo scorpio taurus virgo
+"""
+
 server_dict = {'gemini': '114.212.85.149',
 'leo': '114.212.86.34',
 'scorpio': '210.28.134.13',

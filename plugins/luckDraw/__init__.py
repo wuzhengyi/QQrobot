@@ -5,6 +5,37 @@ from .data_source import pokeName, consName, ballName
 from os import path
 import random
 
+__plugin_name__ = '抽奖系统'
+__plugin_usage__ = """
+抽奖系统支持功能：
+签到
+查询
+物品/物品查询/背包/背包查询
+宠物/宠物查询/我的宠物 
+积分抽奖/积分夺宝
+积分五连
+奖券抽奖/奖券夺宝
+奖券五连
+钻石抽奖/钻石夺宝 [空|次数]
+
+管理功能：
+初始化
+注册 [@某人/QQ号]
+奖券榜
+积分榜
+钻石榜
+清空奖券
+清空积分
+清空钻石
+清空背包
+加奖券 [@某人/QQ号] [数量]
+减奖券 [@某人/QQ号] [数量]
+加积分 [@某人/QQ号] [数量]
+减积分 [@某人/QQ号] [数量]
+加钻石 [@某人/QQ号] [数量]
+减钻石 [@某人/QQ号] [数量]
+"""
+
 # on_command 装饰器将函数声明为一个命令处理器
 # 这里 luckyDraw 为命令的名字
 @on_command('签到', only_to_me=False)
