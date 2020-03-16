@@ -216,7 +216,7 @@ class userSQL():
 
     def resetBall(self):
         self.c.execute(
-            "UPDATE constellation SET evelsBall=0, superBall=0, masterBall = 0")
+            "UPDATE pokemon SET evelsBall=0, superBall=0, masterBall = 0")
 
     def close(self):
         self.conn.commit()

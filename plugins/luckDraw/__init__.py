@@ -202,7 +202,8 @@ async def diamonDraw(session: CommandSession):
                 num = cardIndex.count(i)
                 if num > 0:
                     user.addCons(QQ, i, num)
-                    message = message + '恭喜你获得'+str(num)+'张'+consName[cardIndex[i]]+'卡片\n'
+                    message = message + '恭喜你获得' + \
+                        str(num)+'张'+consName[cardIndex[i]]+'卡片\n'
         diamondSum = sum([int(i) for i in ans if i.isdigit()])
         if diamondSum > 0:
             user.addDiamond(QQ, diamondSum)
@@ -238,7 +239,8 @@ async def topTicket(session: CommandSession):
     for QQ in rank:
         try:
             group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0], no_cache=False)
-            QQname.append((group_member_info['card'] or group_member_info['nickname'], QQ[1]))
+            QQname.append(
+                (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
         except:  # 非本群人员
             pass
         if len(QQname) > 5:
@@ -261,7 +263,8 @@ async def topDiamond(session: CommandSession):
     for QQ in rank:
         try:
             group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0], no_cache=False)
-            QQname.append((group_member_info['card'] or group_member_info['nickname'], QQ[1]))
+            QQname.append(
+                (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
         except:  # 非本群人员
             pass
         if len(QQname) > 5:
@@ -284,7 +287,8 @@ async def topScore(session: CommandSession):
     for QQ in rank:
         try:
             group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0], no_cache=False)
-            QQname.append((group_member_info['card'] or group_member_info['nickname'], QQ[1]))
+            QQname.append(
+                (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
         except:  # 非本群人员
             pass
         if len(QQname) > 5:
@@ -588,8 +592,9 @@ async def resetDiamond(session: CommandSession):
     user.close()
     await session.send('全体钻石清空成功')
 
+
 @on_command('清空背包', aliases=('背包清零',), only_to_me=False)
-async def resetDiamond(session: CommandSession):
+async def resetBackpack(session: CommandSession):
     # 判断目标发起人是否为管理员
     QQ = session.ctx['user_id']
     if not isRoot(QQ):
