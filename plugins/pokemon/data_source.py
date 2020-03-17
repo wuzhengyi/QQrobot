@@ -3,7 +3,7 @@ import random
 import sys
 import os
 sys.path.append(os.path.join('plugins','pokemon'))
-from header import State, Choice, PokeLevel, ballName
+from header import State, Choice, PokeLevel, ballEng2Chn, allPokemon
 import sceneA
 
 GameList = {}
@@ -24,14 +24,8 @@ def getBallEmoji(name: str) -> str:
 
 
 def getPokeLevel(name: str) -> PokeLevel:
-    if name in ['xiaolada', 'bobo']:
-        return PokeLevel.D
-    elif name in ['miaomiao', 'wasidan', 'apashe', 'dashetou']:
-        return PokeLevel.C
-    elif name in ['pikaqiu', 'pipi', 'pangding', 'yibu']:
-        return PokeLevel.B
-    elif name in ['jilidan', 'dailong']:
-        return PokeLevel.A
+    if name in allPokemon:
+        return allPokemon[name]
     else:
         return PokeLevel.S
 
@@ -90,7 +84,7 @@ class Pokemon():
         name = temp[choice]
         ballNum = self._getBallNum(name)
         if ballNum <= 0:
-            return f'对不起，你没有足够的{ballName[name]},请重新选择。'
+            return f'对不起，你没有足够的{ballEng2Chn[name]},请重新选择。'
         # 消耗对应精灵球
         self._subBallNum(name)
         # 开始捕捉
@@ -191,6 +185,7 @@ class Pokemon():
 
 
 if __name__ == "__main__":
+    DEBUG = True
     game = Pokemon(123)
     print(game.begin())
     print(game.next(Choice.B))
@@ -203,3 +198,5 @@ if __name__ == "__main__":
     # print(game.next(Choice.A))
     # print(game.next(Choice.A))
     print(game.next(Choice.D))
+    for i in allPokemon:
+        print(i)

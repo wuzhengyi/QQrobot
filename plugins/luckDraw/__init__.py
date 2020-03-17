@@ -2,8 +2,8 @@ import nonebot
 from nonebot import on_command, CommandSession
 from .data_source import userSQL, getScoreDrawRandom, getDiamonDrawRandom, isRoot
 from .data_source import getImage, getBallImage, getConsImage, getBallEmoji, getConsEmoji
-from .data_source import pokeName, consName, ballName
-from os import path
+from ..pokemon.header import pokeNameChn
+from .data_source import consName
 import random
 
 __plugin_name__ = '抽奖系统'
@@ -124,9 +124,9 @@ async def pet(session: CommandSession):
     user.close()
 
     message = '我的宠物' + '\n' + \
-              ''.join([pokeName[i] + ':' + str(pokemon[i]) +
+              ''.join([pokeNameChn[i] + ':' + str(pokemon[i]) +
                        '\n' for i in range(len(pokemon) - 1)])
-    message = message + pokeName[-1] + ':' + \
+    message = message + pokeNameChn[-1] + ':' + \
               str(pokemon[-1]) + '\n' if pokemon[-1] != 0 else message
     await session.send(message[:-1])
 

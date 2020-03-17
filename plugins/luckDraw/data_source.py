@@ -1,21 +1,15 @@
 import sqlite3
 import random
+from ..pokemon.header import pokeNameEng, pokeNameChn2Eng, ballEng2Chn, ballChn2Eng
 
 # rootList = [942858979, 914349145]
 rootList = [942858979]
-pokeName_database = ['xiaolada', 'bobo', 'miaomiao', 'wasidan', 'apashe',
-                     'dashetou', 'pikaqiu', 'pipi', 'pangding', 'yibu', 'jilidan', 'dailong', 'menghuan']
-pokeName = ['小拉达', '波波', '喵喵', '瓦斯弹', '阿柏蛇',
-            '大舌头', '皮卡丘', '皮皮', '胖丁', '伊布', '吉利蛋', '袋龙', '梦幻']
+
 consName = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座',
             '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座']
 cons_database = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
                  'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
-pokeNameCov = dict(zip(pokeName, pokeName_database))
 consNameCov = dict(zip(consName, cons_database))
-
-ballName = {'evelsBall': '精灵球', 'superBall': '超级球', 'masterBall': '大师球'}
-ballNameCov = {'精灵球': 'evelsBAll', '超级球': 'superBall', '大师球': 'masterBall'}
 
 
 def getScoreDrawRandom() -> int:
@@ -50,7 +44,7 @@ def isRoot(QQ: int) -> bool:
 def getImage(name: str) -> str:
     if name in cons_database:
         return getConsImage(cons_database.index(name))
-    elif name in ballName:
+    elif name in ballEng2Chn:
         return getBallImage(name)
     else:
         return '[CQ:image,file=kululu\%s.png]' % name
@@ -155,7 +149,7 @@ class userSQL():
         return ans[0]
 
     def getPokemon(self, QQ: int) -> tuple:
-        self.c.execute("select * from pokemon where QQ=" + str(QQ))
+        self.c.execute(f"select {','.join(pokeNameEng)} from pokemon where QQ={QQ}")
         ans = self.c.fetchone()
         return ans[4:]
 
@@ -227,22 +221,22 @@ class userSQL():
                        str(value) + " where QQ=" + str(QQ))
 
     def addItem(self, QQ: int, item: str, value: int) -> None:
-        if item in ballNameCov:
-            self.addBall(QQ, ballNameCov[item], value)
-        elif item in pokeNameCov:
+        if item in ballChn2Eng:
+            self.addBall(QQ, ballChn2Eng[item], value)
+        elif item in pokeNameChn2Eng:
             self.c.execute("UPDATE pokemon set %s=%s+%d where QQ=%d" %
-                           (pokeNameCov[item], pokeNameCov[item], value, QQ))
+                           (pokeNameChn2Eng[item], pokeNameChn2Eng[item], value, QQ))
         elif item in consNameCov:
             self.c.execute("UPDATE Constellation set %s=%s+%d where QQ=%d" %
                            (consNameCov[item], consNameCov[item], value, QQ))
 
     def subItem(self, QQ: int, item: str, value: int) -> None:
-        if item in ballNameCov:
+        if item in ballChn2Eng:
             self.c.execute("UPDATE pokemon set %s=%s-%d where QQ=%d" %
-                           (ballNameCov[item], ballNameCov[item], value, QQ))
-        elif item in pokeNameCov:
+                           (ballChn2Eng[item], ballChn2Eng[item], value, QQ))
+        elif item in pokeNameChn2Eng:
             self.c.execute("UPDATE pokemon set %s=%s-%d where QQ=%d" %
-                           (pokeNameCov[item], pokeNameCov[item], value, QQ))
+                           (pokeNameChn2Eng[item], pokeNameChn2Eng[item], value, QQ))
         elif item in consNameCov:
             self.c.execute("UPDATE Constellation set %s=%s-%d where QQ=%d" %
                            (consNameCov[item], consNameCov[item], value, QQ))
@@ -262,7 +256,7 @@ class userSQL():
 
     def resetPokemon(self):
         self.c.execute("UPDATE pokemon SET " +
-                       '=0,'.join(pokeName_database) + "=0")
+                       '=0,'.join(pokeNameEng) + "=0")
 
     def resetCons(self):
         self.c.execute("UPDATE constellation SET " +
