@@ -151,7 +151,7 @@ class userSQL():
     def getPokemon(self, QQ: int) -> tuple:
         self.c.execute(f"select {','.join(pokeNameEng)} from pokemon where QQ={QQ}")
         ans = self.c.fetchone()
-        return ans[4:]
+        return ans
 
     def getConstellation(self, QQ: int) -> tuple:
         self.c.execute("select * from Constellation where QQ=" + str(QQ))
