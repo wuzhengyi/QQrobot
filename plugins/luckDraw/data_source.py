@@ -14,7 +14,6 @@ cons_database = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
 pokeNameCov = dict(zip(pokeName, pokeName_database))
 consNameCov = dict(zip(consName, cons_database))
 
-
 ballName = {'evelsBall': '精灵球', 'superBall': '超级球', 'masterBall': '大师球'}
 ballNameCov = {'精灵球': 'evelsBAll', '超级球': 'superBall', '大师球': 'masterBall'}
 
@@ -71,7 +70,7 @@ def getBallImage(name: str) -> str:
 
 
 def getConsEmoji(index: int) -> str:
-    return '[CQ:emoji, id=%d]' % (index+9800)
+    return '[CQ:emoji, id=%d]' % (index + 9800)
 
 
 def getConsImage(index: int) -> str:
@@ -92,11 +91,11 @@ class userSQL():
 
     def insert(self, QQ: int) -> None:
         self.c.execute("INSERT INTO USER (QQ) \
-                        VALUES ("+str(QQ)+")")
+                        VALUES (" + str(QQ) + ")")
         self.c.execute("INSERT INTO pokemon (QQ) \
-                        VALUES ("+str(QQ)+")")
+                        VALUES (" + str(QQ) + ")")
         self.c.execute("INSERT INTO constellation (QQ) \
-                        VALUES ("+str(QQ)+")")
+                        VALUES (" + str(QQ) + ")")
 
     def _isNewDate(self) -> bool:
         self.c.execute("select * from common where signdate=date('now')")
@@ -182,34 +181,34 @@ class userSQL():
 
     def subScore(self, QQ: int, value: int) -> None:
         self.c.execute("UPDATE user set SCORE = SCORE-" +
-                       str(value)+" where QQ=" + str(QQ))
+                       str(value) + " where QQ=" + str(QQ))
 
     def addScore(self, QQ: int, value: int) -> None:
         self.c.execute("UPDATE user set SCORE = SCORE+" +
-                       str(value)+" where QQ=" + str(QQ))
+                       str(value) + " where QQ=" + str(QQ))
 
     def subTicket(self, QQ: int, value: int) -> None:
         self.c.execute("UPDATE user set ticket = ticket-" +
-                       str(value)+" where QQ=" + str(QQ))
+                       str(value) + " where QQ=" + str(QQ))
 
     def addTicket(self, QQ: int, value: int) -> None:
         self.c.execute("UPDATE user set ticket = ticket+" +
-                       str(value)+" where QQ=" + str(QQ))
+                       str(value) + " where QQ=" + str(QQ))
 
     def subDiamond(self, QQ: int, value: int) -> None:
         self.c.execute("UPDATE user set Diamond = Diamond-" +
-                       str(value)+" where QQ=" + str(QQ))
+                       str(value) + " where QQ=" + str(QQ))
 
     def addDiamond(self, QQ: int, value: int) -> None:
         self.c.execute("UPDATE user set Diamond = Diamond+" +
-                       str(value)+" where QQ=" + str(QQ))
+                       str(value) + " where QQ=" + str(QQ))
 
     def addAllDiamond(self, value: int) -> None:
         self.c.execute("UPDATE user set Diamond = Diamond+" + str(value))
 
     def addCons(self, QQ: int, index: int, value: int = 1) -> None:
         self.c.execute("UPDATE Constellation set " +
-                       cons_database[index]+"="+cons_database[index]+"+"+str(value)+" where QQ=" + str(QQ))
+                       cons_database[index] + "=" + cons_database[index] + "+" + str(value) + " where QQ=" + str(QQ))
 
     def addBall(self, QQ: int, ball: str, value: int = 1) -> None:
         self.c.execute("UPDATE pokemon set %s=%s+%d where QQ=%d" %
@@ -217,15 +216,15 @@ class userSQL():
 
     def addEvelsBall(self, QQ: int, value: int) -> None:
         self.c.execute("UPDATE pokemon set EvelsBall = EvelsBall+" +
-                       str(value)+" where QQ=" + str(QQ))
+                       str(value) + " where QQ=" + str(QQ))
 
     def addSuperBall(self, QQ: int, value: int) -> None:
         self.c.execute("UPDATE pokemon set SuperBall = SuperBall+" +
-                       str(value)+" where QQ=" + str(QQ))
+                       str(value) + " where QQ=" + str(QQ))
 
     def addMasterBall(self, QQ: int, value: int) -> None:
         self.c.execute("UPDATE pokemon set MasterBall = MasterBall+" +
-                       str(value)+" where QQ=" + str(QQ))
+                       str(value) + " where QQ=" + str(QQ))
 
     def addItem(self, QQ: int, item: str, value: int) -> None:
         if item in ballNameCov:
