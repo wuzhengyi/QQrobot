@@ -1,6 +1,9 @@
 import sqlite3
 import random
-from header import *
+import sys
+import os
+sys.path.append(os.path.join('plugins','pokemon'))
+from header import State, Choice, PokeLevel, ballName
 import sceneA
 
 GameList = {}
