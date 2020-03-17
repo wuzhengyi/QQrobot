@@ -101,10 +101,10 @@ class Pokemon():
             return '请重新开始游戏。'
 
     def _dealScene(self, choice: Choice) -> str:
-        if self._getDiamond() < 10:
-            return '对不起，你的钻石余额不足10，快找老蛋充值吧。'
-        self._subDiamond()
         if choice is Choice.A:
+            if self._getDiamond() < 10:
+                return '对不起，你的钻石余额不足10，快找老蛋充值吧。'
+            self._subDiamond()
             # 更新状态
             self.state = State.catch
             # 随机精灵宝可梦
