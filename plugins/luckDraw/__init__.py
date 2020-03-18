@@ -89,7 +89,7 @@ async def sign(session: CommandSession):
     user.close()
 
 @on_natural_language
-async def _(session: NLPSession):
+async def _(session: NLPSession, only_to_me=False):
     # 以置信度 60.0 返回 message 命令
     # 确保任何消息都在且仅在其它自然语言处理器无法理解的时候使用 message 命令
     return IntentCommand(60.0, 'message', args={'message': session.msg_text})
