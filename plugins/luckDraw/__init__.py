@@ -78,15 +78,16 @@ async def sign(session: CommandSession):
     user = userSQL()
     if not user.isExist(QQ):
         user.insert(QQ)
-    if user.getMessageNum(QQ) < 5:
+    messageNum = user.getMessageNum(QQ)
+    if messageNum < 5:
         user.addDiamond(QQ, 10)
-    elif user.getMessageNum(QQ) == 100:
+    elif messageNum == 100:
         await session.send('你今天已经说了100句话了！奖励你一个钻石鼓励一下啵(#^.^#)')
-        user.addDiamond(QQ)
-    elif user.getMessageNum(QQ) == 1000:
+        user.addDiamond(QQ, 1)
+    elif messageNum == 1000:
         await session.send('你今天已经说了1000句话了！你太能唠了，扣10钻石！')
         user.subDiamond(QQ, 10)
-    elif user.getMessageNum(QQ) == 5000:
+    elif messageNum == 5000:
         await session.send('你是传说中的龙王吧，你今天已经说了5000句话了！我把扣的10钻石加回来吧(灬ꈍ ꈍ灬)')
         user.addDiamond(QQ, 10)
     user.addMessageNum(QQ)
