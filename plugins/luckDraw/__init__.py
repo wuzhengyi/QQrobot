@@ -104,11 +104,11 @@ async def sign(session: CommandSession):
     elif messageNum == 6000:
         await session.send('一阵风吹过，6000句话说到我心里，却无事发生。')  
     elif messageNum == 6999:
-        await session.send('你今天已经说了6999句话了！你确定要刷到6000？')
+        await session.send('你今天已经说了6999句话了！你确定要刷到7000？')
     elif messageNum == 7000:
         await session.send('一阵风吹过，7000句话说到我心里，却无事发生。')  
     elif messageNum == 7999:
-        await session.send('你今天已经说了7999句话了！你确定要刷到6000？')
+        await session.send('你今天已经说了7999句话了！你确定要刷到8000？')
     elif messageNum == 8000:
         await session.send('一阵风吹过，8000句话说到我心里，却无事发生。')    
     elif messageNum == 9999:
