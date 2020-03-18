@@ -341,8 +341,8 @@ async def topTicket(session: CommandSession):
                 (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
         except:  # 非本群人员
             pass
-        if len(QQname) > 5:
-            break
+        # if len(QQname) > 5:
+        #     break
     message = '奖券排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
@@ -366,8 +366,8 @@ async def topDiamond(session: CommandSession):
                 (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
         except:  # 非本群人员
             pass
-        if len(QQname) > 5:
-            break
+        # if len(QQname) > 5:
+        #     break
     message = '钻石排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
@@ -391,8 +391,8 @@ async def topMessage(session: CommandSession):
                 (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
         except:  # 非本群人员
             pass
-        if len(QQname) > 5:
-            break
+        # if len(QQname) > 5:
+        #     break
     message = '发言排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
@@ -416,8 +416,8 @@ async def topScore(session: CommandSession):
                 (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
         except:  # 非本群人员
             pass
-        if len(QQname) > 5:
-            break
+        # if len(QQname) > 5:
+        #     break
     message = '积分排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
