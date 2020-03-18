@@ -98,8 +98,11 @@ async def sign(session: CommandSession):
         await session.send('你今天已经说了4000句话了！怕了你了，13颗钻石给你给你都给你！')
         user.addDiamond(QQ, 17)
     elif messageNum == 5000:
-        await session.send('你是传说中的龙王吧，你今天已经说了5000句话了！是在下唐突了，罚18颗钻石以儆效尤')
-        user.subDiamond(QQ, 18)
+        await session.send('你是传说中的龙王吧，你今天已经说了5000句话了！是在下唐突了，罚18颗钻石以儆效尤。')
+    elif messageNum == 5999:
+        await session.send('你今天已经说了5999句话了！你确定要刷到6000？')
+    elif messageNum == 6000:
+        await session.send('一阵风吹过，六千句话说到我心里，却无事发生。')    
     elif messageNum == 9999:
         await session.send('你今天已经说了9999句话了！友谊提醒你不要再说话了，要不然怎么哭的都不知道。')
     elif messageNum == 10000:
