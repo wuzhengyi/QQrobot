@@ -326,8 +326,8 @@ async def diamonDraw(session: CommandSession):
 @on_command('奖券榜', only_to_me=False)
 async def topTicket(session: CommandSession):
     QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
+    # if not isRoot(QQ):
+    #     return
     user = userSQL()
     rank = user.getTopTicket()
     user.close()
@@ -351,8 +351,8 @@ async def topTicket(session: CommandSession):
 @on_command('钻石榜', only_to_me=False)
 async def topDiamond(session: CommandSession):
     QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
+    # if not isRoot(QQ):
+    #     return
     user = userSQL()
     rank = user.getTopDiamond()
     user.close()
@@ -376,8 +376,8 @@ async def topDiamond(session: CommandSession):
 @on_command('发言榜', only_to_me=False)
 async def topMessage(session: CommandSession):
     QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
+    # if not isRoot(QQ):
+    #     return
     user = userSQL()
     rank = user.getTopMessage()
     user.close()
@@ -401,8 +401,8 @@ async def topMessage(session: CommandSession):
 @on_command('积分榜', only_to_me=False)
 async def topScore(session: CommandSession):
     QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
+    # if not isRoot(QQ):
+    #     return
     user = userSQL()
     rank = user.getTopScore()
     user.close()
