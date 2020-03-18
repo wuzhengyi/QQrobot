@@ -4,7 +4,7 @@ from nonebot import on_natural_language, NLPSession, IntentCommand
 from .data_source import userSQL, getScoreDrawRandom, getDiamonDrawRandom, isRoot
 from .data_source import getImage, getBallImage, getConsImage, getBallEmoji, getConsEmoji
 from ..pokemon.header import pokeNameChn
-from .data_source import consName
+from .data_source import consName, stopWord
 import random
 
 __plugin_name__ = '抽奖系统'
@@ -70,7 +70,7 @@ async def sign(session: CommandSession):
 
 
 @on_command('message', only_to_me=False)
-async def sign(session: CommandSession):
+async def message(session: CommandSession):
     QQ = session.ctx['user_id']
     # 获取可选参数，这里如果没有 message 参数，命令不会被中断，message 变量会是 None
     message = session.state.get('message')
@@ -87,9 +87,18 @@ async def sign(session: CommandSession):
     elif messageNum == 1000:
         await session.send('你今天已经说了1000句话了！你太能唠了，扣10钻石！')
         user.subDiamond(QQ, 10)
+    elif messageNum == 2000:
+        await session.send('你今天已经说了2000句话了！你太能唠了，我把扣的10钻石加回来吧(灬ꈍ ꈍ灬),再奖励你一点。！')
+        user.addDiamond(QQ, 11)
+    elif messageNum == 3000:
+        await session.send('你今天已经说了3000句话了！你太能唠了，扣12钻石！')
+        user.subDiamond(QQ, 15)
+    elif messageNum == 4000:
+        await session.send('你今天已经说了4000句话了！你太能唠了，13颗钻石给你给你都给你！')
+        user.addDiamond(QQ, 17)
     elif messageNum == 5000:
-        await session.send('你是传说中的龙王吧，你今天已经说了5000句话了！我把扣的10钻石加回来吧(灬ꈍ ꈍ灬)')
-        user.addDiamond(QQ, 10)
+        await session.send('你是传说中的龙王吧，你今天已经说了5000句话了！是在下唐突了，罚18颗钻石以儆效尤')
+        user.subDiamond(QQ, 18)
     user.addMessageNum(QQ)
     user.close()
 
@@ -337,6 +346,7 @@ async def topTicket(session: CommandSession):
         try:
             group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0],
                                                                 no_cache=False)
+            name = group_member_info['card'] or group_member_info['nickname']
             QQname.append(
                 (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
         except:  # 非本群人员
@@ -344,7 +354,8 @@ async def topTicket(session: CommandSession):
         # if len(QQname) > 5:
         #     break
     message = '奖券排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname)) if
+                                   stopWord not in QQname[i][0]])
     await session.send(message)
 
 
@@ -369,7 +380,8 @@ async def topDiamond(session: CommandSession):
         # if len(QQname) > 5:
         #     break
     message = '钻石排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname)) if
+                                   stopWord not in QQname[i][0]])
     await session.send(message)
 
 
@@ -394,7 +406,8 @@ async def topMessage(session: CommandSession):
         # if len(QQname) > 5:
         #     break
     message = '发言排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname)) if
+                                   stopWord not in QQname[i][0]])
     await session.send(message)
 
 
@@ -419,7 +432,8 @@ async def topScore(session: CommandSession):
         # if len(QQname) > 5:
         #     break
     message = '积分排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname)) if
+                                   stopWord not in QQname[i][0]])
     await session.send(message)
 
 
