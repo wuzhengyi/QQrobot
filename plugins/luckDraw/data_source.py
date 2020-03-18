@@ -174,6 +174,11 @@ class userSQL():
         ans = self.c.fetchall()
         return ans
 
+    def getTopMessage(self) -> [(int, int)]:
+        self.c.execute("select QQ, messageNum from user ORDER BY Diamond DESC")
+        ans = self.c.fetchall()
+        return ans
+
     def getMessageNum(self, QQ: int) -> int:
         self.c.execute(f"select messageNum from user where QQ={QQ}")
         ans = self.c.fetchone()

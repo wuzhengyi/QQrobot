@@ -26,6 +26,7 @@ __plugin_usage__ = r"""
 奖券榜
 积分榜
 钻石榜
+发言榜
 清空奖券/奖券清零
 清空积分/积分清零
 清空钻石/钻石清零
@@ -67,6 +68,7 @@ async def sign(session: CommandSession):
         await session.send(message)
     user.close()
 
+
 @on_command('message', only_to_me=False)
 async def sign(session: CommandSession):
     QQ = session.ctx['user_id']
@@ -79,14 +81,17 @@ async def sign(session: CommandSession):
     if user.getMessageNum(QQ) < 5:
         user.addDiamond(QQ, 10)
     elif user.getMessageNum(QQ) == 100:
-        await session.send('你今天已经说了100句话了！')
+        await session.send('你今天已经说了100句话了！奖励你一个钻石鼓励一下啵(#^.^#)')
+        user.addDiamond(QQ)
     elif user.getMessageNum(QQ) == 1000:
-        await session.send('你今天已经说了1000句话了！')
+        await session.send('你今天已经说了1000句话了！你太能唠了，扣10钻石！')
+        user.subDiamond(QQ, 10)
     elif user.getMessageNum(QQ) == 5000:
-        await session.send('你是传说中的龙王吧，你今天已经说了5000句话了！')
+        await session.send('你是传说中的龙王吧，你今天已经说了5000句话了！我把扣的10钻石加回来吧(灬ꈍ ꈍ灬)')
+        user.addDiamond(QQ, 10)
     user.addMessageNum(QQ)
-
     user.close()
+
 
 @on_natural_language(only_to_me=False)
 async def _(session: NLPSession):
@@ -363,6 +368,31 @@ async def topDiamond(session: CommandSession):
         if len(QQname) > 5:
             break
     message = '钻石排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
+                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+    await session.send(message)
+
+
+@on_command('发言榜', only_to_me=False)
+async def topMessage(session: CommandSession):
+    QQ = session.ctx['user_id']
+    if not isRoot(QQ):
+        return
+    user = userSQL()
+    rank = user.getTopMessage()
+    user.close()
+    bot = nonebot.get_bot()
+    QQname = []
+    for QQ in rank:
+        try:
+            group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0],
+                                                                no_cache=False)
+            QQname.append(
+                (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
+        except:  # 非本群人员
+            pass
+        if len(QQname) > 5:
+            break
+    message = '发言排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
 
