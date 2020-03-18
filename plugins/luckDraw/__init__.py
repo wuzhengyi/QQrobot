@@ -70,11 +70,12 @@ async def sign(session: CommandSession):
 
 
 @on_command('message', only_to_me=False)
-async def message(session: CommandSession):
+async def sign(session: CommandSession):
     QQ = session.ctx['user_id']
     # 获取可选参数，这里如果没有 message 参数，命令不会被中断，message 变量会是 None
     message = session.state.get('message')
-    if not message: return
+    # 屏蔽表情包
+    # if not message: return
     user = userSQL()
     if not user.isExist(QQ):
         user.insert(QQ)
@@ -347,15 +348,14 @@ async def topTicket(session: CommandSession):
             group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0],
                                                                 no_cache=False)
             name = group_member_info['card'] or group_member_info['nickname']
-            QQname.append(
-                (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
+            if all([w not in name for w in stopWord]):
+                QQname.append((name, QQ[1]))
         except:  # 非本群人员
             pass
         # if len(QQname) > 5:
         #     break
     message = '奖券排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname)) if
-                                   stopWord not in QQname[i][0]])
+                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
 
 
@@ -373,15 +373,15 @@ async def topDiamond(session: CommandSession):
         try:
             group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0],
                                                                 no_cache=False)
-            QQname.append(
-                (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
+            name = group_member_info['card'] or group_member_info['nickname']
+            if all([w not in name for w in stopWord]):
+                QQname.append((name, QQ[1]))
         except:  # 非本群人员
             pass
         # if len(QQname) > 5:
         #     break
     message = '钻石排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname)) if
-                                   stopWord not in QQname[i][0]])
+                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
 
 
@@ -399,15 +399,15 @@ async def topMessage(session: CommandSession):
         try:
             group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0],
                                                                 no_cache=False)
-            QQname.append(
-                (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
+            name = group_member_info['card'] or group_member_info['nickname']
+            if all([w not in name for w in stopWord]):
+                QQname.append((name, QQ[1]))
         except:  # 非本群人员
             pass
         # if len(QQname) > 5:
         #     break
     message = '发言排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname)) if
-                                   stopWord not in QQname[i][0]])
+                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
 
 
@@ -425,15 +425,15 @@ async def topScore(session: CommandSession):
         try:
             group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0],
                                                                 no_cache=False)
-            QQname.append(
-                (group_member_info['card'] or group_member_info['nickname'], QQ[1]))
+            name = group_member_info['card'] or group_member_info['nickname']
+            if all([w not in name for w in stopWord]):
+                QQname.append((name, QQ[1]))
         except:  # 非本群人员
             pass
         # if len(QQname) > 5:
         #     break
     message = '积分排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname)) if
-                                   stopWord not in QQname[i][0]])
+                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
 
 
