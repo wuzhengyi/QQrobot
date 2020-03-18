@@ -1,5 +1,6 @@
 import nonebot
 from nonebot import on_command, CommandSession
+from nonebot import on_natural_language, NLPSession, IntentCommand
 from .data_source import userSQL, getScoreDrawRandom, getDiamonDrawRandom, isRoot
 from .data_source import getImage, getBallImage, getConsImage, getBallEmoji, getConsEmoji
 from ..pokemon.header import pokeNameChn
@@ -66,6 +67,33 @@ async def sign(session: CommandSession):
         await session.send(message)
     user.close()
 
+@on_command('message', only_to_me=False)
+async def sign(session: CommandSession):
+    QQ = session.ctx['user_id']
+    # 获取可选参数，这里如果没有 message 参数，命令不会被中断，message 变量会是 None
+    message = session.state.get('message')
+    if not message: return
+    user = userSQL()
+    if not user.isExist(QQ):
+        user.insert(QQ)
+    if user.getMessageNum(QQ) < 5:
+        user.addDiamond(QQ, 10)
+    elif user.getMessageNum(QQ) == 100:
+        await session.send('你今天已经说了100句话了！')
+    elif user.getMessageNum(QQ) == 1000:
+        await session.send('你今天已经说了1000句话了！')
+    elif user.getMessageNum(QQ) == 5000:
+        await session.send('你是传说中的龙王吧，你今天已经说了5000句话了！')
+    user.addMessageNum(QQ)
+
+    user.close()
+
+@on_natural_language
+async def _(session: NLPSession):
+    # 以置信度 60.0 返回 message 命令
+    # 确保任何消息都在且仅在其它自然语言处理器无法理解的时候使用 message 命令
+    return IntentCommand(60.0, 'message', args={'message': session.msg_text})
+
 
 @on_command('查询', only_to_me=False)
 async def query(session: CommandSession):
@@ -78,12 +106,14 @@ async def query(session: CommandSession):
     score = user.getScore(QQ)
     ticket = user.getTicket(QQ)
     diamond = user.getDiamond(QQ)
+    messageNum = user.getMessageNum(QQ)
     user.close()
 
     message = '个人信息' + '\n' + \
               '积分:' + str(score) + '\n' + \
               '奖券:' + str(ticket) + '\n' + \
-              '钻石:' + str(diamond)
+              '钻石:' + str(diamond) + '\n' + \
+              '发言:' + str(messageNum) + '条'
 
     await session.send(message)
 

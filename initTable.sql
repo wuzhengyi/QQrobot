@@ -3,7 +3,8 @@ create table user(
     score int DEFAULT 0,
     diamond int DEFAULT 0,
     ticket int DEFAULT 0,
-    sign int DEFAULT 0
+    sign int DEFAULT 0,
+    messageNum int DEFAULT 0
 );
 
 create table pokemon(
@@ -51,3 +52,5 @@ INSERT INTO
     common (signDate)
 VALUES
     (date('now'));
+
+--  alter table user add column messagenum int default 0;

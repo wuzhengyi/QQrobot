@@ -77,7 +77,7 @@ class userSQL():
         self.c = self.conn.cursor()
 
     def isExist(self, QQ: int) -> bool:
-        self.c.execute("select * from user where QQ=" + str(QQ))
+        self.c.execute(f"select * from user where QQ= {QQ}")
         ans = self.c.fetchall()
         if ans == []:
             return False
@@ -97,14 +97,14 @@ class userSQL():
         if ans == []:
             self.c.execute(
                 "INSERT INTO common (signDate) VALUES (date('now'))")
-            self.c.execute("UPDATE user set sign = 0")
+            self.c.execute("UPDATE user set sign = 0, messageNum=0")
             return True
         return False
 
     def isSigned(self, QQ: int) -> bool:
         if self._isNewDate():
             return True
-        self.c.execute("select sign from user where QQ=" + str(QQ))
+        self.c.execute(f"select sign from user where QQ= {QQ}")
         ans = self.c.fetchall()
         if ans == [] or ans[0][0] == 0:
             return False
@@ -113,48 +113,49 @@ class userSQL():
     def sign(self, QQ: int) -> int:
         self.c.execute(
             "UPDATE common set signnum = signnum+1 where signdate=date('now')")
-        self.c.execute("UPDATE user set sign = 1 where QQ=" + str(QQ))
+        self.c.execute(f"UPDATE user set sign = 1 where QQ= {QQ}")
         self.c.execute("select signnum from common where signdate=date('now')")
         ans = self.c.fetchone()
         return ans[0]
 
     def getScore(self, QQ: int) -> int:
-        self.c.execute("select SCORE from user where QQ=" + str(QQ))
+        self.c.execute(f"select SCORE from user where QQ={QQ}")
         ans = self.c.fetchone()
         return ans[0]
 
     def getTicket(self, QQ: int) -> int:
-        self.c.execute("select Ticket from user where QQ=" + str(QQ))
+        self.c.execute(f"select Ticket from user where QQ={QQ}")
         ans = self.c.fetchone()
         return ans[0]
 
     def getDiamond(self, QQ: int) -> int:
-        self.c.execute("select Diamond from user where QQ=" + str(QQ))
+        self.c.execute(f"select Diamond from user where QQ={QQ}")
         ans = self.c.fetchone()
         return ans[0]
 
     def getEvelsBall(self, QQ: int) -> int:
-        self.c.execute("select evelsball from pokemon where QQ=" + str(QQ))
+        self.c.execute(f"select evelsball from pokemon where QQ={QQ}")
         ans = self.c.fetchone()
         return ans[0]
 
     def getSuperBall(self, QQ: int) -> int:
-        self.c.execute("select Superball from pokemon where QQ=" + str(QQ))
+        self.c.execute(f"select Superball from pokemon where QQ={QQ}")
         ans = self.c.fetchone()
         return ans[0]
 
     def getMasterBall(self, QQ: int) -> int:
-        self.c.execute("select Masterball from pokemon where QQ=" + str(QQ))
+        self.c.execute(f"select Masterball from pokemon where QQ={QQ}")
         ans = self.c.fetchone()
         return ans[0]
 
     def getPokemon(self, QQ: int) -> tuple:
-        self.c.execute(f"select {','.join(pokeNameEng)} from pokemon where QQ={QQ}")
+        self.c.execute(
+            f"select {','.join(pokeNameEng)} from pokemon where QQ={QQ}")
         ans = self.c.fetchone()
         return ans
 
     def getConstellation(self, QQ: int) -> tuple:
-        self.c.execute("select * from Constellation where QQ=" + str(QQ))
+        self.c.execute(f"select * from Constellation where QQ={QQ}")
         ans = self.c.fetchone()
         return ans[1:]
 
@@ -173,52 +174,59 @@ class userSQL():
         ans = self.c.fetchall()
         return ans
 
+    def getMessageNum(self, QQ: int) -> int:
+        self.c.execute(f"select messageNum from user where QQ={QQ}")
+        ans = self.c.fetchone()
+        return ans[0]
+
+    def addMessageNum(self, QQ: int, value: int = 1) -> None:
+        self.c.execute(
+            f"UPDATE user set messageNum = messageNum+{value} where QQ={QQ}")
+
     def subScore(self, QQ: int, value: int) -> None:
-        self.c.execute("UPDATE user set SCORE = SCORE-" +
-                       str(value) + " where QQ=" + str(QQ))
+        self.c.execute(f"UPDATE user set SCORE = SCORE-{value} where QQ={QQ}")
 
     def addScore(self, QQ: int, value: int) -> None:
-        self.c.execute("UPDATE user set SCORE = SCORE+" +
-                       str(value) + " where QQ=" + str(QQ))
+        self.c.execute(f"UPDATE user set SCORE = SCORE+{value} where QQ={QQ}")
 
     def subTicket(self, QQ: int, value: int) -> None:
-        self.c.execute("UPDATE user set ticket = ticket-" +
-                       str(value) + " where QQ=" + str(QQ))
+        self.c.execute(
+            f"UPDATE user set ticket = ticket-{value} where QQ={QQ}")
 
     def addTicket(self, QQ: int, value: int) -> None:
-        self.c.execute("UPDATE user set ticket = ticket+" +
-                       str(value) + " where QQ=" + str(QQ))
+        self.c.execute(
+            f"UPDATE user set ticket = ticket-{value} where QQ={QQ}")
 
     def subDiamond(self, QQ: int, value: int) -> None:
-        self.c.execute("UPDATE user set Diamond = Diamond-" +
-                       str(value) + " where QQ=" + str(QQ))
+        self.c.execute(
+            f"UPDATE user set Diamond = Diamond-{value} where QQ={QQ}")
 
     def addDiamond(self, QQ: int, value: int) -> None:
-        self.c.execute("UPDATE user set Diamond = Diamond+" +
-                       str(value) + " where QQ=" + str(QQ))
+        self.c.execute(
+            f"UPDATE user set Diamond = Diamond+{value} where QQ={QQ}")
 
     def addAllDiamond(self, value: int) -> None:
-        self.c.execute("UPDATE user set Diamond = Diamond+" + str(value))
+        self.c.execute(f"UPDATE user set Diamond = Diamond+{value}")
 
     def addCons(self, QQ: int, index: int, value: int = 1) -> None:
-        self.c.execute("UPDATE Constellation set " +
-                       cons_database[index] + "=" + cons_database[index] + "+" + str(value) + " where QQ=" + str(QQ))
+        self.c.execute(
+            f"UPDATE Constellation set {cons_database[index]}={cons_database[index]}+{value} where QQ= +{QQ}")
 
     def addBall(self, QQ: int, ball: str, value: int = 1) -> None:
         self.c.execute("UPDATE pokemon set %s=%s+%d where QQ=%d" %
                        (ball, ball, value, QQ))
 
     def addEvelsBall(self, QQ: int, value: int) -> None:
-        self.c.execute("UPDATE pokemon set EvelsBall = EvelsBall+" +
-                       str(value) + " where QQ=" + str(QQ))
+        self.c.execute(
+            f"UPDATE pokemon set EvelsBall = EvelsBall+{value} where QQ={QQ}")
 
     def addSuperBall(self, QQ: int, value: int) -> None:
-        self.c.execute("UPDATE pokemon set SuperBall = SuperBall+" +
-                       str(value) + " where QQ=" + str(QQ))
+        self.c.execute(
+            f"UPDATE pokemon set SuperBall = SuperBall+{value} where QQ={QQ}")
 
     def addMasterBall(self, QQ: int, value: int) -> None:
-        self.c.execute("UPDATE pokemon set MasterBall = MasterBall+" +
-                       str(value) + " where QQ=" + str(QQ))
+        self.c.execute(
+            f"UPDATE pokemon set MasterBall = MasterBall+{value} where QQ={QQ}")
 
     def addItem(self, QQ: int, item: str, value: int) -> None:
         if item in ballChn2Eng:
@@ -255,12 +263,11 @@ class userSQL():
         self.resetBall()
 
     def resetPokemon(self):
-        self.c.execute("UPDATE pokemon SET " +
-                       '=0,'.join(pokeNameEng) + "=0")
+        self.c.execute(f"UPDATE pokemon SET {'=0,'.join(pokeNameEng)}=0")
 
     def resetCons(self):
-        self.c.execute("UPDATE constellation SET " +
-                       '=0,'.join(cons_database) + "=0")
+        self.c.execute(
+            f"UPDATE constellation SET {'=0,'.join(cons_database)}=0")
 
     def resetBall(self):
         self.c.execute(
