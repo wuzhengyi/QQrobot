@@ -356,7 +356,7 @@ async def topTicket(session: CommandSession):
         #     break
     message = '[CQ:emoji, id=128179]奖券排行榜[CQ:emoji, id=128179]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
-    await session.send(message)
+    await session.send(message[:-1])
 
 
 @on_command('钻石榜', only_to_me=False)
@@ -382,7 +382,7 @@ async def topDiamond(session: CommandSession):
         #     break
     message = '[CQ:emoji, id=128142]钻石排行榜[CQ:emoji, id=128142]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
-    await session.send(message)
+    await session.send(message[:-1])
 
 
 @on_command('发言榜', only_to_me=False)
@@ -408,7 +408,7 @@ async def topMessage(session: CommandSession):
         #     break
     message = '[CQ:emoji, id=128172]发言排行榜[CQ:emoji, id=128172]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
-    await session.send(message)
+    await session.send(message[:-1])
 
 
 @on_command('积分榜', only_to_me=False)
@@ -434,7 +434,7 @@ async def topScore(session: CommandSession):
         #     break
     message = '[CQ:emoji, id=128176]积分排行榜[CQ:emoji, id=128176]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
-    await session.send(message)
+    await session.send(message[:-1])
 
 
 @on_command('加积分', only_to_me=False)
