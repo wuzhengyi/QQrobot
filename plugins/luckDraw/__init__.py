@@ -354,7 +354,7 @@ async def topTicket(session: CommandSession):
             pass
         # if len(QQname) > 5:
         #     break
-    message = '奖券排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
+    message = '[CQ:emoji, id=128179]奖券排行榜[CQ:emoji, id=128179]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
 
@@ -380,7 +380,7 @@ async def topDiamond(session: CommandSession):
             pass
         # if len(QQname) > 5:
         #     break
-    message = '钻石排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
+    message = '[CQ:emoji, id=128142]钻石排行榜[CQ:emoji, id=128142]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
 
@@ -406,7 +406,7 @@ async def topMessage(session: CommandSession):
             pass
         # if len(QQname) > 5:
         #     break
-    message = '发言排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
+    message = '[CQ:emoji, id=128172]发言排行榜[CQ:emoji, id=128172]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
 
@@ -432,7 +432,7 @@ async def topScore(session: CommandSession):
             pass
         # if len(QQname) > 5:
         #     break
-    message = '积分排行榜\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
+    message = '[CQ:emoji, id=128176]积分排行榜[CQ:emoji, id=128176]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
                                    '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message)
 
