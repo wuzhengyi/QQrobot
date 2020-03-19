@@ -70,7 +70,7 @@ async def sign(session: CommandSession):
 
 
 @on_command('message', only_to_me=False)
-async def sign(session: CommandSession):
+async def message(session: CommandSession):
     QQ = session.ctx['user_id']
     # 获取可选参数，这里如果没有 message 参数，命令不会被中断，message 变量会是 None
     message = session.state.get('message')

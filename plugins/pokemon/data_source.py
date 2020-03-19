@@ -4,7 +4,7 @@ import sys
 import os
 
 sys.path.append(os.path.join('plugins', 'pokemon'))
-from header import State, Choice, PokeLevel, ballEng2Chn, allPokemon, pokeNameChn2Eng
+from header import State, Choice, PokeLevel, ballEng2Chn,ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
 # from ..luckDraw.data_source import userSQL
 import sceneA
 
@@ -47,7 +47,8 @@ class Reward():
             return False
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
-        c.execute(f"select {','.join([pokeNameChn2Eng(x[0]) for x in self.pokemon])} from user where QQ={QQ}")
+        nameList = [pokeNameChn2Eng[x[0]] for x in self.pokemon]
+        c.execute(f"select {','.join(nameList)} from pokemon where QQ={QQ}")
         num = c.fetchone()
         conn.close()
         return all(num)
@@ -55,11 +56,29 @@ class Reward():
     def getReward(self, QQ: int) -> None:
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
-        temp = [f"{x[0]}={x[0]}+{x[1]}" for x in self.award]
-        c.execute(f"UPDATE pokemon set {','.join(temp)} where QQ={QQ}")
+        nameList = [f"{pokeNameChn2Eng[x[0]]}={pokeNameChn2Eng[x[0]]}-{x[1]}" for x in self.pokemon]
+        c.execute(f"UPDATE pokemon set {','.join(nameList)} where QQ={QQ}")
+        for x in self.award:
+            if x[0] in pokeNameChn2Eng:
+                name = pokeNameChn2Eng[x[0]]
+                c.execute(f"UPDATE pokemon set {name}={name}+{x[1]} where QQ={QQ}")
+            elif x[0] == '奖券':
+                c.execute(f"UPDATE user set ticket = ticket+ {x[1]} where QQ={QQ}")
+            elif x[0] == '钻石':
+                c.execute(f"UPDATE user set diamond = diamond+ {x[1]} where QQ={QQ}")
+            elif x[0] == '积分':
+                c.execute(f"UPDATE user set score = score+ {x[1]} where QQ={QQ}")
+            elif x[0] in ballChn2Eng:
+                name = ballChn2Eng[x[0]]
+                c.execute(f"UPDATE pokemon set {name} = {name}+ {x[1]} where QQ={QQ}")
+            elif x[0] in consNameChn2Eng:
+                name = consNameChn2Eng[x[0]]
+                c.execute(f"UPDATE constellation set {name} = {name}+ {x[1]} where QQ={QQ}")
+            
+            
         conn.commit()
         conn.close()
-        self.reward['nowNum'] = self.reward['nowNum'] + 1
+        self.nowNum = self.nowNum + 1
 
 
 class Pokemon():
