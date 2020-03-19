@@ -36,13 +36,18 @@ class Reward():
         self.postReward(reward)
 
     def postReward(self, reward: {}) -> None:
-        self.reward = reward
+        self.pokemon = reward['pokemon']
+        self.award = reward['award']
+        self.limitNum = reward['limitNum']
+        self.nowNum = reward['nowNum']
 
     def meetReward(self, QQ: int) -> bool:
         if DEBUG: return True
+        if self.nowNum >= self.limitNum:
+            return False
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
-        c.execute(f"select {','.join([pokeNameChn2Eng(x[0]) for x in self.reward['pokemon']])} from user where QQ={QQ}")
+        c.execute(f"select {','.join([pokeNameChn2Eng(x[0]) for x in self.pokemon])} from user where QQ={QQ}")
         num = c.fetchone()
         conn.close()
         return all(num)
@@ -50,8 +55,8 @@ class Reward():
     def getReward(self, QQ: int) -> None:
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
-        c.execute(
-            f"UPDATE pokemon set {'=0,'.join([pokeNameChn2Eng(x[0]) for x in self.reward['pokemon']])} =0  where QQ={QQ}")
+        temp = [f"{x[0]}={x[0]}+{x[1]}" for x in self.award]
+        c.execute(f"UPDATE pokemon set {','.join(temp)} where QQ={QQ}")
         conn.commit()
         conn.close()
         self.reward['nowNum'] = self.reward['nowNum'] + 1

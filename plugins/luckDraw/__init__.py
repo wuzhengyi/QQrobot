@@ -1,7 +1,7 @@
 import nonebot
 from nonebot import on_command, CommandSession, permission
 from nonebot import on_natural_language, NLPSession, IntentCommand
-from .data_source import userSQL, getScoreDrawRandom, getDiamonDrawRandom, isRoot
+from .data_source import userSQL, getScoreDrawRandom, getDiamonDrawRandom
 from .data_source import getImage, getBallImage, getConsImage, getBallEmoji, getConsEmoji
 from ..pokemon.header import pokeNameChn
 from .data_source import consName, stopWord

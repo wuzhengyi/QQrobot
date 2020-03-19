@@ -92,8 +92,6 @@ async def sendReward(session: CommandSession):
 
     @on_command('揭榜', aliases=('领取悬赏',), only_to_me=False)
     async def getReward(session: CommandSession):
-        if nowReward is {} or nowReward['nowNum']>=nowReward['limitNum']:
-            return
         QQ = session.ctx['user_id']
         if nowReward.meetReward(QQ):
             nowReward.getReward(QQ)
