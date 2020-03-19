@@ -48,7 +48,7 @@ async def chooseC(session: CommandSession):
         message = game.next(Choice.C)
         await session.send(message)
 
-@on_command('D', only_to_me=False)
+@on_command('D', aliases=('Ｄ',),only_to_me=False)
 async def chooseD(session: CommandSession):
     global GameList
     QQ = session.ctx['user_id']
@@ -56,3 +56,11 @@ async def chooseD(session: CommandSession):
         game = GameList[QQ]
         message = game.next(Choice.D)
         await session.send(message)
+
+@on_command('发群公告', aliases=('悬赏',),only_to_me=False)
+async def groupNotice(session: CommandSession):
+    global GameList
+    groupID = session.ctx['group_id']
+    if groupID not None:
+        bot = nonebot.get_bot()
+        bot._send_group_notice(groupID, '悬赏', '悬赏内容111111111111111111111111111111111111111')
