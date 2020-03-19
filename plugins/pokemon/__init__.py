@@ -1,8 +1,7 @@
 import nonebot
 from nonebot import on_command, CommandSession, permission
-from .data_source import Pokemon, Choice, reward, meetReward, getReward
+from .data_source import Pokemon, Choice, Reward
 from .header import pokeNameChn
-import data_source as ds
 __plugin_name__ = '宝可梦'
 __plugin_usage__ = r"""
 欢迎来到精灵宝可梦的世界
@@ -12,7 +11,7 @@ __plugin_usage__ = r"""
 
 
 GameList = {}
-
+nowReward = None
 @on_command('开始游戏', only_to_me=False)
 async def sign(session: CommandSession):
     global GameList
@@ -66,8 +65,6 @@ async def chooseD(session: CommandSession):
 
 @on_command('悬赏', aliases=('发布悬赏',), only_to_me=False, permission=permission.SUPERUSER)
 async def sendReward(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
     inpt = session.state.get('message') or session.current_arg
     inpt=inpt.replace('，', ',')
     inpt=inpt.replace('：', ':')
@@ -83,23 +80,21 @@ async def sendReward(session: CommandSession):
         await session.send('你悬赏的精灵不存在，请重新发布悬赏。')
         return
     award =  [x.split(':') for x in args[1].strip().split(',')]
-    # global reward
-    ds.reward = {'pokemon': pokemon, 'award': award, 'limitNum':limitNum, 'remard':remark, 'nowNum':0}
-    print(ds.reward)
+    reward = {'pokemon': pokemon, 'award': award, 'limitNum':limitNum, 'remard':remark, 'nowNum':0}
+    nowReward = Reward(reward)
     groupID = session.ctx['group_id']
     if groupID is not None:
         bot = nonebot.get_bot()
         
-        message = f"通缉：{','.join([f'{x[0]}x{x[1]}' for x in ds.reward['pokemon']])}\n赏金：{','.join([f'{x[0]}x{x[1]}' for x in ds.reward['award']])}\n备注：{remark}\n"
+        message = f"通缉：{','.join([f'{x[0]}x{x[1]}' for x in reward['pokemon']])}\n赏金：{','.join([f'{x[0]}x{x[1]}' for x in reward['award']])}\n备注：{remark}\n"
         await bot._send_group_notice(group_id=groupID, title='悬赏',
                                      content=message)
 
     @on_command('揭榜', aliases=('领取悬赏',), only_to_me=False)
     async def getReward(session: CommandSession):
-        # global reward
-        if ds.reward is {} or ds.reward['nowNum']>=ds.reward['limitNum']:
+        if nowReward is {} or nowReward['nowNum']>=nowReward['limitNum']:
             return
         QQ = session.ctx['user_id']
-        if meetReward(QQ):
-            getReward(QQ)
+        if nowReward.meetReward(QQ):
+            nowReward.getReward(QQ)
             await session.send('恭喜你，揭榜成功！')

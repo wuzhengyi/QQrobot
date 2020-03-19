@@ -2,8 +2,6 @@ import sqlite3
 import random
 from ..pokemon.header import pokeNameEng, pokeNameChn2Eng, ballEng2Chn, ballChn2Eng
 
-# rootList = [942858979, 914349145]
-rootList = [942858979]
 stopWord = ['小号', '机器']
 consName = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座',
             '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座']
@@ -35,10 +33,6 @@ def getDiamonDrawRandom() -> int:
         if x < cumprob:
             break
     return item
-
-
-def isRoot(QQ: int) -> bool:
-    return QQ in rootList
 
 
 def getImage(name: str) -> str:

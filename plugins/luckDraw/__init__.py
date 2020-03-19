@@ -1,5 +1,5 @@
 import nonebot
-from nonebot import on_command, CommandSession
+from nonebot import on_command, CommandSession, permission
 from nonebot import on_natural_language, NLPSession, IntentCommand
 from .data_source import userSQL, getScoreDrawRandom, getDiamonDrawRandom, isRoot
 from .data_source import getImage, getBallImage, getConsImage, getBallEmoji, getConsEmoji
@@ -193,11 +193,8 @@ async def pet(session: CommandSession):
     await session.send(message[:-1])
 
 
-@on_command('初始化', only_to_me=False)
+@on_command('初始化', only_to_me=False, permission=permission.SUPERUSER)
 async def initGroupList(session: CommandSession):
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
     bot = nonebot.get_bot()
     memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
     user = userSQL()
@@ -351,9 +348,6 @@ async def diamonDraw(session: CommandSession):
 
 @on_command('奖券榜', only_to_me=False)
 async def topTicket(session: CommandSession):
-    QQ = session.ctx['user_id']
-    # if not isRoot(QQ):
-    #     return
     user = userSQL()
     rank = user.getTopTicket()
     user.close()
@@ -377,9 +371,6 @@ async def topTicket(session: CommandSession):
 
 @on_command('钻石榜', only_to_me=False)
 async def topDiamond(session: CommandSession):
-    QQ = session.ctx['user_id']
-    # if not isRoot(QQ):
-    #     return
     user = userSQL()
     rank = user.getTopDiamond()
     user.close()
@@ -403,9 +394,6 @@ async def topDiamond(session: CommandSession):
 
 @on_command('发言榜', only_to_me=False)
 async def topMessage(session: CommandSession):
-    QQ = session.ctx['user_id']
-    # if not isRoot(QQ):
-    #     return
     user = userSQL()
     rank = user.getTopMessage()
     user.close()
@@ -429,9 +417,6 @@ async def topMessage(session: CommandSession):
 
 @on_command('积分榜', only_to_me=False)
 async def topScore(session: CommandSession):
-    QQ = session.ctx['user_id']
-    # if not isRoot(QQ):
-    #     return
     user = userSQL()
     rank = user.getTopScore()
     user.close()
@@ -453,13 +438,8 @@ async def topScore(session: CommandSession):
     await session.send(message[:-1])
 
 
-@on_command('加积分', only_to_me=False)
+@on_command('加积分', only_to_me=False, permission=permission.SUPERUSER)
 async def addScore(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
-
     # 解析命令格式
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
@@ -491,12 +471,8 @@ async def addScore(session: CommandSession):
     await session.send('增加成功，当前目标用户的积分为' + str(now))
 
 
-@on_command('减积分', only_to_me=False)
+@on_command('减积分', only_to_me=False, permission=permission.SUPERUSER)
 async def subScore(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
 
     # 解析命令格式
     inpt = session.state.get('message') or session.current_arg
@@ -529,14 +505,9 @@ async def subScore(session: CommandSession):
     await session.send('减少成功，当前目标用户的积分为' + str(now))
 
 
-@on_command('加奖券', only_to_me=False)
+@on_command('加奖券', only_to_me=False, permission=permission.SUPERUSER)
 async def addTicket(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
-
-    # 解析命令格式
+     # 解析命令格式
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
     if len(args) != 2:
@@ -567,13 +538,8 @@ async def addTicket(session: CommandSession):
     await session.send('增加成功，当前目标用户的奖券为' + str(now))
 
 
-@on_command('减奖券', only_to_me=False)
+@on_command('减奖券', only_to_me=False, permission=permission.SUPERUSER)
 async def subTicket(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
-
     # 解析命令格式
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
@@ -605,13 +571,8 @@ async def subTicket(session: CommandSession):
     await session.send('减少成功，当前目标用户的奖券为' + str(now))
 
 
-@on_command('加钻石', only_to_me=False)
+@on_command('加钻石', only_to_me=False, permission=permission.SUPERUSER)
 async def addDiamond(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
-
     # 解析命令格式
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
@@ -643,13 +604,8 @@ async def addDiamond(session: CommandSession):
     await session.send('增加成功，当前目标用户的钻石为' + str(now))
 
 
-@on_command('减钻石', only_to_me=False)
+@on_command('减钻石', only_to_me=False, permission=permission.SUPERUSER)
 async def subDiamond(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
-
     # 解析命令格式
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
@@ -681,13 +637,8 @@ async def subDiamond(session: CommandSession):
     await session.send('减少成功，当前目标用户的钻石为' + str(now))
 
 
-@on_command('注册', only_to_me=False)
+@on_command('注册', only_to_me=False, permission=permission.SUPERUSER)
 async def register(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
-
     # 解析命令格式
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip()
@@ -712,97 +663,64 @@ async def register(session: CommandSession):
     await session.send('注册成功')
 
 
-@on_command('清空积分', aliases=('积分清零',), only_to_me=False)
+@on_command('清空积分', aliases=('积分清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetScore(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
     user = userSQL()
     user.resetScore()
     user.close()
     await session.send('全体积分清空成功')
 
 
-@on_command('清空奖券', aliases=('奖券清零',), only_to_me=False)
+@on_command('清空奖券', aliases=('奖券清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetTicket(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
     user = userSQL()
     user.resetTicket()
     user.close()
     await session.send('全体奖券清空成功')
 
 
-@on_command('清空钻石', aliases=('钻石清零',), only_to_me=False)
+@on_command('清空钻石', aliases=('钻石清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetDiamond(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
     user = userSQL()
     user.resetDiamond()
     user.close()
     await session.send('全体钻石清空成功')
 
 
-@on_command('清空背包', aliases=('背包清零',), only_to_me=False)
+@on_command('清空背包', aliases=('背包清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetBackpack(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
     user = userSQL()
     user.resetBackpack()
     user.close()
     await session.send('全体背包清空成功')
 
 
-@on_command('清空宠物', aliases=('宠物清零',), only_to_me=False)
+@on_command('清空宠物', aliases=('宠物清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetPokemon(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
     user = userSQL()
     user.resetPokemon()
     user.close()
     await session.send('全体宠物清空成功')
 
 
-@on_command('清空精灵球', aliases=('精灵球清零',), only_to_me=False)
+@on_command('清空精灵球', aliases=('精灵球清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetBall(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
     user = userSQL()
     user.resetBall()
     user.close()
     await session.send('全体精灵球清空成功')
 
 
-@on_command('清空星座卡', aliases=('星座卡清零',), only_to_me=False)
+@on_command('清空星座卡', aliases=('星座卡清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetCons(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
     user = userSQL()
     user.resetCons()
     user.close()
     await session.send('全体星座卡清空成功')
 
 
-@on_command('祈福', aliases=('老板发钱', '桃园结义', '普度众生', '悬壶济世'), only_to_me=False)
+@on_command('祈福', aliases=('老板发钱', '桃园结义', '普度众生', '悬壶济世'), only_to_me=False, permission=permission.SUPERUSER)
 async def bless(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
-
     # 解析命令格式
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
@@ -825,12 +743,8 @@ async def bless(session: CommandSession):
     await session.send('增加成功，全体用户增加%d钻石。' % money)
 
 
-@on_command('加物品', only_to_me=False)
+@on_command('加物品', only_to_me=False, permission=permission.SUPERUSER)
 async def addItem(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
     if len(args) != 3 or not args[2].isdigit():
@@ -851,12 +765,8 @@ async def addItem(session: CommandSession):
     await session.send('添加成功')
 
 
-@on_command('减物品', only_to_me=False)
+@on_command('减物品', only_to_me=False, permission=permission.SUPERUSER)
 async def subItem(session: CommandSession):
-    # 判断目标发起人是否为管理员
-    QQ = session.ctx['user_id']
-    if not isRoot(QQ):
-        return
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
     if len(args) != 3 or not args[2].isdigit():
