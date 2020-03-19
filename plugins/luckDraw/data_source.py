@@ -200,7 +200,7 @@ class userSQL():
 
     def addTicket(self, QQ: int, value: int) -> None:
         self.c.execute(
-            f"UPDATE user set ticket = ticket-{value} where QQ={QQ}")
+            f"UPDATE user set ticket = ticket+{value} where QQ={QQ}")
 
     def subDiamond(self, QQ: int, value: int) -> None:
         self.c.execute(
