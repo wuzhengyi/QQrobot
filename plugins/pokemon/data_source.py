@@ -2,11 +2,14 @@ import sqlite3
 import random
 import sys
 import os
-sys.path.append(os.path.join('plugins','pokemon'))
-from header import State, Choice, PokeLevel, ballEng2Chn, allPokemon
+
+sys.path.append(os.path.join('plugins', 'pokemon'))
+from header import State, Choice, PokeLevel, ballEng2Chn, allPokemon, pokeNameChn2Eng
+from ..luckDraw.data_source import userSQL
 import sceneA
 
 GameList = {}
+reward = None
 DEBUG = False
 
 
@@ -28,6 +31,36 @@ def getPokeLevel(name: str) -> PokeLevel:
         return allPokemon[name]
     else:
         return PokeLevel.S
+
+
+def meetReward(QQ: int) -> bool:
+    if DEBUG: return True
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute(f"select {','.join([pokeNameChn2Eng(x[0]) for x in reward['pokemon']])} from user where QQ={QQ}")
+    num = c.fetchone()
+    conn.close()
+    return all(num)
+
+
+def getReward(QQ: int) -> None:
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute(f"UPDATE pokemon set {'=0,'.join([pokeNameChn2Eng(x[0]) for x in reward['pokemon']])} =0  where QQ={QQ}")
+    conn.commit()
+    conn.close()
+    user = userSQL()
+    for x in reward['award']:
+        if x[0] == '奖券':
+            user.addTicket(QQ, x[1])
+        elif x[0] == '积分':
+            user.addScore(QQ, x[1])
+        elif x[0] == '钻石':
+            user.addDiamond(QQ, x[1])
+        else:
+            user.addItem(QQ, x[0], x[1])
+    user.close()
+    reward['nowNum'] = reward['nowNum'] + 1
 
 
 class Pokemon():
