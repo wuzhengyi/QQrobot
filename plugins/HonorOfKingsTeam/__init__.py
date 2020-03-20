@@ -21,78 +21,101 @@ def echoTeam(game: {}) -> str:
 def isFullTeam(game: {}) -> bool:
     return all([game[x] for x in game])
 
+def isInTeam(game:{}, name:str) -> bool:
+    return not all([game[x] != name for x in game])
 
 @on_command('开车', aliases=('组队', '王者组队'), only_to_me=False)
 async def createTeam(session: CommandSession):
+    global game
     game = {'打野': None, '中单': None, '战士': None, '辅助': None, '射手': None}
-    await session.send('[CQ:at,qq=all]开车啦开车啦，大家快上车啦。')
+    await session.send('[CQ:at,qq=all] 开车啦开车啦，大家快上车啦。')
 
 
-@on_command('打野')
+@on_command('打野', only_to_me=False)
 async def jungle(session: CommandSession):
-    if game['打野'] is None:
+    global game
+    if game['打野'] == None:
         bot = nonebot.get_bot()
         member = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=session.ctx['user_id'])
-        game['打野'] = member['card'] or member['nickname']
+        name = member['card'] or member['nickname']
+        if isInTeam(game, name):
+            await session.send('你已经在车上了哦，不可以坐两个位置！贪心鬼（*╹▽╹*）')
+            return
+        game['打野'] = name
         await session.send(f'野王上车成功，当前队伍:\n{echoTeam(game)}')
     else:
         await session.send(f'上车失败，已经有野王啦，要不要试一试别的位置呀，当前队伍:\n{echoTeam(game)}')
-
     if isFullTeam(game):
         await session.send(f'开车成功，快进入游戏吧！当前队伍:\n{echoTeam(game)}')
 
 
-@on_command('战士')
+@on_command('战士', aliases=('边路','上单',), only_to_me=False)
 async def warrior(session: CommandSession):
-    if game['战士'] is None:
+    global game
+    if game['战士'] == None:
         bot = nonebot.get_bot()
         member = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=session.ctx['user_id'])
-        game['战士'] = member['card'] or member['nickname']
+        name = member['card'] or member['nickname']
+        if isInTeam(game, name):
+            await session.send('你已经在车上了哦，不可以坐两个位置！贪心鬼（*╹▽╹*）')
+            return
+        game['战士'] = name
         await session.send(f'边路霸主上车成功，当前队伍:\n{echoTeam(game)}')
     else:
         await session.send(f'上车失败，已经有边路霸主啦，要不要试一试别的位置呀，当前队伍:\n{echoTeam(game)}')
-
     if isFullTeam(game):
         await session.send(f'开车成功，快进入游戏吧！当前队伍:\n{echoTeam(game)}')
 
 
-@on_command('中单')
+@on_command('中单', only_to_me=False)
 async def mage(session: CommandSession):
-    if game['中单'] is None:
+    global game
+    if game['中单'] == None:
         bot = nonebot.get_bot()
         member = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=session.ctx['user_id'])
-        game['中单'] = member['card'] or member['nickname']
+        name = member['card'] or member['nickname']
+        if isInTeam(game, name):
+            await session.send('你已经在车上了哦，不可以坐两个位置！贪心鬼（*╹▽╹*）')
+            return
+        game['中单'] = name
         await session.send(f'中单法王上车成功，当前队伍:\n{echoTeam(game)}')
     else:
         await session.send(f'上车失败，已经有中单法王啦，要不要试一试别的位置呀，当前队伍:\n{echoTeam(game)}')
-
     if isFullTeam(game):
         await session.send(f'开车成功，快进入游戏吧！当前队伍:\n{echoTeam(game)}')
 
 
-@on_command('辅助', aliases=('坦克',))
+@on_command('辅助', aliases=('坦克',), only_to_me=False)
 async def tank(session: CommandSession):
-    if game['辅助'] is None:
+    global game
+    if game['辅助'] == None:
         bot = nonebot.get_bot()
         member = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=session.ctx['user_id'])
-        game['辅助'] = member['card'] or member['nickname']
+        name = member['card'] or member['nickname']
+        if isInTeam(game, name):
+            await session.send('你已经在车上了哦，不可以坐两个位置！贪心鬼（*╹▽╹*）')
+            return
+        game['辅助'] = name
         await session.send(f'最强辅助上车成功，当前队伍:\n{echoTeam(game)}')
     else:
         await session.send(f'上车失败，已经有最强辅助啦，要不要试一试别的位置呀，当前队伍:\n{echoTeam(game)}')
-
     if isFullTeam(game):
         await session.send(f'开车成功，快进入游戏吧！当前队伍:\n{echoTeam(game)}')
 
 
-@on_command('射手')
+@on_command('射手', only_to_me=False)
 async def shooter(session: CommandSession):
-    if game['射手'] is None:
+    global game
+    if game['射手'] == None:
         bot = nonebot.get_bot()
         member = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=session.ctx['user_id'])
-        game['射手'] = member['card'] or member['nickname']
+        name = member['card'] or member['nickname']
+        if isInTeam(game, name):
+            await session.send('你已经在车上了哦，不可以坐两个位置！贪心鬼（*╹▽╹*）')
+            return
+        game['射手'] = name
         await session.send(f'无敌射手上车成功，当前队伍:\n{echoTeam(game)}')
     else:
         await session.send(f'上车失败，已经有无敌射手啦，要不要试一试别的位置呀，当前队伍:\n{echoTeam(game)}')
-
     if isFullTeam(game):
         await session.send(f'开车成功，快进入游戏吧！当前队伍:\n{echoTeam(game)}')
