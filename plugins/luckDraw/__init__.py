@@ -744,9 +744,9 @@ async def bless(session: CommandSession):
     bot = nonebot.get_bot()
     memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
     QQList = [x['user_id'] for x in memberList]
-    print(QQList)
     user = userSQL()
-    user.addAllDiamond(money)
+    for QQ in QQList:
+        user.addDiamond(QQ, money)
     user.close()
     await session.send('增加成功，全体用户增加%d钻石。' % money)
 

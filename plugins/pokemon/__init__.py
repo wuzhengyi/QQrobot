@@ -108,4 +108,4 @@ async def sendReward(session: CommandSession):
         if all([w not in name for w in stopWord]):
             if nowReward.meetReward(QQ):
                 nowReward.getReward(QQ)
-                await session.send(f'{getImage("getReward")}恭喜你，揭榜成功！')
+                await session.send(f'{getImage("getReward")}\n恭喜你，揭榜成功！')
