@@ -11,7 +11,7 @@ __plugin_usage__ = r"""
 位置有：打野 中单 战士 辅助 射手
 """
 
-game = {}
+game = {'打野': None, '中单': None, '战士': None, '辅助': None, '射手': None}
 
 
 def echoTeam(game: {}) -> str:
