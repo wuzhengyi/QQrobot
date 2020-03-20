@@ -1,7 +1,7 @@
 import nonebot
 from nonebot import on_command, CommandSession, permission
 from .data_source import Pokemon, Choice, Reward, getImage
-from .header import pokeNameChn
+from .header import pokeNameChn, stopWord
 
 __plugin_name__ = '宝可梦'
 __plugin_usage__ = r"""
@@ -103,6 +103,9 @@ async def sendReward(session: CommandSession):
     @on_command('揭榜', aliases=('领取悬赏',), only_to_me=False)
     async def getReward(session: CommandSession):
         QQ = session.ctx['user_id']
-        if nowReward.meetReward(QQ):
-            nowReward.getReward(QQ)
-            await session.send(f'{getImage("getReward")}恭喜你，揭榜成功！')
+        group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ,no_cache=False)
+        name = group_member_info['card'] or group_member_info['nickname']
+        if all([w not in name for w in stopWord]):
+            if nowReward.meetReward(QQ):
+                nowReward.getReward(QQ)
+                await session.send(f'{getImage("getReward")}恭喜你，揭榜成功！')

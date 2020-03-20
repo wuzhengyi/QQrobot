@@ -46,3 +46,5 @@ consNameChn = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座',
 consNameEng = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
                  'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
 consNameChn2Eng = dict(zip(consNameChn, consNameEng))
+
+stopWord = ['小号', '机器']

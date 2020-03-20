@@ -64,7 +64,9 @@ async def sign(session: CommandSession):
         value = random.randint(300, 600)
         user.addDiamond(QQ, value)
         sumDiamond = user.getDiamond(QQ)
-        message = '签到成功,你是今天第' + str(count) + '位签到的。恭喜你获得' + str(value) + '个钻石，你当前总共有' + str(sumDiamond) + '个钻石。'
+        message = '签到成功,你是今天第' + \
+            str(count) + '位签到的。恭喜你获得' + str(value) + \
+            '个钻石，你当前总共有' + str(sumDiamond) + '个钻石。'
         await session.send(message)
     user.close()
 
@@ -102,15 +104,15 @@ async def message(session: CommandSession):
     elif messageNum == 5999:
         await session.send('你今天已经说了5999句话了！你确定要刷到6000？')
     elif messageNum == 6000:
-        await session.send('一阵风吹过，6000句话说到我心里，却无事发生。')  
+        await session.send('一阵风吹过，6000句话说到我心里，却无事发生。')
     elif messageNum == 6999:
         await session.send('你今天已经说了6999句话了！你确定要刷到7000？')
     elif messageNum == 7000:
-        await session.send('一阵风吹过，7000句话说到我心里，却无事发生。')  
+        await session.send('一阵风吹过，7000句话说到我心里，却无事发生。')
     elif messageNum == 7999:
         await session.send('你今天已经说了7999句话了！你确定要刷到8000？')
     elif messageNum == 8000:
-        await session.send('一阵风吹过，8000句话说到我心里，却无事发生。')    
+        await session.send('一阵风吹过，8000句话说到我心里，却无事发生。')
     elif messageNum == 9999:
         await session.send('你今天已经说了9999句话了！友谊提醒你不要再说话了，要不然怎么哭的都不知道。')
     elif messageNum == 10000:
@@ -189,7 +191,7 @@ async def pet(session: CommandSession):
               ''.join([pokeNameChn[i] + ':' + str(pokemon[i]) +
                        '\n' for i in range(len(pokemon) - 1)])
     message = message + pokeNameChn[-1] + ':' + \
-              str(pokemon[-1]) + '\n' if pokemon[-1] != 0 else message
+        str(pokemon[-1]) + '\n' if pokemon[-1] != 0 else message
     await session.send(message[:-1])
 
 
@@ -305,7 +307,7 @@ async def diamonDraw(session: CommandSession):
         if ticketNum > 0:
             user.addTicket(QQ, ticketNum)
             message = message + getImage('ticket') + \
-                      '\n恭喜你获得' + str(ticketNum) + '奖券\n'
+                '\n恭喜你获得' + str(ticketNum) + '奖券\n'
         cardNum = ans.count('card')
         if cardNum > 0:
             cardIndex = [random.randint(0, 11) for i in range(cardNum)]
@@ -314,32 +316,34 @@ async def diamonDraw(session: CommandSession):
                 if num > 0:
                     user.addCons(QQ, i, num)
                     message = message + getConsImage(i) + '\n恭喜你获得' + \
-                              str(num) + '张' + consName[i] + '卡片\n'
+                        str(num) + '张' + consName[i] + '卡片\n'
         diamondSum = sum([int(i) for i in ans if i.isdigit()])
         if diamondSum > 0:
             user.addDiamond(QQ, diamondSum)
             if diamondSum in [30, 60, 120, 300]:
                 message = message + \
-                          getImage(str(diamondSum) + 'diamond') + \
-                          '\n恭喜你获得' + str(diamondSum) + '钻石\n'
+                    getImage(str(diamondSum) + 'diamond') + \
+                    '\n恭喜你获得' + str(diamondSum) + '钻石\n'
             else:
                 message = message + '恭喜你获得' + str(diamondSum) + '钻石\n'
         evelsBall = ans.count('evelsBall')
         if evelsBall > 0:
             user.addEvelsBall(QQ, evelsBall)
             message = message + \
-                      getBallImage('evelsBall') + '\n恭喜你获得' + str(evelsBall) + '个精灵球\n'
+                getBallImage('evelsBall') + '\n恭喜你获得' + \
+                str(evelsBall) + '个精灵球\n'
         superBall = ans.count('superBall')
         if superBall > 0:
             user.addSuperBall(QQ, superBall)
             message = message + \
-                      getBallImage('superBall') + '\n恭喜你获得' + str(superBall) + '个超级球\n'
+                getBallImage('superBall') + '\n恭喜你获得' + \
+                str(superBall) + '个超级球\n'
         masterBall = ans.count('masterBall')
         if masterBall > 0:
             user.addMasterBall(QQ, masterBall)
             message = message + \
-                      getBallImage('masterBall') + '\n恭喜你获得' + \
-                      str(masterBall) + '个大师球\n欢迎下次光临。'
+                getBallImage('masterBall') + '\n恭喜你获得' + \
+                str(masterBall) + '个大师球\n欢迎下次光临。'
         await session.send(message)
     else:
         await session.send('你的钻石不足，快去找老蛋赚钻石吧。')
@@ -365,7 +369,7 @@ async def topTicket(session: CommandSession):
         # if len(QQname) > 5:
         #     break
     message = '[CQ:emoji, id=128179]奖券排行榜[CQ:emoji, id=128179]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+                                                                             '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message[:-1])
 
 
@@ -388,7 +392,7 @@ async def topDiamond(session: CommandSession):
         # if len(QQname) > 5:
         #     break
     message = '[CQ:emoji, id=128142]钻石排行榜[CQ:emoji, id=128142]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+                                                                             '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message[:-1])
 
 
@@ -411,7 +415,7 @@ async def topMessage(session: CommandSession):
         # if len(QQname) > 5:
         #     break
     message = '[CQ:emoji, id=128172]发言排行榜[CQ:emoji, id=128172]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+                                                                             '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message[:-1])
 
 
@@ -434,7 +438,7 @@ async def topScore(session: CommandSession):
         # if len(QQname) > 5:
         #     break
     message = '[CQ:emoji, id=128176]积分排行榜[CQ:emoji, id=128176]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                   '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+                                                                             '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
     await session.send(message[:-1])
 
 
@@ -507,7 +511,7 @@ async def subScore(session: CommandSession):
 
 @on_command('加奖券', only_to_me=False, permission=permission.SUPERUSER)
 async def addTicket(session: CommandSession):
-     # 解析命令格式
+    # 解析命令格式
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
     if len(args) != 2:
@@ -719,7 +723,7 @@ async def resetCons(session: CommandSession):
     await session.send('全体星座卡清空成功')
 
 
-@on_command('祈福', aliases=('老板发钱', '桃园结义', '普度众生', '悬壶济世'), only_to_me=False, permission=permission.SUPERUSER)
+@on_command('祈福', aliases=('老板发钱', '桃园结义', '普度众生', '悬壶济世',), only_to_me=False, permission=permission.SUPERUSER)
 async def bless(session: CommandSession):
     # 解析命令格式
     inpt = session.state.get('message') or session.current_arg
@@ -737,13 +741,17 @@ async def bless(session: CommandSession):
         money = 60
 
     # 对用户进行加钻石操作
+    bot = nonebot.get_bot()
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    QQList = [x['user_id'] for x in memberList]
+    print(QQList)
     user = userSQL()
     user.addAllDiamond(money)
     user.close()
     await session.send('增加成功，全体用户增加%d钻石。' % money)
 
 
-@on_command('加物品', only_to_me=False, permission=permission.SUPERUSER)
+@on_command('加物品', aliases=('加道具',), only_to_me=False, permission=permission.SUPERUSER)
 async def addItem(session: CommandSession):
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
@@ -765,7 +773,7 @@ async def addItem(session: CommandSession):
     await session.send('添加成功')
 
 
-@on_command('减物品', only_to_me=False, permission=permission.SUPERUSER)
+@on_command('减物品', aliases=('减道具',), only_to_me=False, permission=permission.SUPERUSER)
 async def subItem(session: CommandSession):
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
