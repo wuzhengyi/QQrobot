@@ -4,7 +4,7 @@ import sys
 import os
 
 sys.path.append(os.path.join('plugins', 'pokemon'))
-from header import State, Choice, PokeLevel, ballEng2Chn,ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
+from header import State, Choice, PokeLevel, ballEng2Chn, ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
 # from ..luckDraw.data_source import userSQL
 import sceneA
 
@@ -40,10 +40,11 @@ class Reward():
         self.award = reward['award']
         self.limitNum = reward['limitNum']
         self.nowNum = reward['nowNum']
+        self.getList = []
 
     def meetReward(self, QQ: int) -> bool:
         if DEBUG: return True
-        if self.nowNum >= self.limitNum:
+        if self.nowNum >= self.limitNum or QQ in self.getList:
             return False
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
@@ -54,6 +55,7 @@ class Reward():
         return all(num)
 
     def getReward(self, QQ: int) -> None:
+        self.getList.append(QQ)
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
         nameList = [f"{pokeNameChn2Eng[x[0]]}={pokeNameChn2Eng[x[0]]}-{x[1]}" for x in self.pokemon]
@@ -74,8 +76,7 @@ class Reward():
             elif x[0] in consNameChn2Eng:
                 name = consNameChn2Eng[x[0]]
                 c.execute(f"UPDATE constellation set {name} = {name}+ {x[1]} where QQ={QQ}")
-            
-            
+
         conn.commit()
         conn.close()
         self.nowNum = self.nowNum + 1
