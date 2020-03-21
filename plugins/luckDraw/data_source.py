@@ -86,11 +86,11 @@ class userSQL():
                         VALUES (" + str(QQ) + ")")
 
     def _isNewDate(self) -> bool:
-        self.c.execute("select * from common where signdate=date('now')")
+        self.c.execute("select * from common where signdate=date('now','localtime')")
         ans = self.c.fetchall()
         if ans == []:
             self.c.execute(
-                "INSERT INTO common (signDate) VALUES (date('now'))")
+                "INSERT INTO common (signDate) VALUES (date('now','localtime'))")
             self.c.execute("UPDATE user set sign = 0, messageNum=0")
             return True
         return False
@@ -106,9 +106,9 @@ class userSQL():
 
     def sign(self, QQ: int) -> int:
         self.c.execute(
-            "UPDATE common set signnum = signnum+1 where signdate=date('now')")
+            "UPDATE common set signnum = signnum+1 where signdate=date('now','localtime')")
         self.c.execute(f"UPDATE user set sign = 1 where QQ= {QQ}")
-        self.c.execute("select signnum from common where signdate=date('now')")
+        self.c.execute("select signnum from common where signdate=date('now','localtime')")
         ans = self.c.fetchone()
         return ans[0]
 
@@ -174,6 +174,8 @@ class userSQL():
         return ans
 
     def getMessageNum(self, QQ: int) -> int:
+        if self._isNewDate():
+            return 0
         self.c.execute(f"select messageNum from user where QQ={QQ}")
         ans = self.c.fetchone()
         return ans[0]

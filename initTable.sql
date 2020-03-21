@@ -51,6 +51,6 @@ create table common(
 INSERT INTO
     common (signDate)
 VALUES
-    (date('now'));
+    (date('now', 'localtime'));
 
 --  alter table user add column messagenum int default 0;
