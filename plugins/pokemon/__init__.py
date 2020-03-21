@@ -11,7 +11,6 @@ __plugin_usage__ = r"""
 
 管理功能：
 /悬赏 [精灵:数目，逗号分开] [奖励:数目，逗号分开] [限制人数] [无|备注]
- [精灵:数目，逗号分开] [奖励:数目，逗号分开] [限制人数] [无|备注]
 
 成员功能：
 /揭榜 [编号]
@@ -125,6 +124,7 @@ async def getReward(session: CommandSession):
     if args == '' or not args.isdigit():
         await session.send('请输入通缉令编号，格式为 /揭榜 [编号]')
     QQ = session.ctx['user_id']
+    bot = nonebot.get_bot()
     group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ,
                                                         no_cache=False)
     name = group_member_info['card'] or group_member_info['nickname']
