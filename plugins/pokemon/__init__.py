@@ -107,7 +107,7 @@ async def sendReward(session: CommandSession):
     award = [x.split(':') for x in args[1].strip().split(',')]
     groupID = session.ctx['group_id']
     reward = Reward()
-    temp = {'group_id': groupID, 'pokemon': pokemon, 'award': award, 'limitNum': limitNum, 'remard': remark}
+    temp = {'group_id': groupID, 'pokemon': pokemon, 'award': award, 'limitNum': limitNum, 'remark': remark}
     id = reward.postReward(temp)
     temp['id'] = id
     temp['getList'] = []
@@ -118,31 +118,31 @@ async def sendReward(session: CommandSession):
         #                              content=message)
         await session.send(echoReward(temp))
 
-    @on_command('揭榜', aliases=('领取悬赏',), only_to_me=False)
-    async def getReward(session: CommandSession):
-        inpt = session.state.get('message') or session.current_arg
-        args = inpt.strip()
-        if not args.isdigit() or args == '':
-            award
-            session.send('请输入通缉令编号，格式为 /揭榜 [编号]')
-        QQ = session.ctx['user_id']
-        group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ,
-                                                            no_cache=False)
-        name = group_member_info['card'] or group_member_info['nickname']
-        reward = Reward()
-        if all([w not in name for w in stopWord]):
-            if reward.meetReward(QQ, int(args)):
-                reward.getReward(QQ, int(args))
-                await session.send(f'{getImage("getReward")}\n恭喜你，揭榜成功！')
+@on_command('揭榜', aliases=('领取悬赏',), only_to_me=False)
+async def getReward(session: CommandSession):
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip()
+    if args == '' or not args.isdigit():
+        await session.send('请输入通缉令编号，格式为 /揭榜 [编号]')
+    QQ = session.ctx['user_id']
+    group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ,
+                                                        no_cache=False)
+    name = group_member_info['card'] or group_member_info['nickname']
+    reward = Reward()
+    if all([w not in name for w in stopWord]):
+        if reward.meetReward(QQ, int(args)):
+            reward.getReward(QQ, int(args))
+            await session.send(f'{getImage("getReward")}\n恭喜你，揭榜成功！')
 
-    @on_command('查询悬赏', aliases=('悬赏榜',), only_to_me=False)
-    async def getReward(session: CommandSession):
-        QQ = session.ctx['user_id']
-        group_id = session.ctx['group_id']
-        rewardList = Reward().echoReward(group_id)
-        if rewardList == []:
-            await session.send('当前还没有悬赏任务哦，勇士晚些再来吧~')
-        message = '通缉令\n'
-        for reward in rewardList:
-            message = message + '-' * 10 + '\n' + echoReward(reward)
-        await session.send(message)
+@on_command('查询悬赏', aliases=('悬赏榜',), only_to_me=False)
+async def getAllReward(session: CommandSession):
+    group_id = session.ctx['group_id']
+    rewardList = Reward().echoReward(group_id)
+    if rewardList == []:
+        await session.send('当前还没有悬赏任务哦，勇士晚些再来吧~')
+        return
+    message = '通缉令\n'
+    for reward in rewardList:
+        print(reward)
+        message = message + '-' * 20 + '\n' + echoReward(reward) + '\n'
+    await session.send(message)

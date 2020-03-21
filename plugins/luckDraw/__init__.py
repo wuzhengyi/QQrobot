@@ -124,9 +124,9 @@ async def message(session: CommandSession):
 
 @on_natural_language(only_to_me=False)
 async def _(session: NLPSession):
-    # 以置信度 60.0 返回 message 命令
+    # 以置信度 10.0 返回 message 命令
     # 确保任何消息都在且仅在其它自然语言处理器无法理解的时候使用 message 命令
-    return IntentCommand(60.0, 'message', args={'message': session.msg_text})
+    return IntentCommand(10.0, 'message', args={'message': session.msg_text})
 
 
 @on_command('查询', only_to_me=False)

@@ -41,7 +41,7 @@ class Reward():
         if os.path.exists(self.jsonPath):
             with open(self.jsonPath, encoding='utf-8') as f:
                 self.allReward = json.load(f)
-                self.nextID = max([x['id'] for x in self.allReward]) + 1
+                self.nextID = max([x['id'] for x in self.allReward]) + 1 if self.allReward != [] else 1024
         else:
             self.allReward = []
             self.nextID = 1024
