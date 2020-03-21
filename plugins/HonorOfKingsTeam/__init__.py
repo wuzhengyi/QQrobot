@@ -45,8 +45,14 @@ async def jungle(session: CommandSession):
         member = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=session.ctx['user_id'])
         name = member['card'] or member['nickname']
         if isInTeam(game, name):
-            await session.send('你已经在车上了哦，不可以坐两个位置！贪心鬼（*╹▽╹*）')
-            return
+            for pos in game:
+                if game[pos] == name:
+                    break
+            if pos == '打野':
+                await session.send('你已经是打野了呀！（*╹▽╹*）')
+            else:
+                game[pos] = None
+                await session.send('真是麻烦呢，就帮你换个位置吧~')
         game['打野'] = name
         await session.send(f'野王上车成功，当前队伍:\n{echoTeam(game)}')
     else:
@@ -63,8 +69,14 @@ async def warrior(session: CommandSession):
         member = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=session.ctx['user_id'])
         name = member['card'] or member['nickname']
         if isInTeam(game, name):
-            await session.send('你已经在车上了哦，不可以坐两个位置！贪心鬼（*╹▽╹*）')
-            return
+            for pos in game:
+                if game[pos] == name:
+                    break
+            if pos == '战士':
+                await session.send('你已经是战士了呀！（*╹▽╹*）')
+            else:
+                game[pos] = None
+                await session.send('真是麻烦呢，就帮你换个位置吧~')
         game['战士'] = name
         await session.send(f'边路霸主上车成功，当前队伍:\n{echoTeam(game)}')
     else:
@@ -81,8 +93,14 @@ async def mage(session: CommandSession):
         member = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=session.ctx['user_id'])
         name = member['card'] or member['nickname']
         if isInTeam(game, name):
-            await session.send('你已经在车上了哦，不可以坐两个位置！贪心鬼（*╹▽╹*）')
-            return
+            for pos in game:
+                if game[pos] == name:
+                    break
+            if pos == '中单':
+                await session.send('你已经是中单了呀！（*╹▽╹*）')
+            else:
+                game[pos] = None
+                await session.send('真是麻烦呢，就帮你换个位置吧~')
         game['中单'] = name
         await session.send(f'中单法王上车成功，当前队伍:\n{echoTeam(game)}')
     else:
@@ -99,8 +117,14 @@ async def tank(session: CommandSession):
         member = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=session.ctx['user_id'])
         name = member['card'] or member['nickname']
         if isInTeam(game, name):
-            await session.send('你已经在车上了哦，不可以坐两个位置！贪心鬼（*╹▽╹*）')
-            return
+            for pos in game:
+                if game[pos] == name:
+                    break
+            if pos == '辅助':
+                await session.send('你已经是辅助了呀！（*╹▽╹*）')
+            else:
+                game[pos] = None
+                await session.send('真是麻烦呢，就帮你换个位置吧~')
         game['辅助'] = name
         await session.send(f'最强辅助上车成功，当前队伍:\n{echoTeam(game)}')
     else:
@@ -117,8 +141,14 @@ async def shooter(session: CommandSession):
         member = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=session.ctx['user_id'])
         name = member['card'] or member['nickname']
         if isInTeam(game, name):
-            await session.send('你已经在车上了哦，不可以坐两个位置！贪心鬼（*╹▽╹*）')
-            return
+            for pos in game:
+                if game[pos] == name:
+                    break
+            if pos == '射手':
+                await session.send('你已经是射手了呀！（*╹▽╹*）')
+            else:
+                game[pos] = None
+                await session.send('真是麻烦呢，就帮你换个位置吧~')
         game['射手'] = name
         await session.send(f'无敌射手上车成功，当前队伍:\n{echoTeam(game)}')
     else:
