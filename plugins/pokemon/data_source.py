@@ -2,6 +2,7 @@ import sqlite3
 import random
 import sys
 import os
+import json
 
 sys.path.append(os.path.join('plugins', 'pokemon'))
 from header import State, Choice, PokeLevel, ballEng2Chn, ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
@@ -32,35 +33,63 @@ def getPokeLevel(name: str) -> PokeLevel:
 
 
 class Reward():
-    def __init__(self, reward: {}):
-        self.postReward(reward)
+    def __init__(self):
+        self.jsonPath = 'reward.json'
+        self.loadData()
 
-    def postReward(self, reward: {}) -> None:
-        self.pokemon = reward['pokemon']
-        self.award = reward['award']
-        self.limitNum = reward['limitNum']
-        self.nowNum = reward['nowNum']
-        self.getList = []
+    def loadData(self):
+        if os.path.exists(self.jsonPath):
+            with open(self.jsonPath, encoding='utf-8') as f:
+                self.allReward = json.load(f)
+                self.nextID = max([x['id'] for x in self.allReward]) + 1
+        else:
+            self.allReward = []
+            self.nextID = 1024
 
-    def meetReward(self, QQ: int) -> bool:
+    def saveDate(self):
+        with open(self.jsonPath, 'w', encoding='utf-8') as f:
+            json.dump(self.allReward, f, indent=4, ensure_ascii=False)
+
+    def postReward(self, reward: {}) -> int:
+        ''':reward: {'group_id': int,
+                    'pokemon': [[name,num],],
+                    'award': [[name,num],],
+                    'limitNum': int,
+                    'remard': str}'''
+        reward['id'] = self.nextID
+        reward['getList'] = []
+        self.nextID = self.nextID + 1
+        self.allReward.append(reward)
+        self.saveDate()
+        return reward['id']
+
+    def meetReward(self, QQ: int, id: int) -> bool:
         if DEBUG: return True
-        if self.nowNum >= self.limitNum or QQ in self.getList:
+        if self.allReward == []: return False
+        for reward in self.allReward:
+            if reward['id'] == id:
+                break
+
+        if reward['id'] != id or len(reward['getList']) >= reward['limitNum'] or QQ in reward['getList']:
             return False
+
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
-        nameList = [pokeNameChn2Eng[x[0]] for x in self.pokemon]
+        nameList = [pokeNameChn2Eng[x[0]] for x in reward['pokemon']]
         c.execute(f"select {','.join(nameList)} from pokemon where QQ={QQ}")
         num = c.fetchone()
         conn.close()
         return all(num)
 
-    def getReward(self, QQ: int) -> None:
-        self.getList.append(QQ)
+    def getReward(self, QQ: int, id: int) -> None:
+        for reward in self.allReward:
+            if reward['id'] == id:
+                break
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
-        nameList = [f"{pokeNameChn2Eng[x[0]]}={pokeNameChn2Eng[x[0]]}-{x[1]}" for x in self.pokemon]
+        nameList = [f"{pokeNameChn2Eng[x[0]]}={pokeNameChn2Eng[x[0]]}-{x[1]}" for x in reward['pokemon']]
         c.execute(f"UPDATE pokemon set {','.join(nameList)} where QQ={QQ}")
-        for x in self.award:
+        for x in reward['award']:
             if x[0] in pokeNameChn2Eng:
                 name = pokeNameChn2Eng[x[0]]
                 c.execute(f"UPDATE pokemon set {name}={name}+{x[1]} where QQ={QQ}")
@@ -76,10 +105,15 @@ class Reward():
             elif x[0] in consNameChn2Eng:
                 name = consNameChn2Eng[x[0]]
                 c.execute(f"UPDATE constellation set {name} = {name}+ {x[1]} where QQ={QQ}")
-
         conn.commit()
         conn.close()
-        self.nowNum = self.nowNum + 1
+        reward['getList'].append(QQ)
+        if len(reward['getList']) == reward['limitNum']:
+            self.allReward.remove(reward)
+        self.saveDate()
+
+    def echoReward(self, group_id: int) -> []:
+        return [x for x in self.allReward if x['group_id'] == group_id]
 
 
 class Pokemon():
