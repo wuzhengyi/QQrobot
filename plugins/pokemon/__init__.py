@@ -131,7 +131,7 @@ async def getReward(session: CommandSession):
     name = group_member_info['card'] or group_member_info['nickname']
     reward = Reward()
     if all([w not in name for w in stopWord]):
-        if reward.meetReward(QQ, int(args)):
+        if reward.meetReward(QQ, session.ctx['group_id'], int(args)):
             reward.getReward(QQ, int(args))
             await session.send(f'{getImage("getReward")}\n恭喜你，揭榜成功！')
 

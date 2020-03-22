@@ -63,14 +63,15 @@ class Reward():
         self.saveDate()
         return reward['id']
 
-    def meetReward(self, QQ: int, id: int) -> bool:
+    def meetReward(self, QQ: int, group_id: int, id: int) -> bool:
         if DEBUG: return True
         if self.allReward == []: return False
         for reward in self.allReward:
             if reward['id'] == id:
                 break
 
-        if reward['id'] != id or len(reward['getList']) >= reward['limitNum'] or QQ in reward['getList']:
+        if reward['id'] != id or len(reward['getList']) >= reward['limitNum'] or QQ in reward['getList'] or reward[
+            'group_id'] != group_id:
             return False
 
         conn = sqlite3.connect('user.db')
