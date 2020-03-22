@@ -115,6 +115,16 @@ class Reward():
     def echoReward(self, group_id: int) -> []:
         return [x for x in self.allReward if x['group_id'] == group_id]
 
+    def endReward(self, id: int, group_id: int):
+        for reward in self.allReward:
+            if reward['id'] == id:
+                break
+        if reward['id'] != id or reward['group_id'] != group_id:
+            return False
+        self.allReward.remove(reward)
+        self.saveDate()
+        return True
+
 
 class Pokemon():
     def __init__(self, QQ: int):

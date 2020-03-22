@@ -117,6 +117,7 @@ async def sendReward(session: CommandSession):
         #                              content=message)
         await session.send(echoReward(temp))
 
+
 @on_command('揭榜', aliases=('领取悬赏',), only_to_me=False)
 async def getReward(session: CommandSession):
     inpt = session.state.get('message') or session.current_arg
@@ -134,6 +135,7 @@ async def getReward(session: CommandSession):
             reward.getReward(QQ, int(args))
             await session.send(f'{getImage("getReward")}\n恭喜你，揭榜成功！')
 
+
 @on_command('查询悬赏', aliases=('悬赏榜',), only_to_me=False)
 async def getAllReward(session: CommandSession):
     group_id = session.ctx['group_id']
@@ -146,3 +148,15 @@ async def getAllReward(session: CommandSession):
         print(reward)
         message = message + '-' * 20 + '\n' + echoReward(reward) + '\n'
     await session.send(message)
+
+
+@on_command('撤销悬赏', only_to_me=False, permission=permission.SUPERUSER)
+async def endReward(session: CommandSession):
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip()
+    if args == '' or not args.isdigit():
+        await session.send('请输入通缉令编号，格式为 /撤销悬赏 [编号]')
+    if Reward().endReward(int(args), session.ctx['group_id']):
+        await session.send(f'悬赏{args}撤销成功~')
+    else:
+        await session.send(f'撤销悬赏失败，在该群发布的编号为{args}的悬赏不存在。')
