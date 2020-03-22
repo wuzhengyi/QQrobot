@@ -98,7 +98,7 @@ async def sendReward(session: CommandSession):
             '格式为 /悬赏 [精灵:数目，逗号分开] [奖励:数目，逗号分开] [限制人数] [无|备注]。\n例如： \悬赏 阿柏蛇:1,喵喵:2,皮皮:1 奖券:1 3 第一名单独多奖励一个奖券')
         return
     remark = None if len(args) == 3 else args[3]
-    limitNum = int(args[2]) if args[2].isdigit() else None
+    limitNum = int(args[2]) if args[2].isdigit() else 1
     pokemon = [x.split(':') for x in args[0].strip().split(',')]
     if not all([x[0] in pokeNameChn for x in pokemon]):
         await session.send('你悬赏的精灵不存在，请重新发布悬赏。')
