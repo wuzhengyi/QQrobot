@@ -5,3 +5,4 @@ __pycache__
 image
 user.db-journal
 .idea
+*.json
