@@ -46,7 +46,7 @@ class Reward():
             self.allReward = []
             self.nextID = 1024
 
-    def saveDate(self):
+    def saveData(self):
         with open(self.jsonPath, 'w', encoding='utf-8') as f:
             json.dump(self.allReward, f, indent=4, ensure_ascii=False)
 
@@ -60,7 +60,7 @@ class Reward():
         reward['getList'] = []
         self.nextID = self.nextID + 1
         self.allReward.append(reward)
-        self.saveDate()
+        self.saveData()
         return reward['id']
 
     def meetReward(self, QQ: int, group_id: int, id: int) -> bool:
@@ -111,7 +111,7 @@ class Reward():
         reward['getList'].append(QQ)
         if len(reward['getList']) == reward['limitNum']:
             self.allReward.remove(reward)
-        self.saveDate()
+        self.saveData()
 
     def echoReward(self, group_id: int) -> []:
         return [x for x in self.allReward if x['group_id'] == group_id]
@@ -123,7 +123,7 @@ class Reward():
         if reward['id'] != id or reward['group_id'] != group_id:
             return False
         self.allReward.remove(reward)
-        self.saveDate()
+        self.saveData()
         return True
 
 

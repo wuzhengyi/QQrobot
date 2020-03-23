@@ -65,8 +65,8 @@ async def sign(session: CommandSession):
         user.addDiamond(QQ, value)
         sumDiamond = user.getDiamond(QQ)
         message = '签到成功,你是今天第' + \
-            str(count) + '位签到的。恭喜你获得' + str(value) + \
-            '个钻石，你当前总共有' + str(sumDiamond) + '个钻石。'
+                  str(count) + '位签到的。恭喜你获得' + str(value) + \
+                  '个钻石，你当前总共有' + str(sumDiamond) + '个钻石。'
         await session.send(message)
     user.close()
 
@@ -191,7 +191,7 @@ async def pet(session: CommandSession):
               ''.join([pokeNameChn[i] + ':' + str(pokemon[i]) +
                        '\n' for i in range(len(pokemon) - 1)])
     message = message + pokeNameChn[-1] + ':' + \
-        str(pokemon[-1]) + '\n' if pokemon[-1] != 0 else message
+              str(pokemon[-1]) + '\n' if pokemon[-1] != 0 else message
     await session.send(message[:-1])
 
 
@@ -307,7 +307,7 @@ async def diamonDraw(session: CommandSession):
         if ticketNum > 0:
             user.addTicket(QQ, ticketNum)
             message = message + getImage('ticket') + \
-                '\n恭喜你获得' + str(ticketNum) + '奖券\n'
+                      '\n恭喜你获得' + str(ticketNum) + '奖券\n'
         cardNum = ans.count('card')
         if cardNum > 0:
             cardIndex = [random.randint(0, 11) for i in range(cardNum)]
@@ -316,34 +316,34 @@ async def diamonDraw(session: CommandSession):
                 if num > 0:
                     user.addCons(QQ, i, num)
                     message = message + getConsImage(i) + '\n恭喜你获得' + \
-                        str(num) + '张' + consName[i] + '卡片\n'
+                              str(num) + '张' + consName[i] + '卡片\n'
         diamondSum = sum([int(i) for i in ans if i.isdigit()])
         if diamondSum > 0:
             user.addDiamond(QQ, diamondSum)
             if diamondSum in [30, 60, 120, 300]:
                 message = message + \
-                    getImage(str(diamondSum) + 'diamond') + \
-                    '\n恭喜你获得' + str(diamondSum) + '钻石\n'
+                          getImage(str(diamondSum) + 'diamond') + \
+                          '\n恭喜你获得' + str(diamondSum) + '钻石\n'
             else:
                 message = message + '恭喜你获得' + str(diamondSum) + '钻石\n'
         evelsBall = ans.count('evelsBall')
         if evelsBall > 0:
             user.addEvelsBall(QQ, evelsBall)
             message = message + \
-                getBallImage('evelsBall') + '\n恭喜你获得' + \
-                str(evelsBall) + '个精灵球\n'
+                      getBallImage('evelsBall') + '\n恭喜你获得' + \
+                      str(evelsBall) + '个精灵球\n'
         superBall = ans.count('superBall')
         if superBall > 0:
             user.addSuperBall(QQ, superBall)
             message = message + \
-                getBallImage('superBall') + '\n恭喜你获得' + \
-                str(superBall) + '个超级球\n'
+                      getBallImage('superBall') + '\n恭喜你获得' + \
+                      str(superBall) + '个超级球\n'
         masterBall = ans.count('masterBall')
         if masterBall > 0:
             user.addMasterBall(QQ, masterBall)
             message = message + \
-                getBallImage('masterBall') + '\n恭喜你获得' + \
-                str(masterBall) + '个大师球\n欢迎下次光临。'
+                      getBallImage('masterBall') + '\n恭喜你获得' + \
+                      str(masterBall) + '个大师球\n欢迎下次光临。'
         await session.send(message)
     else:
         await session.send('你的钻石不足，快去找老蛋赚钻石吧。')
@@ -356,20 +356,11 @@ async def topTicket(session: CommandSession):
     rank = user.getTopTicket()
     user.close()
     bot = nonebot.get_bot()
-    QQname = []
-    for QQ in rank:
-        try:
-            group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0],
-                                                                no_cache=False)
-            name = group_member_info['card'] or group_member_info['nickname']
-            if all([w not in name for w in stopWord]):
-                QQname.append((name, QQ[1]))
-        except:  # 非本群人员
-            pass
-        # if len(QQname) > 5:
-        #     break
-    message = '[CQ:emoji, id=128179]奖券排行榜[CQ:emoji, id=128179]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                                                             '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    QQList = {x['user_id']: (x['card'] or x['nickname']) for x in memberList}
+    QQname = [(QQList[x[0]], x[1]) for x in rank if x[0] in QQList]
+    message = '[CQ:emoji, id=128179]奖券排行榜[CQ:emoji, id=128179]\n' + ''.join(
+        [f'Top {i + 1}. {QQname[i][0]}\t{QQname[i][1]}\n' for i in range(len(QQname))])
     await session.send(message[:-1])
 
 
@@ -379,20 +370,11 @@ async def topDiamond(session: CommandSession):
     rank = user.getTopDiamond()
     user.close()
     bot = nonebot.get_bot()
-    QQname = []
-    for QQ in rank:
-        try:
-            group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0],
-                                                                no_cache=False)
-            name = group_member_info['card'] or group_member_info['nickname']
-            if all([w not in name for w in stopWord]):
-                QQname.append((name, QQ[1]))
-        except:  # 非本群人员
-            pass
-        # if len(QQname) > 5:
-        #     break
-    message = '[CQ:emoji, id=128142]钻石排行榜[CQ:emoji, id=128142]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                                                             '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    QQList = {x['user_id']: (x['card'] or x['nickname']) for x in memberList}
+    QQname = [(QQList[x[0]], x[1]) for x in rank if x[0] in QQList]
+    message = '[CQ:emoji, id=128142]钻石排行榜[CQ:emoji, id=128142]\n' + ''.join(
+        [f'Top {i + 1}. {QQname[i][0]}\t{QQname[i][1]}\n' for i in range(len(QQname))])
     await session.send(message[:-1])
 
 
@@ -402,20 +384,11 @@ async def topMessage(session: CommandSession):
     rank = user.getTopMessage()
     user.close()
     bot = nonebot.get_bot()
-    QQname = []
-    for QQ in rank:
-        try:
-            group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0],
-                                                                no_cache=False)
-            name = group_member_info['card'] or group_member_info['nickname']
-            if all([w not in name for w in stopWord]):
-                QQname.append((name, QQ[1]))
-        except:  # 非本群人员
-            pass
-        # if len(QQname) > 5:
-        #     break
-    message = '[CQ:emoji, id=128172]发言排行榜[CQ:emoji, id=128172]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                                                             '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    QQList = {x['user_id']: (x['card'] or x['nickname']) for x in memberList}
+    QQname = [(QQList[x[0]], x[1]) for x in rank if x[0] in QQList]
+    message = '[CQ:emoji, id=128172]发言排行榜[CQ:emoji, id=128172]\n' + ''.join(
+        [f'Top {i + 1}. {QQname[i][0]}\t{QQname[i][1]}\n' for i in range(len(QQname))])
     await session.send(message[:-1])
 
 
@@ -425,20 +398,11 @@ async def topScore(session: CommandSession):
     rank = user.getTopScore()
     user.close()
     bot = nonebot.get_bot()
-    QQname = []
-    for QQ in rank:
-        try:
-            group_member_info = await bot.get_group_member_info(group_id=session.ctx['group_id'], user_id=QQ[0],
-                                                                no_cache=False)
-            name = group_member_info['card'] or group_member_info['nickname']
-            if all([w not in name for w in stopWord]):
-                QQname.append((name, QQ[1]))
-        except:  # 非本群人员
-            pass
-        # if len(QQname) > 5:
-        #     break
-    message = '[CQ:emoji, id=128176]积分排行榜[CQ:emoji, id=128176]\n' + ''.join(['Top ' + str(i + 1) + '. ' + QQname[i][0] +
-                                                                             '\t ' + str(QQname[i][1]) + '\n' for i in range(len(QQname))])
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    QQList = {x['user_id']: (x['card'] or x['nickname']) for x in memberList}
+    QQname = [(QQList[x[0]], x[1]) for x in rank if x[0] in QQList]
+    message = '[CQ:emoji, id=128176]积分排行榜[CQ:emoji, id=128176]\n' + ''.join(
+        [f'Top {i + 1}. {QQname[i][0]}\t{QQname[i][1]}\n' for i in range(len(QQname))])
     await session.send(message[:-1])
 
 
@@ -477,7 +441,6 @@ async def addScore(session: CommandSession):
 
 @on_command('减积分', only_to_me=False, permission=permission.SUPERUSER)
 async def subScore(session: CommandSession):
-
     # 解析命令格式
     inpt = session.state.get('message') or session.current_arg
     args = inpt.strip().split()
