@@ -97,7 +97,7 @@ class userSQL():
 
     def isSigned(self, QQ: int) -> bool:
         if self._isNewDate():
-            return True
+            return False
         self.c.execute(f"select sign from user where QQ= {QQ}")
         ans = self.c.fetchall()
         if ans == [] or ans[0][0] == 0:
