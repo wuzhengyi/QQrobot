@@ -7,6 +7,7 @@ import json
 sys.path.append(os.path.join('plugins', 'pokemon'))
 import sceneA, sceneB
 from header import State, Choice, PokeLevel, ballEng2Chn, ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
+
 # from ..luckDraw.data_source import userSQL
 
 
@@ -137,6 +138,9 @@ class Pokemon():
         self.state = State.init
         self.PokemonNameEng = ''
         self.PokemonNameChn = ''
+        self.pokemonLevel = ''
+        self.pokemonNum = 0
+        self.scene = ''
 
     def begin(self) -> str:
         if self.state is not State.init:
@@ -162,14 +166,8 @@ class Pokemon():
             self.state = State.catch
             # 随机精灵宝可梦
             self._getSenceAPokemon()
-            # 获得宝可梦的姓名，精灵球的数目。
-            evelsBallNum = self._getBallNum('evelsBall')
-            superBallNum = self._getBallNum('superBall')
-            masterBallNum = self._getBallNum('masterBall')
-            return "%s\n野生的%s出现了，接下来你要做什么？\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑" % \
-                   (self._pokemonImage, self.pokemonNameChn, getBallEmoji('evelsBall'), evelsBallNum,
-                    getBallEmoji(
-                        'superBall'), superBallNum, getBallEmoji('asterBall'), masterBallNum, '[CQ:emoji, id=127939]')
+            self.scene = 'A'
+
         elif choice is Choice.B:
             if self._diamondNum < 10:
                 return '对不起，你的钻石余额不足10，快找老蛋充值吧。'
@@ -178,16 +176,19 @@ class Pokemon():
             self.state = State.catch
             # 随机精灵宝可梦
             self._getSenceBPokemon()
-            # 获得宝可梦的姓名，精灵球的数目。
-            evelsBallNum = self._getBallNum('evelsBall')
-            superBallNum = self._getBallNum('superBall')
-            masterBallNum = self._getBallNum('masterBall')
-            return "%s\n野生的%s出现了，接下来你要做什么？\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑" % \
-                   (self._pokemonImage, self.pokemonNameChn, getBallEmoji('evelsBall'), evelsBallNum,
-                    getBallEmoji(
-                        'superBall'), superBallNum, getBallEmoji('asterBall'), masterBallNum, '[CQ:emoji, id=127939]')
+            self.scene = 'B'
         else:
-            return '对不起，当前只开放了场景A.精灵乐园，请您重新选择'
+            return '对不起，当前只开放了场景\nA.精灵乐园（50钻石/次）\nB.精灵乐园（10钻石/次）\n请您重新选择。'
+
+        # 获得宝可梦的姓名，精灵球的数目。
+        evelsBallNum = self._getBallNum('evelsBall')
+        superBallNum = self._getBallNum('superBall')
+        masterBallNum = self._getBallNum('masterBall')
+        return "%s\n野生的%s[%s级,您有%d只]出现了，接下来你要做什么？\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑" % \
+               (self._pokemonImage, self.pokemonNameChn, self.pokemonLevel, self.pokemonNum, getBallEmoji('evelsBall'),
+                evelsBallNum,
+                getBallEmoji(
+                    'superBall'), superBallNum, getBallEmoji('asterBall'), masterBallNum, '[CQ:emoji, id=127939]')
 
     def _dealCatch(self, choice: Choice) -> str:
         temp = {Choice.A: 'evelsBall',
@@ -202,14 +203,16 @@ class Pokemon():
         # 消耗对应精灵球
         self._subBallNum(name)
         # 开始捕捉
-        if random.uniform(0, 1) <= self._getSenceACatchProb(name):
+        catchProb = self._getSenceACatchProb(name) if self.scene == 'A' else self._getSenceBCatchProb(name)
+        escapeProb = self._getSenceAEscapeProb() if self.scene == 'A' else self._getSenceBEscapeProb()
+        if random.uniform(0, 1) <= catchProb:
             # 如果捕捉到
             message = f'{self._pokemonImage}\n恭喜你获得了可爱的{self.pokemonNameChn}，快打开宠物看看吧。'
             self._addPokemon(self.pokemonNameEng)
             self.reset()
             return message
         else:
-            if random.uniform(0, 1) <= self._getSenceAEscapeProb():
+            if random.uniform(0, 1) <= escapeProb:
                 # 宝可梦逃跑
                 message = f'很可惜，{self.pokemonNameChn}可恶的逃跑了，再进入游戏寻找你的伙伴吧。'
                 self.reset()
@@ -219,8 +222,9 @@ class Pokemon():
                 evelsBallNum = self._getBallNum('evelsBall')
                 superBallNum = self._getBallNum('superBall')
                 masterBallNum = self._getBallNum('masterBall')
-                return '很可惜，%s捕捉失败，请再试一次吧。\n%s\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑' % \
-                       (self.pokemonNameChn, self._pokemonImage, getBallEmoji('evelsBall'), evelsBallNum,
+                return '很可惜，%s[%s级,您有%d只]捕捉失败，请再试一次吧。\n%s\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑' % \
+                       (self.pokemonNameChn, self.pokemonLevel, self.pokemonNum, self._pokemonImage,
+                        getBallEmoji('evelsBall'), evelsBallNum,
                         getBallEmoji(
                             'superBall'), superBallNum, getBallEmoji('asterBall'), masterBallNum,
                         '[CQ:emoji, id=127939]')
@@ -241,6 +245,14 @@ class Pokemon():
                 break
         self.pokemonNameEng = item
         self.pokemonNameChn = sceneA.pokeNameChn[sceneA.pokeNameEng.index(item)]
+        self.pokemonLevel = allPokemon[item].name
+        self.pokemonNum = self._getPokeNum
+
+    def _getSenceBCatchProb(self, ball: str) -> float:
+        return sceneB.catchProb[getPokeLevel(self.pokemonNameEng)][ball]
+
+    def _getSenceBEscapeProb(self) -> float:
+        return sceneB.escapeProb[getPokeLevel(self.pokemonNameEng)]
 
     def _getSenceBPokemon(self) -> None:
         prob = sceneB.pokemonProb
@@ -252,6 +264,8 @@ class Pokemon():
                 break
         self.pokemonNameEng = item
         self.pokemonNameChn = sceneB.pokeNameChn[sceneB.pokeNameEng.index(item)]
+        self.pokemonLevel = allPokemon[item].name
+        self.pokemonNum = self._getPokeNum
 
     @property
     def _pokemonImage(self) -> str:
@@ -286,6 +300,16 @@ class Pokemon():
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
         c.execute("select %s from pokemon where QQ=%d" % (ball, self.QQ))
+        ans = c.fetchone()[0]
+        conn.close()
+        return ans
+
+    @property
+    def _getPokeNum(self) -> int:
+        if DEBUG: return 1000
+        conn = sqlite3.connect('user.db')
+        c = conn.cursor()
+        c.execute("select %s from pokemon where QQ=%d" % (self.pokemonNameEng, self.QQ))
         ans = c.fetchone()[0]
         conn.close()
         return ans
