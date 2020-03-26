@@ -189,14 +189,15 @@ async def pet(session: CommandSession):
     menghuanIndex = pokeNameChn.index('梦幻')
     chaomengInedx = pokeNameChn.index('超梦')
     message = '我的宠物' + '\n' + \
-              ''.join([pokeNameChn[i] + ':' + str(pokemon[i]) +
-                       '\n' for i in range(menghuanIndex)])
+              ''.join([f'{pokeNameChn[i]}:{pokemon[i]}\t{pokeNameChn[i + 1]}:{pokemon[i + 1]}\n' for i in
+                       range(0, menghuanIndex, 2)])
     message = message + pokeNameChn[menghuanIndex] + ':' + \
               str(pokemon[menghuanIndex]) + '\n' if pokemon[menghuanIndex] != 0 else message
-    message = message + ''.join([pokeNameChn[i] + ':' + str(pokemon[i]) +
-                       '\n' for i in range(menghuanIndex+1, chaomengInedx)])
-    message = message + pokeNameChn[chaomengInedx] + ':' + \
-              str(pokemon[chaomengInedx]) + '\n' if pokemon[chaomengInedx] != 0 else message
+    message = message + ''.join([f'{pokeNameChn[i]}:{pokemon[i]}\t{pokeNameChn[i + 1]}:{pokemon[i + 1]}\n' for i in
+                                 range(menghuanIndex + 1, chaomengInedx)])
+    message = message + f'{pokeNameChn[chaomengInedx - 1]}:{pokemon[chaomengInedx - 1]}\t{pokeNameChn[chaomengInedx]}:{pokemon[chaomengInedx]}\n' \
+        if pokemon[chaomengInedx] != 0 \
+        else message + f'{pokeNameChn[chaomengInedx - 1]}: {pokemon[chaomengInedx - 1]}\n'
     await session.send(message[:-1])
 
 
