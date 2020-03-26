@@ -16,5 +16,7 @@ catchProb = {header.PokeLevel.D: {'evelsBall': 0.3, 'superBall': 0.8, 'masterBal
              header.PokeLevel.A: {'evelsBall': 0.1, 'superBall': 0.25, 'masterBall': 1.0},
              header.PokeLevel.S: {'evelsBall': 0.01, 'superBall': 0.05, 'masterBall': 1.0}}
 
-escapeProb = {header.PokeLevel.D: 0.15, header.PokeLevel.C: 0.2,
-              header.PokeLevel.B: 0.25, header.PokeLevel.A: 0.1, header.PokeLevel.S: 0.01}
+#escapeProb = {header.PokeLevel.D: 0.15, header.PokeLevel.C: 0.2,
+#              header.PokeLevel.B: 0.25, header.PokeLevel.A: 0.1, header.PokeLevel.S: 0.01}
+escapeProb = {header.PokeLevel.D: 0.1, header.PokeLevel.C: 0.15,
+              header.PokeLevel.B: 0.2, header.PokeLevel.A: 0.1, header.PokeLevel.S: 0.01}

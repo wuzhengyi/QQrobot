@@ -167,7 +167,7 @@ async def backpack(session: CommandSession):
 
     user.close()
 
-    message = '我的背包' + '\n' + \
+    message = '---我的背包---' + '\n' + \
               getBallEmoji('evelsBall') + '精灵球:' + str(evelsBall) + '\n' + \
               getBallEmoji('superBall') + '超级球:' + str(superBall) + '\n' + \
               getBallEmoji('masterBall') + '大师球:' + str(masterBall) + '\n' + \
