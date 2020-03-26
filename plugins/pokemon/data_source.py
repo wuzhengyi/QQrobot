@@ -5,9 +5,10 @@ import os
 import json
 
 sys.path.append(os.path.join('plugins', 'pokemon'))
+import sceneA, sceneB
 from header import State, Choice, PokeLevel, ballEng2Chn, ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
 # from ..luckDraw.data_source import userSQL
-import sceneA, sceneB
+
 
 DEBUG = False
 

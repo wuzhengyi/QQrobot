@@ -1,5 +1,5 @@
 from enum import Enum, unique
-import sceneA, sceneB
+
 
 @unique
 class State(Enum):
@@ -38,17 +38,25 @@ allPokemon = {'xiaolada': PokeLevel.D, 'bobo': PokeLevel.D, 'lvmaochong': PokeLe
               'jilidan': PokeLevel.A, 'dailong': PokeLevel.A, 'miaowazhongzi': PokeLevel.A, 'xiaohuolong': PokeLevel.A,
               'jienigui': PokeLevel.A,
               'menghuan': PokeLevel.S, 'huoyanniao': PokeLevel.S, 'jidongniao': PokeLevel.S,
-              'shandianniao': PokeLevel.S, 'chaomeng': PokeLevel.S}}
+              'shandianniao': PokeLevel.S, 'chaomeng': PokeLevel.S}
 
-pokeNameEng = sceneA.pokeNameEng + sceneB.pokeNameEng
-pokeNameChn = sceneA.pokeNameChn + sceneB.pokeNameChn
+pokeNameEng = ['xiaolada', 'bobo', 'miaomiao', 'wasidan', 'apashe',
+               'dashetou', 'pikaqiu', 'pipi', 'pangding', 'yibu', 'jilidan', 'dailong', 'menghuan'] + \
+              ['lvmaochong', 'dujiaochong', 'lieque', 'chuanshanshu', 'niduolang', 'niduolan', 'maoqiu',
+               'liuwei', 'kabishou', 'xipanmoou', 'kentailuo', 'feitiantanglang', 'dajia', 'miaowazhongzi',
+               'xiaohuolong', 'jienigui', 'huoyanniao', 'jidongniao', 'shandianniao', 'chaomeng']
+pokeNameChn = ['小拉达', '波波', '喵喵', '瓦斯弹', '阿柏蛇',
+               '大舌头', '皮卡丘', '皮皮', '胖丁', '伊布', '吉利蛋', '袋龙', '梦幻'] + \
+              ['绿毛虫', '独角虫', '烈雀', '穿山鼠', '尼多朗', '尼多兰', '毛球', '六尾',
+               '卡比兽', '吸盘魔偶', '肯泰罗', '飞天螳螂', '大甲', '妙蛙种子', '小火龙',
+               '杰尼龟', '火焰鸟', '急冻鸟', '闪电鸟', '超梦']
 
 pokeNameChn2Eng = dict(zip(pokeNameChn, pokeNameEng))
 
 consNameChn = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座',
-'处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座']
+               '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座']
 consNameEng = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
-'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
+               'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
 consNameChn2Eng = dict(zip(consNameChn, consNameEng))
 
 stopWord = ['小号', '机器']
