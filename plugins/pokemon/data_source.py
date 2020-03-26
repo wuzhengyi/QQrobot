@@ -143,7 +143,7 @@ class Pokemon():
             return '你已经在游戏中了，快回复选项继续游戏吧。'
         self.state = State.scene
         # return '欢迎来到宝可梦的世界，请选择你需要探索的地点:\nA.精灵乐园（10钻石/次）\nB.海底遗迹\nC.无尽森林\nD.精灵联盟'
-        return '欢迎来到宝可梦的世界，请选择你需要探索的地点:\nA.精灵乐园（50钻石/次）'  # \nB.精灵乐园（10钻石/次）'
+        return '欢迎来到宝可梦的世界，请选择你需要探索的地点:\nA.精灵乐园（50钻石/次）\nB.精灵乐园（10钻石/次）'
 
     def next(self, choice: Choice) -> str:
         if self.state is State.scene:
@@ -251,7 +251,7 @@ class Pokemon():
             if x < cumprob:
                 break
         self.pokemonNameEng = item
-        self.pokemonNameChn = sceneA.pokeNameChn[sceneB.pokeNameEng.index(item)]
+        self.pokemonNameChn = sceneB.pokeNameChn[sceneB.pokeNameEng.index(item)]
 
     @property
     def _pokemonImage(self) -> str:
