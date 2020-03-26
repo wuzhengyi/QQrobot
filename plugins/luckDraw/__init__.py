@@ -186,12 +186,17 @@ async def pet(session: CommandSession):
         return
     pokemon = user.getPokemon(QQ)
     user.close()
-
+    menghuanIndex = pokeNameChn.index('梦幻')
+    chaomengInedx = pokeNameChn.index('超梦')
     message = '我的宠物' + '\n' + \
               ''.join([pokeNameChn[i] + ':' + str(pokemon[i]) +
-                       '\n' for i in range(len(pokemon) - 1)])
-    message = message + pokeNameChn[-1] + ':' + \
-              str(pokemon[-1]) + '\n' if pokemon[-1] != 0 else message
+                       '\n' for i in range(menghuanIndex)])
+    message = message + pokeNameChn[menghuanIndex] + ':' + \
+              str(pokemon[menghuanIndex]) + '\n' if pokemon[menghuanIndex] != 0 else message
+    message = message + ''.join([pokeNameChn[i] + ':' + str(pokemon[i]) +
+                       '\n' for i in range(menghuanIndex+1, chaomengInedx)])
+    message = message + pokeNameChn[chaomengInedx] + ':' + \
+              str(pokemon[chaomengInedx]) + '\n' if pokemon[chaomengInedx] != 0 else message
     await session.send(message[:-1])
 
 
@@ -358,7 +363,7 @@ async def topTicket(session: CommandSession):
     bot = nonebot.get_bot()
     memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
     QQList = {x['user_id']: (x['card'] or x['nickname']) for x in memberList}
-    QQname = [(QQList[x[0]], x[1]) for x in rank if x[0] in QQList]
+    QQname = [(QQList[x[0]], x[1]) for x in rank if x[0] in QQList and x[0] not in stopWord]
     message = '[CQ:emoji, id=128179]奖券排行榜[CQ:emoji, id=128179]\n' + ''.join(
         [f'Top {i + 1}. {QQname[i][0]}\t{QQname[i][1]}\n' for i in range(len(QQname))])
     await session.send(message[:-1])
@@ -372,7 +377,7 @@ async def topDiamond(session: CommandSession):
     bot = nonebot.get_bot()
     memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
     QQList = {x['user_id']: (x['card'] or x['nickname']) for x in memberList}
-    QQname = [(QQList[x[0]], x[1]) for x in rank if x[0] in QQList]
+    QQname = [(QQList[x[0]], x[1]) for x in rank if x[0] in QQList and x[0] not in stopWord]
     message = '[CQ:emoji, id=128142]钻石排行榜[CQ:emoji, id=128142]\n' + ''.join(
         [f'Top {i + 1}. {QQname[i][0]}\t{QQname[i][1]}\n' for i in range(len(QQname))])
     await session.send(message[:-1])
@@ -386,7 +391,7 @@ async def topMessage(session: CommandSession):
     bot = nonebot.get_bot()
     memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
     QQList = {x['user_id']: (x['card'] or x['nickname']) for x in memberList}
-    QQname = [(QQList[x[0]], x[1]) for x in rank if x[0] in QQList]
+    QQname = [(QQList[x[0]], x[1]) for x in rank if x[0] in QQList and x[0] not in stopWord]
     message = '[CQ:emoji, id=128172]发言排行榜[CQ:emoji, id=128172]\n' + ''.join(
         [f'Top {i + 1}. {QQname[i][0]}\t{QQname[i][1]}\n' for i in range(len(QQname))])
     await session.send(message[:-1])
@@ -400,7 +405,7 @@ async def topScore(session: CommandSession):
     bot = nonebot.get_bot()
     memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
     QQList = {x['user_id']: (x['card'] or x['nickname']) for x in memberList}
-    QQname = [(QQList[x[0]], x[1]) for x in rank if x[0] in QQList]
+    QQname = [(QQList[x[0]], x[1]) for x in rank if x[0] in QQList and x[0] not in stopWord]
     message = '[CQ:emoji, id=128176]积分排行榜[CQ:emoji, id=128176]\n' + ''.join(
         [f'Top {i + 1}. {QQname[i][0]}\t{QQname[i][1]}\n' for i in range(len(QQname))])
     await session.send(message[:-1])

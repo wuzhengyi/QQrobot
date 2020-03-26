@@ -12,6 +12,7 @@ create table pokemon(
     evelsBall int DEFAULT 0,
     superBall int DEFAULT 0,
     masterBall int DEFAULT 0,
+    -- sceneA
     xiaolada int DEFAULT 0,
     bobo int DEFAULT 0,
     miaomiao int DEFAULT 0,
@@ -24,7 +25,28 @@ create table pokemon(
     yibu int DEFAULT 0,
     jilidan int DEFAULT 0,
     dailong int DEFAULT 0,
-    menghuan int DEFAULT 0
+    menghuan int DEFAULT 0,
+    -- sceneB
+    lvmaochong int DEFAULT 0,
+    dujiaochong int DEFAULT 0,
+    lieque int DEFAULT 0,
+    chuanshanshu int DEFAULT 0,
+    niduolang int DEFAULT 0,
+    niduolan int DEFAULT 0,
+    maoqiu int DEFAULT 0,
+    liuwei int DEFAULT 0,
+    kabishou int DEFAULT 0,
+    xipanmoou int DEFAULT 0,
+    kentailuo int DEFAULT 0,
+    feitiantanglang int DEFAULT 0,
+    dajia int DEFAULT 0,
+    miaowazhongzi int DEFAULT 0,
+    xiaohuolong int DEFAULT 0,
+    jienigui int DEFAULT 0,
+    huoyanniao int DEFAULT 0,
+    jidongniao int DEFAULT 0,
+    shandianniao int DEFAULT 0,
+    chaomeng int DEFAULT 0
 );
 
 create table constellation(
@@ -53,4 +75,25 @@ INSERT INTO
 VALUES
     (date('now', 'localtime'));
 
+
 --  alter table user add column messagenum int default 0;
+-- alter table pokemon add column lvmaochong int default 0;
+-- alter table pokemon add column dujiaochong int default 0;
+-- alter table pokemon add column lieque int default 0;
+-- alter table pokemon add column chuanshanshu int default 0;
+-- alter table pokemon add column niduolang int default 0;
+-- alter table pokemon add column niduolan int default 0;
+-- alter table pokemon add column maoqiu int default 0;
+-- alter table pokemon add column liuwei int default 0;
+-- alter table pokemon add column kabishou int default 0;
+-- alter table pokemon add column xipanmoou int default 0;
+-- alter table pokemon add column kentailuo int default 0;
+-- alter table pokemon add column feitiantanglang int default 0;
+-- alter table pokemon add column dajia int default 0;
+-- alter table pokemon add column miaowazhongzi int default 0;
+-- alter table pokemon add column xiaohuolong int default 0;
+-- alter table pokemon add column jienigui int default 0;
+-- alter table pokemon add column huoyanniao int default 0;
+-- alter table pokemon add column jidongniao int default 0;
+-- alter table pokemon add column shandianniao int default 0;
+-- alter table pokemon add column chaomeng int default 0;

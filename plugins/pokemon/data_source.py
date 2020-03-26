@@ -7,7 +7,7 @@ import json
 sys.path.append(os.path.join('plugins', 'pokemon'))
 from header import State, Choice, PokeLevel, ballEng2Chn, ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
 # from ..luckDraw.data_source import userSQL
-import sceneA
+import sceneA, sceneB
 
 DEBUG = False
 
@@ -142,7 +142,7 @@ class Pokemon():
             return '你已经在游戏中了，快回复选项继续游戏吧。'
         self.state = State.scene
         # return '欢迎来到宝可梦的世界，请选择你需要探索的地点:\nA.精灵乐园（10钻石/次）\nB.海底遗迹\nC.无尽森林\nD.精灵联盟'
-        return '欢迎来到宝可梦的世界，请选择你需要探索的地点:\nA.精灵乐园（10钻石/次）'
+        return '欢迎来到宝可梦的世界，请选择你需要探索的地点:\nA.精灵乐园（50钻石/次）'  # \nB.精灵乐园（10钻石/次）'
 
     def next(self, choice: Choice) -> str:
         if self.state is State.scene:
@@ -154,13 +154,29 @@ class Pokemon():
 
     def _dealScene(self, choice: Choice) -> str:
         if choice is Choice.A:
-            if self._diamondNum < 10:
-                return '对不起，你的钻石余额不足10，快找老蛋充值吧。'
-            self._subDiamond()
+            if self._diamondNum < 50:
+                return '对不起，你的钻石余额不足50，快找老蛋充值吧。'
+            self._subDiamond(50)
             # 更新状态
             self.state = State.catch
             # 随机精灵宝可梦
             self._getSenceAPokemon()
+            # 获得宝可梦的姓名，精灵球的数目。
+            evelsBallNum = self._getBallNum('evelsBall')
+            superBallNum = self._getBallNum('superBall')
+            masterBallNum = self._getBallNum('masterBall')
+            return "%s\n野生的%s出现了，接下来你要做什么？\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑" % \
+                   (self._pokemonImage, self.pokemonNameChn, getBallEmoji('evelsBall'), evelsBallNum,
+                    getBallEmoji(
+                        'superBall'), superBallNum, getBallEmoji('asterBall'), masterBallNum, '[CQ:emoji, id=127939]')
+        elif choice is Choice.B:
+            if self._diamondNum < 10:
+                return '对不起，你的钻石余额不足10，快找老蛋充值吧。'
+            self._subDiamond(10)
+            # 更新状态
+            self.state = State.catch
+            # 随机精灵宝可梦
+            self._getSenceBPokemon()
             # 获得宝可梦的姓名，精灵球的数目。
             evelsBallNum = self._getBallNum('evelsBall')
             superBallNum = self._getBallNum('superBall')
@@ -224,6 +240,17 @@ class Pokemon():
                 break
         self.pokemonNameEng = item
         self.pokemonNameChn = sceneA.pokeNameChn[sceneA.pokeNameEng.index(item)]
+
+    def _getSenceBPokemon(self) -> None:
+        prob = sceneB.pokemonProb
+        x = random.uniform(0, 1)
+        cumprob = 0.0
+        for item, item_pro in zip(sceneB.pokeNameEng, prob):
+            cumprob += item_pro
+            if x < cumprob:
+                break
+        self.pokemonNameEng = item
+        self.pokemonNameChn = sceneA.pokeNameChn[sceneB.pokeNameEng.index(item)]
 
     @property
     def _pokemonImage(self) -> str:
