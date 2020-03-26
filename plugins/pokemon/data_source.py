@@ -184,7 +184,7 @@ class Pokemon():
         evelsBallNum = self._getBallNum('evelsBall')
         superBallNum = self._getBallNum('superBall')
         masterBallNum = self._getBallNum('masterBall')
-        return "%s\n野生的%s[%s级,您有%d只]出现了，接下来你要做什么？\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑" % \
+        return "%s\n野生的%s [%s级,您有%d只] 出现了，接下来你要做什么？\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑" % \
                (self._pokemonImage, self.pokemonNameChn, self.pokemonLevel, self.pokemonNum, getBallEmoji('evelsBall'),
                 evelsBallNum,
                 getBallEmoji(
@@ -222,8 +222,8 @@ class Pokemon():
                 evelsBallNum = self._getBallNum('evelsBall')
                 superBallNum = self._getBallNum('superBall')
                 masterBallNum = self._getBallNum('masterBall')
-                return '很可惜，%s[%s级,您有%d只]捕捉失败，请再试一次吧。\n%s\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑' % \
-                       (self.pokemonNameChn, self.pokemonLevel, self.pokemonNum, self._pokemonImage,
+                return '%s\n很可惜，%s [%s级,您有%d只] 捕捉失败，请再试一次吧。\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑' % \
+                       (self._pokemonImage,self.pokemonNameChn, self.pokemonLevel, self.pokemonNum,
                         getBallEmoji('evelsBall'), evelsBallNum,
                         getBallEmoji(
                             'superBall'), superBallNum, getBallEmoji('asterBall'), masterBallNum,
