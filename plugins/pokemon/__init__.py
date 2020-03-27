@@ -34,7 +34,7 @@ async def sign(session: CommandSession):
     await session.send(message)
 
 
-@on_command('A', only_to_me=False)
+@on_command('A', aliases=('a',), only_to_me=False)
 async def chooseA(session: CommandSession):
     global GameList
     QQ = session.ctx['user_id']
@@ -44,7 +44,7 @@ async def chooseA(session: CommandSession):
         await session.send(message)
 
 
-@on_command('B', only_to_me=False)
+@on_command('B', aliases=('b',), only_to_me=False)
 async def chooseB(session: CommandSession):
     global GameList
     QQ = session.ctx['user_id']
@@ -54,7 +54,7 @@ async def chooseB(session: CommandSession):
         await session.send(message)
 
 
-@on_command('C', only_to_me=False)
+@on_command('C', aliases=('c',), only_to_me=False)
 async def chooseC(session: CommandSession):
     global GameList
     QQ = session.ctx['user_id']
@@ -64,7 +64,7 @@ async def chooseC(session: CommandSession):
         await session.send(message)
 
 
-@on_command('D', aliases=('Ｄ',), only_to_me=False)
+@on_command('D', aliases=('Ｄ', 'd',), only_to_me=False)
 async def chooseD(session: CommandSession):
     global GameList
     QQ = session.ctx['user_id']
@@ -107,7 +107,8 @@ async def sendReward(session: CommandSession):
     award = [x.split(':') for x in args[1].strip().split(',')]
     groupID = session.ctx['group_id']
     reward = Reward()
-    temp = {'group_id': groupID, 'pokemon': pokemon, 'award': award, 'limitNum': limitNum, 'remark': remark}
+    temp = {'group_id': groupID, 'pokemon': pokemon,
+            'award': award, 'limitNum': limitNum, 'remark': remark}
     id = reward.postReward(temp)
     temp['id'] = id
     temp['getList'] = []

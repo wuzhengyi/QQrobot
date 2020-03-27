@@ -161,8 +161,6 @@ class Pokemon():
             if self._diamondNum < 50:
                 return '对不起，你的钻石余额不足50，快找老蛋充值吧。'
             self._subDiamond(50)
-            # 更新状态
-            self.state = State.catch
             # 随机精灵宝可梦
             self._getSenceAPokemon()
             self.scene = 'A'
@@ -171,14 +169,14 @@ class Pokemon():
             if self._diamondNum < 10:
                 return '对不起，你的钻石余额不足10，快找老蛋充值吧。'
             self._subDiamond(10)
-            # 更新状态
-            self.state = State.catch
             # 随机精灵宝可梦
             self._getSenceBPokemon()
             self.scene = 'B'
         else:
             return '对不起，当前只开放了场景\nA.精灵乐园（50钻石/次）\nB.沙狐乐园（10钻石/次）\n请您重新选择。'
-
+        
+        # 更新状态
+        self.state = State.catch
         # 获得宝可梦的姓名，精灵球的数目。
         evelsBallNum = self._getBallNum('evelsBall')
         superBallNum = self._getBallNum('superBall')
