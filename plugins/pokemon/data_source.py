@@ -1,6 +1,3 @@
-import sceneB
-import sceneA
-from header import State, Choice, PokeLevel, ballEng2Chn, ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
 import sqlite3
 import random
 import sys
@@ -8,9 +5,9 @@ import os
 import json
 
 sys.path.append(os.path.join('plugins', 'pokemon'))
-
-# from ..luckDraw.data_source import userSQL
-
+from header import State, Choice, PokeLevel, ballEng2Chn, ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
+import sceneA, sceneB
+Scenes = {Choice.A: sceneA, Choice.B: sceneB}
 
 DEBUG = False
 
@@ -144,6 +141,10 @@ class Pokemon():
     def __init__(self, QQ: int):
         self.QQ = QQ
         self.reset()
+        self.sceneMsg = '欢迎来到宝可梦的世界，请选择你需要探索的地点:\n'+'\n'.join([
+            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）" for choice, scene in Scenes.items()])
+        self.sceneErrorMsg = '对不起，当前只开放了场景\n'+''.join([
+            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）\n" for choice, scene in Scenes.items()]) + '请您重新选择。'
 
     def reset(self):
         self.state = State.init
@@ -151,13 +152,12 @@ class Pokemon():
         self.PokemonNameChn = ''
         self.pokemonLevel = ''
         self.pokemonNum = 0
-        self.scene = ''
 
     def begin(self) -> str:
         if self.state is not State.init:
             return '你已经在游戏中了，快回复选项继续游戏吧。'
         self.state = State.scene
-        return '欢迎来到宝可梦的世界，请选择你需要探索的地点:\nA.精灵乐园（50钻石/次）\nB.沙狐乐园（10钻石/次）'
+        return self.sceneMsg
 
     def next(self, choice: Choice) -> str:
         if self.state is State.scene:
@@ -168,26 +168,14 @@ class Pokemon():
             return '请重新开始游戏。'
 
     def _dealScene(self, choice: Choice) -> str:
-        if choice is Choice.A:
-            if self._diamondNum < 50:
-                return '对不起，你的钻石余额不足50，快找老蛋充值吧。'
-            self._subDiamond(50)
-            # 随机精灵宝可梦
-            self._getSenceAPokemon()
-            self.scene = 'A'
-
-        elif choice is Choice.B:
-            if self._diamondNum < 10:
-                return '对不起，你的钻石余额不足10，快找老蛋充值吧。'
-            self._subDiamond(10)
-            # 随机精灵宝可梦
-            self._getSenceBPokemon()
-            self.scene = 'B'
-        else:
-            return '对不起，当前只开放了场景\nA.精灵乐园（50钻石/次）\nB.沙狐乐园（10钻石/次）\n请您重新选择。'
-
-        # 更新状态
+        if choice not in Scenes:
+            return self.sceneErrorMsg
+        cost = Scenes[choice].enterCost
+        if self._diamondNum < cost:
+            return f'对不起，你的钻石余额不足{cost}，快找老蛋充值吧。'
+        self._subDiamond(cost)
         self.state = State.catch
+        self._getScenePokemon(choice)
         # 获得宝可梦的姓名，精灵球的数目。
         evelsBallNum = self._getBallNum('evelsBall')
         superBallNum = self._getBallNum('superBall')
@@ -211,10 +199,8 @@ class Pokemon():
         # 消耗对应精灵球
         self._subBallNum(name)
         # 开始捕捉
-        catchProb = self._getSenceACatchProb(
-            name) if self.scene == 'A' else self._getSenceBCatchProb(name)
-        escapeProb = self._getSenceAEscapeProb(
-        ) if self.scene == 'A' else self._getSenceBEscapeProb()
+        catchProb = self._getSceneCatchProb(name, choice)
+        escapeProb = self._getSceneEscapeProb(choice)
         if random.uniform(0, 1) <= catchProb:
             # 如果捕捉到
             message = f'{self._pokemonImage}\n恭喜你获得了可爱的{self.pokemonNameChn}，快打开宠物看看吧。'
@@ -239,14 +225,15 @@ class Pokemon():
                             'superBall'), superBallNum, getBallEmoji('asterBall'), masterBallNum,
                         '[CQ:emoji, id=127939]')
 
-    def _getSenceACatchProb(self, ball: str) -> float:
-        return sceneA.catchProb[getPokeLevel(self.pokemonNameEng)][ball]
+    def _getSceneCatchProb(self, ball: str, choice: Choice) -> float:
+        return Scenes[choice].catchProb[getPokeLevel(self.pokemonNameEng)][ball]
 
-    def _getSenceAEscapeProb(self) -> float:
-        return sceneA.escapeProb[getPokeLevel(self.pokemonNameEng)]
+    def _getSceneEscapeProb(self, choice: Choice) -> float:
+        return Scenes[choice].escapeProb[getPokeLevel(self.pokemonNameEng)]
 
-    def _getSenceAPokemon(self) -> None:
-        prob = sceneA.pokemonProb
+    def _getScenePokemon(self, choice: Choice) -> None:
+        scene = Scenes[choice]
+        prob = scene.pokemonProb
         x = random.uniform(0, 1)
         cumprob = 0.0
         for item, item_pro in zip(sceneA.pokeNameEng, prob):
@@ -255,26 +242,6 @@ class Pokemon():
                 break
         self.pokemonNameEng = item
         self.pokemonNameChn = sceneA.pokeNameChn[sceneA.pokeNameEng.index(
-            item)]
-        self.pokemonLevel = allPokemon[item].name
-        self.pokemonNum = self._getPokeNum
-
-    def _getSenceBCatchProb(self, ball: str) -> float:
-        return sceneB.catchProb[getPokeLevel(self.pokemonNameEng)][ball]
-
-    def _getSenceBEscapeProb(self) -> float:
-        return sceneB.escapeProb[getPokeLevel(self.pokemonNameEng)]
-
-    def _getSenceBPokemon(self) -> None:
-        prob = sceneB.pokemonProb
-        x = random.uniform(0, 1)
-        cumprob = 0.0
-        for item, item_pro in zip(sceneB.pokeNameEng, prob):
-            cumprob += item_pro
-            if x < cumprob:
-                break
-        self.pokemonNameEng = item
-        self.pokemonNameChn = sceneB.pokeNameChn[sceneB.pokeNameEng.index(
             item)]
         self.pokemonLevel = allPokemon[item].name
         self.pokemonNum = self._getPokeNum

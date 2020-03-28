@@ -16,3 +16,7 @@ catchProb = {header.PokeLevel.D: {'evelsBall': 0.4, 'superBall': 0.8, 'masterBal
 
 escapeProb = {header.PokeLevel.D: 0.1, header.PokeLevel.C: 0.15,
               header.PokeLevel.B: 0.2, header.PokeLevel.A: 0.1, header.PokeLevel.S: 0.01}
+
+enterCost = 50
+
+name = '精灵乐园'
