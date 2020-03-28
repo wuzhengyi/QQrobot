@@ -1,3 +1,6 @@
+import sceneB
+import sceneA
+from header import State, Choice, PokeLevel, ballEng2Chn, ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
 import sqlite3
 import random
 import sys
@@ -5,8 +8,6 @@ import os
 import json
 
 sys.path.append(os.path.join('plugins', 'pokemon'))
-import sceneA, sceneB
-from header import State, Choice, PokeLevel, ballEng2Chn, ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
 
 # from ..luckDraw.data_source import userSQL
 
@@ -43,7 +44,8 @@ class Reward():
         if os.path.exists(self.jsonPath):
             with open(self.jsonPath, encoding='utf-8') as f:
                 self.allReward = json.load(f)
-                self.nextID = max([x['id'] for x in self.allReward]) + 1 if self.allReward != [] else 1024
+                self.nextID = max([x['id'] for x in self.allReward]) + \
+                    1 if self.allReward != [] else 1024
         else:
             self.allReward = []
             self.nextID = 1024
@@ -66,14 +68,16 @@ class Reward():
         return reward['id']
 
     def meetReward(self, QQ: int, group_id: int, id: int) -> bool:
-        if DEBUG: return True
-        if self.allReward == []: return False
+        if DEBUG:
+            return True
+        if self.allReward == []:
+            return False
         for reward in self.allReward:
             if reward['id'] == id:
                 break
 
         if reward['id'] != id or len(reward['getList']) >= reward['limitNum'] or QQ in reward['getList'] or reward[
-            'group_id'] != group_id:
+                'group_id'] != group_id:
             return False
 
         conn = sqlite3.connect('user.db')
@@ -82,7 +86,7 @@ class Reward():
         c.execute(f"select {','.join(nameList)} from pokemon where QQ={QQ}")
         num = c.fetchone()
         conn.close()
-        return all([reward['pokemon'][i][1]>=num[i] for i in range(len(num))])
+        return all([reward['pokemon'][i][1] <= num[i] for i in range(len(num))])
 
     def getReward(self, QQ: int, id: int) -> None:
         for reward in self.allReward:
@@ -90,24 +94,31 @@ class Reward():
                 break
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
-        nameList = [f"{pokeNameChn2Eng[x[0]]}={pokeNameChn2Eng[x[0]]}-{x[1]}" for x in reward['pokemon']]
+        nameList = [
+            f"{pokeNameChn2Eng[x[0]]}={pokeNameChn2Eng[x[0]]}-{x[1]}" for x in reward['pokemon']]
         c.execute(f"UPDATE pokemon set {','.join(nameList)} where QQ={QQ}")
         for x in reward['award']:
             if x[0] in pokeNameChn2Eng:
                 name = pokeNameChn2Eng[x[0]]
-                c.execute(f"UPDATE pokemon set {name}={name}+{x[1]} where QQ={QQ}")
+                c.execute(
+                    f"UPDATE pokemon set {name}={name}+{x[1]} where QQ={QQ}")
             elif x[0] == '奖券':
-                c.execute(f"UPDATE user set ticket = ticket+ {x[1]} where QQ={QQ}")
+                c.execute(
+                    f"UPDATE user set ticket = ticket+ {x[1]} where QQ={QQ}")
             elif x[0] == '钻石':
-                c.execute(f"UPDATE user set diamond = diamond+ {x[1]} where QQ={QQ}")
+                c.execute(
+                    f"UPDATE user set diamond = diamond+ {x[1]} where QQ={QQ}")
             elif x[0] == '积分':
-                c.execute(f"UPDATE user set score = score+ {x[1]} where QQ={QQ}")
+                c.execute(
+                    f"UPDATE user set score = score+ {x[1]} where QQ={QQ}")
             elif x[0] in ballChn2Eng:
                 name = ballChn2Eng[x[0]]
-                c.execute(f"UPDATE pokemon set {name} = {name}+ {x[1]} where QQ={QQ}")
+                c.execute(
+                    f"UPDATE pokemon set {name} = {name}+ {x[1]} where QQ={QQ}")
             elif x[0] in consNameChn2Eng:
                 name = consNameChn2Eng[x[0]]
-                c.execute(f"UPDATE constellation set {name} = {name}+ {x[1]} where QQ={QQ}")
+                c.execute(
+                    f"UPDATE constellation set {name} = {name}+ {x[1]} where QQ={QQ}")
         conn.commit()
         conn.close()
         reward['getList'].append(QQ)
@@ -174,7 +185,7 @@ class Pokemon():
             self.scene = 'B'
         else:
             return '对不起，当前只开放了场景\nA.精灵乐园（50钻石/次）\nB.沙狐乐园（10钻石/次）\n请您重新选择。'
-        
+
         # 更新状态
         self.state = State.catch
         # 获得宝可梦的姓名，精灵球的数目。
@@ -200,8 +211,10 @@ class Pokemon():
         # 消耗对应精灵球
         self._subBallNum(name)
         # 开始捕捉
-        catchProb = self._getSenceACatchProb(name) if self.scene == 'A' else self._getSenceBCatchProb(name)
-        escapeProb = self._getSenceAEscapeProb() if self.scene == 'A' else self._getSenceBEscapeProb()
+        catchProb = self._getSenceACatchProb(
+            name) if self.scene == 'A' else self._getSenceBCatchProb(name)
+        escapeProb = self._getSenceAEscapeProb(
+        ) if self.scene == 'A' else self._getSenceBEscapeProb()
         if random.uniform(0, 1) <= catchProb:
             # 如果捕捉到
             message = f'{self._pokemonImage}\n恭喜你获得了可爱的{self.pokemonNameChn}，快打开宠物看看吧。'
@@ -220,7 +233,7 @@ class Pokemon():
                 superBallNum = self._getBallNum('superBall')
                 masterBallNum = self._getBallNum('masterBall')
                 return '%s\n很可惜，%s [%s级,您有%d只] 捕捉失败，请再试一次吧。\nA.%s精灵球（%d个）\nB.%s超级球（%d个）\nC.%s大师球（%d个）\nD.%s逃跑' % \
-                       (self._pokemonImage,self.pokemonNameChn, self.pokemonLevel, self.pokemonNum,
+                       (self._pokemonImage, self.pokemonNameChn, self.pokemonLevel, self.pokemonNum,
                         getBallEmoji('evelsBall'), evelsBallNum,
                         getBallEmoji(
                             'superBall'), superBallNum, getBallEmoji('asterBall'), masterBallNum,
@@ -241,7 +254,8 @@ class Pokemon():
             if x < cumprob:
                 break
         self.pokemonNameEng = item
-        self.pokemonNameChn = sceneA.pokeNameChn[sceneA.pokeNameEng.index(item)]
+        self.pokemonNameChn = sceneA.pokeNameChn[sceneA.pokeNameEng.index(
+            item)]
         self.pokemonLevel = allPokemon[item].name
         self.pokemonNum = self._getPokeNum
 
@@ -260,7 +274,8 @@ class Pokemon():
             if x < cumprob:
                 break
         self.pokemonNameEng = item
-        self.pokemonNameChn = sceneB.pokeNameChn[sceneB.pokeNameEng.index(item)]
+        self.pokemonNameChn = sceneB.pokeNameChn[sceneB.pokeNameEng.index(
+            item)]
         self.pokemonLevel = allPokemon[item].name
         self.pokemonNum = self._getPokeNum
 
@@ -270,7 +285,8 @@ class Pokemon():
 
     @property
     def _diamondNum(self) -> int:
-        if DEBUG: return 1000
+        if DEBUG:
+            return 1000
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
         c.execute("select Diamond from user where QQ=" + str(self.QQ))
@@ -279,10 +295,12 @@ class Pokemon():
         return num
 
     def _subDiamond(self, value: int = 10) -> None:
-        if DEBUG: return
+        if DEBUG:
+            return
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
-        c.execute("UPDATE user set Diamond = Diamond-{0} where QQ={1}".format(str(value), str(self.QQ)))
+        c.execute(
+            "UPDATE user set Diamond = Diamond-{0} where QQ={1}".format(str(value), str(self.QQ)))
         conn.commit()
         conn.close()
 
@@ -293,7 +311,8 @@ class Pokemon():
         return self.state
 
     def _getBallNum(self, ball: str) -> int:
-        if DEBUG: return 1000
+        if DEBUG:
+            return 1000
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
         c.execute("select %s from pokemon where QQ=%d" % (ball, self.QQ))
@@ -303,16 +322,19 @@ class Pokemon():
 
     @property
     def _getPokeNum(self) -> int:
-        if DEBUG: return 1000
+        if DEBUG:
+            return 1000
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
-        c.execute("select %s from pokemon where QQ=%d" % (self.pokemonNameEng, self.QQ))
+        c.execute("select %s from pokemon where QQ=%d" %
+                  (self.pokemonNameEng, self.QQ))
         ans = c.fetchone()[0]
         conn.close()
         return ans
 
     def _subBallNum(self, ball: str, value: int = 1) -> None:
-        if DEBUG: return
+        if DEBUG:
+            return
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
         c.execute("UPDATE pokemon set %s = %s-%d where QQ=%d" %
@@ -321,7 +343,8 @@ class Pokemon():
         conn.close()
 
     def _addPokemon(self, name: str, value: int = 1) -> None:
-        if DEBUG: return
+        if DEBUG:
+            return
         conn = sqlite3.connect('user.db')
         c = conn.cursor()
         c.execute("UPDATE pokemon set %s = %s+%d where QQ=%d" %
