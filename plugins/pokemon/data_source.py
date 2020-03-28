@@ -152,6 +152,7 @@ class Pokemon():
         self.PokemonNameChn = ''
         self.pokemonLevel = ''
         self.pokemonNum = 0
+        self.currentScene = None
 
     def begin(self) -> str:
         if self.state is not State.init:
@@ -176,6 +177,7 @@ class Pokemon():
         self._subDiamond(cost)
         self.state = State.catch
         self._getScenePokemon(choice)
+        self.currentScene = choice
         # 获得宝可梦的姓名，精灵球的数目。
         evelsBallNum = self._getBallNum('evelsBall')
         superBallNum = self._getBallNum('superBall')
@@ -199,8 +201,8 @@ class Pokemon():
         # 消耗对应精灵球
         self._subBallNum(name)
         # 开始捕捉
-        catchProb = self._getSceneCatchProb(name, choice)
-        escapeProb = self._getSceneEscapeProb(choice)
+        catchProb = self._getSceneCatchProb(name, self.currentScene)
+        escapeProb = self._getSceneEscapeProb(self.currentScene)
         if random.uniform(0, 1) <= catchProb:
             # 如果捕捉到
             message = f'{self._pokemonImage}\n恭喜你获得了可爱的{self.pokemonNameChn}，快打开宠物看看吧。'
