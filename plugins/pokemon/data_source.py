@@ -238,13 +238,12 @@ class Pokemon():
         prob = scene.pokemonProb
         x = random.uniform(0, 1)
         cumprob = 0.0
-        for item, item_pro in zip(sceneA.pokeNameEng, prob):
+        for item, item_pro in zip(scene.pokeNameEng, prob):
             cumprob += item_pro
             if x < cumprob:
                 break
         self.pokemonNameEng = item
-        self.pokemonNameChn = sceneA.pokeNameChn[sceneA.pokeNameEng.index(
-            item)]
+        self.pokemonNameChn = scene.pokeNameChn[scene.pokeNameEng.index(item)]
         self.pokemonLevel = allPokemon[item].name
         self.pokemonNum = self._getPokeNum
 
