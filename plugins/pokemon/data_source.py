@@ -82,7 +82,7 @@ class Reward():
         c.execute(f"select {','.join(nameList)} from pokemon where QQ={QQ}")
         num = c.fetchone()
         conn.close()
-        return all(num)
+        return all([reward['pokemon'][i][1]>=num[i] for i in range(len(num))])
 
     def getReward(self, QQ: int, id: int) -> None:
         for reward in self.allReward:
