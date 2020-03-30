@@ -147,7 +147,6 @@ async def getAllReward(session: CommandSession):
         return
     message = '通缉令\n'
     for reward in rewardList:
-        print(reward)
         message = message + '-' * 20 + '\n' + echoReward(reward) + '\n'
     await session.send(message)
 
