@@ -29,17 +29,17 @@ class PokeLevel(Enum):
 ballEng2Chn = {'evelsBall': '精灵球', 'superBall': '超级球', 'masterBall': '大师球'}
 ballChn2Eng = {'精灵球': 'evelsBAll', '超级球': 'superBall', '大师球': 'masterBall'}
 
-allPokemon = {'xiaolada': PokeLevel.D, 'bobo': PokeLevel.D, 'lvmaochong': PokeLevel.D, 'dujiaochong': PokeLevel.D,
+allPokemon = {'xiaolada': PokeLevel.D, 'bobo': PokeLevel.D, 'lvmaochong': PokeLevel.D, 'dujiaochong': PokeLevel.D,'xiaoladae': PokeLevel.D, 'guisi': PokeLevel.D,
               'miaomiao': PokeLevel.C, 'wasidan': PokeLevel.C, 'apashe': PokeLevel.C, 'dashetou': PokeLevel.C,
               'lieque': PokeLevel.C, 'chuanshanshu': PokeLevel.C, 'niduolang': PokeLevel.C, 'niduolan': PokeLevel.C,
-              'maoqiu': PokeLevel.C, 'liuwei': PokeLevel.C,
+              'maoqiu': PokeLevel.C, 'liuwei': PokeLevel.C,'miaomiaoe': PokeLevel.C, 'heianya': PokeLevel.C, 'chounie': PokeLevel.C,
               'pikaqiu': PokeLevel.B, 'pipi': PokeLevel.B, 'pangding': PokeLevel.B, 'yibu': PokeLevel.B,
               'kabishou': PokeLevel.B, 'xipanmoou': PokeLevel.B, 'kentailuo': PokeLevel.B,
-              'feitiantanglang': PokeLevel.B, 'dajia': PokeLevel.B,
+              'feitiantanglang': PokeLevel.B, 'dajia': PokeLevel.B,'mengyao': PokeLevel.B, 'dailubi': PokeLevel.B, 'guisitong': PokeLevel.B,
               'jilidan': PokeLevel.A, 'dailong': PokeLevel.A, 'miaowazhongzi': PokeLevel.A, 'xiaohuolong': PokeLevel.A,
-              'jienigui': PokeLevel.A,
+              'jienigui': PokeLevel.A,'niula': PokeLevel.A, 'galagalagui': PokeLevel.A,
               'menghuan': PokeLevel.S, 'huoyanniao': PokeLevel.S, 'jidongniao': PokeLevel.S,
-              'shandianniao': PokeLevel.S, 'chaomeng': PokeLevel.S}
+              'shandianniao': PokeLevel.S, 'chaomeng': PokeLevel.S, 'banjila': PokeLevel.S, 'genggui': PokeLevel.S, 'xuelabi': PokeLevel.S}
 
 pokeNameEng = ['xiaolada', 'bobo', 'miaomiao', 'wasidan', 'apashe',
                'dashetou', 'pikaqiu', 'pipi', 'pangding', 'yibu', 'jilidan', 'dailong', 'menghuan'] + \
