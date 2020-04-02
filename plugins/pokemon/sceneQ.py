@@ -17,6 +17,6 @@ catchProb = {header.PokeLevel.D: {'evelsBall': 0.4, 'superBall': 0.8, 'masterBal
 escapeProb = {header.PokeLevel.D: 0.2, header.PokeLevel.C: 0.3,
               header.PokeLevel.B: 0.4, header.PokeLevel.A: 0.1, header.PokeLevel.S: 0.01}
 
-enterCost = 1
+enterCost = 5
 
 name = '百鬼夜行'
