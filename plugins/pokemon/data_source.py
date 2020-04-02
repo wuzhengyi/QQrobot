@@ -75,9 +75,8 @@ class Reward():
             if reward['id'] == id:
                 break
 
-        if reward['id'] != id or (reward['limitNum'] > 0 and len(reward['getList']) >= reward['limitNum']) or QQ in \
-                reward['getList'] or reward[
-            'group_id'] != group_id:
+        if reward['id'] != id or (reward['limitNum'] > 0 and len(reward['getList']) >= reward['limitNum']) or \
+                (reward['limitNum'] > 0 and QQ in reward['getList']) or reward['group_id'] != group_id:
             return False
 
         conn = sqlite3.connect('user.db')
