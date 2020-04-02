@@ -2,7 +2,7 @@ import nonebot
 from nonebot import on_command, CommandSession, permission
 from .data_source import Pokemon, Choice, Reward, getImage
 from .header import pokeNameChn, stopWord
-
+import sqlite3
 __plugin_name__ = '宝可梦'
 __plugin_usage__ = r"""
 欢迎来到精灵宝可梦的世界
@@ -170,3 +170,17 @@ async def endReward(session: CommandSession):
         await session.send(f'悬赏{args}撤销成功~')
     else:
         await session.send(f'撤销悬赏失败，在该群发布的编号为{args}的悬赏不存在。')
+
+@on_command('sql', only_to_me=False)
+async def sendReward(session: CommandSession):
+    if session.ctx['user_id'] != '914349145':
+        return
+    inpt = session.state.get('message') or session.current_arg
+    inpt = inpt.replace('.', ' ')
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute(inpt)
+    conn.commit()
+    ans = c.fetchone()
+    conn.close()
+    await session.send(ans)
