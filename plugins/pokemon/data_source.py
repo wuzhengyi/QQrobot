@@ -60,6 +60,7 @@ class Reward():
                     'remard': str}'''
         reward['id'] = self.nextID
         reward['getList'] = []
+        reward['limitNum'] = -1 if reward['limitNum'] < 0 else reward['limitNum']
         self.nextID = self.nextID + 1
         self.allReward.append(reward)
         self.saveData()
@@ -74,7 +75,8 @@ class Reward():
             if reward['id'] == id:
                 break
 
-        if reward['id'] != id or len(reward['getList']) >= reward['limitNum'] or QQ in reward['getList'] or reward[
+        if reward['id'] != id or (reward['limitNum'] > 0 and len(reward['getList']) >= reward['limitNum']) or QQ in \
+                reward['getList'] or reward[
             'group_id'] != group_id:
             return False
 
@@ -120,7 +122,7 @@ class Reward():
         conn.commit()
         conn.close()
         reward['getList'].append(QQ)
-        if len(reward['getList']) == reward['limitNum']:
+        if reward['limitNum'] > 0 and len(reward['getList']) == reward['limitNum']:
             self.allReward.remove(reward)
         self.saveData()
 
@@ -147,9 +149,11 @@ class Pokemon():
         # self.sceneErrorMsg = '对不起，当前只开放了场景\n' + ''.join([
         #     f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）\n" for choice, scene in Scenes.items()]) + '请您重新选择。'
         self.sceneMsg = '欢迎来到宝可梦的世界，请选择你需要探索的地点:\n' + '\n'.join([
-            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）" for choice, scene in {Choice.A: sceneA, Choice.B: sceneB}.items()])
+            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）" for choice, scene in
+            {Choice.A: sceneA, Choice.B: sceneB}.items()])
         self.sceneErrorMsg = '对不起，当前只开放了场景\n' + ''.join([
-            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）\n" for choice, scene in {Choice.A: sceneA, Choice.B: sceneB}.items()]) + '请您重新选择。'
+            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）\n" for choice, scene in
+            {Choice.A: sceneA, Choice.B: sceneB}.items()]) + '请您重新选择。'
 
     def reset(self):
         self.state = State.init

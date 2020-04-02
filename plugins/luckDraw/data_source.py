@@ -1,7 +1,6 @@
 import sqlite3
 import random
 from ..pokemon.header import pokeNameEng, pokeNameChn2Eng, ballEng2Chn, ballChn2Eng
-from ..pokemon.header import pokeNameEngQ
 
 stopWord = ['小号', '机器']
 consName = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座',
@@ -146,12 +145,6 @@ class userSQL():
     def getPokemon(self, QQ: int) -> tuple:
         self.c.execute(
             f"select {','.join(pokeNameEng)} from pokemon where QQ={QQ}")
-        ans = self.c.fetchone()
-        return ans
-
-    def getPokemonQ(self, QQ: int) -> tuple:
-        self.c.execute(
-            f"select {','.join(pokeNameEngQ)} from pokemon where QQ={QQ}")
         ans = self.c.fetchone()
         return ans
 

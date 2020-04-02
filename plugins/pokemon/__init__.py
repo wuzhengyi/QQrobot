@@ -92,7 +92,7 @@ def echoReward(reward: {}) -> str:
     return f"编号：{reward['id']}\n\
 通缉：{','.join([f'{x[0]}x{x[1]}' for x in reward['pokemon']])}\n\
 赏金：{','.join([f'{x[0]}x{x[1]}' for x in reward['award']])}\n\
-限制人数：{reward['limitNum']}\n\
+限制人数：{'不限次数' if reward['limitNum'] < 0 else reward['limitNum']}\n\
 领赏人数：{len(reward['getList'])}\n\
 备注：{reward['remark']}"
 
@@ -108,7 +108,7 @@ async def sendReward(session: CommandSession):
             '格式为 /悬赏 [精灵:数目，逗号分开] [奖励:数目，逗号分开] [限制人数] [无|备注]。\n例如： \悬赏 阿柏蛇:1,喵喵:2,皮皮:1 奖券:1 3 第一名单独多奖励一个奖券')
         return
     remark = None if len(args) == 3 else args[3]
-    limitNum = int(args[2]) if args[2].isdigit() else 1
+    limitNum = int(args[2]) if args[2].isdigit() else -1
     pokemon = [x.split(':') for x in args[0].strip().split(',')]
     if not all([x[0] in pokeNameChn for x in pokemon]):
         await session.send('你悬赏的精灵不存在，请重新发布悬赏。')
