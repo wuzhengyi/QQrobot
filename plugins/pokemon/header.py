@@ -14,6 +14,7 @@ class Choice(Enum):
     B = 1
     C = 2
     D = 3
+    Q = 4
 
 
 @unique
@@ -52,6 +53,19 @@ pokeNameChn = ['小拉达', '波波', '喵喵', '瓦斯弹', '阿柏蛇',
                '杰尼龟', '火焰鸟', '急冻鸟', '闪电鸟', '超梦']
 
 pokeNameChn2Eng = dict(zip(pokeNameChn, pokeNameEng))
+
+allPokemonQ = {'xiaoladae': PokeLevel.D, 'guisi': PokeLevel.D,
+              'miaomiaoe': PokeLevel.C, 'heianya': PokeLevel.C, 'chounie': PokeLevel.C,
+              'mengyao': PokeLevel.B, 'dailubi': PokeLevel.B, 'guisitong': PokeLevel.B,
+              'niula': PokeLevel.A, 'galagalagui': PokeLevel.A, 'banjila': PokeLevel.S, 'genggui': PokeLevel.S, 'xuelabi': PokeLevel.S}
+
+pokeNameEngQ = ['xiaoladae', 'guisi', 'miaomiaoe', 'heianya', 'chounie',
+               'mengyao', 'dailubi', 'guisitong', 'niula', 'galagalagui', 'banjila', 'genggui', 'xuelabi']
+
+pokeNameChnQ = ['小拉达(恶)', '鬼斯', '喵喵(恶)', '黑暗鸦', '臭泥(恶)',
+               '梦妖', '戴鲁比', '鬼斯通', '纽拉', '嘎啦嘎啦(鬼)', '班吉拉', '耿鬼', '雪拉比']
+
+pokeNameChn2EngQ = dict(zip(pokeNameChn, pokeNameEng))
 
 consNameChn = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座',
                '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座']

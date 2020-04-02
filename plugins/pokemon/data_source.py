@@ -6,8 +6,9 @@ import json
 
 sys.path.append(os.path.join('plugins', 'pokemon'))
 from header import State, Choice, PokeLevel, ballEng2Chn, ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
-import sceneA, sceneB
-Scenes = {Choice.A: sceneA, Choice.B: sceneB}
+import sceneA, sceneB, sceneQ
+
+Scenes = {Choice.A: sceneA, Choice.B: sceneB, Choice.Q: sceneQ}
 
 DEBUG = False
 
@@ -42,7 +43,7 @@ class Reward():
             with open(self.jsonPath, encoding='utf-8') as f:
                 self.allReward = json.load(f)
                 self.nextID = max([x['id'] for x in self.allReward]) + \
-                    1 if self.allReward != [] else 1024
+                              1 if self.allReward != [] else 1024
         else:
             self.allReward = []
             self.nextID = 1024
@@ -74,7 +75,7 @@ class Reward():
                 break
 
         if reward['id'] != id or len(reward['getList']) >= reward['limitNum'] or QQ in reward['getList'] or reward[
-                'group_id'] != group_id:
+            'group_id'] != group_id:
             return False
 
         conn = sqlite3.connect('user.db')
@@ -141,10 +142,14 @@ class Pokemon():
     def __init__(self, QQ: int):
         self.QQ = QQ
         self.reset()
-        self.sceneMsg = '欢迎来到宝可梦的世界，请选择你需要探索的地点:\n'+'\n'.join([
-            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）" for choice, scene in Scenes.items()])
-        self.sceneErrorMsg = '对不起，当前只开放了场景\n'+''.join([
-            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）\n" for choice, scene in Scenes.items()]) + '请您重新选择。'
+        # self.sceneMsg = '欢迎来到宝可梦的世界，请选择你需要探索的地点:\n' + '\n'.join([
+        #     f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）" for choice, scene in Scenes.items()])
+        # self.sceneErrorMsg = '对不起，当前只开放了场景\n' + ''.join([
+        #     f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）\n" for choice, scene in Scenes.items()]) + '请您重新选择。'
+        self.sceneMsg = '欢迎来到宝可梦的世界，请选择你需要探索的地点:\n' + '\n'.join([
+            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）" for choice, scene in {Choice.A: sceneA, Choice.B: sceneB}.items()])
+        self.sceneErrorMsg = '对不起，当前只开放了场景\n' + ''.join([
+            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）\n" for choice, scene in {Choice.A: sceneA, Choice.B: sceneB}.items()]) + '请您重新选择。'
 
     def reset(self):
         self.state = State.init

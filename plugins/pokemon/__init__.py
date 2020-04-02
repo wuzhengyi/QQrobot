@@ -73,6 +73,15 @@ async def chooseD(session: CommandSession):
         message = game.next(Choice.D)
         await session.send(message)
 
+@on_command('Q', aliases=( 'q',), only_to_me=False)
+async def chooseD(session: CommandSession):
+    global GameList
+    QQ = session.ctx['user_id']
+    if QQ in GameList:
+        game = GameList[QQ]
+        message = game.next(Choice.Q)
+        await session.send(message)
+
 
 def echoReward(reward: {}) -> str:
     ''':reward: {'group_id': int,
