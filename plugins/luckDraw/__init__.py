@@ -207,14 +207,9 @@ async def pet(session: CommandSession):
                                                 1], pokeNameChn[chaomengInedx], pokemon[chaomengInedx],
         chr(12288)) if pokemon[chaomengInedx] != 0 else message + '{0:{2}<4}:{1:>2}\n'.format(
         pokeNameChn[chaomengInedx - 1], pokemon[chaomengInedx - 1], chr(12288))
-    if QINGMING:
-        message = message + '{0:=^26}\n'.format('清明限定')
-        message = message + ''.join(['{0:{4}<4}:{1:>2}{4}\t{2:{4}<4}:{3:>2}\n'.format(pokeNameChnQ[i], pokemonQ[i],
-                                                                                      pokeNameChnQ[i +
-                                                                                                   1], pokemonQ[i + 1],
-                                                                                      chr(12288)) for i in
-                                     range(0, len(pokeNameChnQ) - 1, 2)])
-        message = message + '{0:{2}<4}:{1:>2}\n'.format(pokeNameChnQ[-1], pokemonQ[-1], chr(12288))
+
+    message = message + ''.join(['[限定]{0:{2}<6}:{1:>2}{4}\n'.format(pokeNameChnQ[i], pokemonQ[i],chr(12288)) for i in
+                                    range(len(pokeNameChnQ)) if pokemonQ[i] > 0])
     await session.send(message[:-1])
 
 

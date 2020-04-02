@@ -46,7 +46,21 @@ create table pokemon(
     huoyanniao int DEFAULT 0,
     jidongniao int DEFAULT 0,
     shandianniao int DEFAULT 0,
-    chaomeng int DEFAULT 0
+    chaomeng int DEFAULT 0,
+    -- sceneQ
+    xiaoladae int DEFAULT 0,
+    guisi int DEFAULT 0,
+    miaomiaoe int DEFAULT 0,
+    heianya int DEFAULT 0,
+    chounie int DEFAULT 0,
+    mengyao int DEFAULT 0,
+    dailubi int DEFAULT 0,
+    guisitong int DEFAULT 0,
+    niula int DEFAULT 0,
+    galagalagui int DEFAULT 0,
+    banjila int DEFAULT 0,
+    genggui int DEFAULT 0,
+    xuelabi int DEFAULT 0
 );
 
 create table constellation(
@@ -77,6 +91,7 @@ VALUES
 
 
 --  alter table user add column messagenum int default 0;
+-- 场景B
 -- alter table pokemon add column lvmaochong int default 0;
 -- alter table pokemon add column dujiaochong int default 0;
 -- alter table pokemon add column lieque int default 0;
@@ -97,3 +112,18 @@ VALUES
 -- alter table pokemon add column jidongniao int default 0;
 -- alter table pokemon add column shandianniao int default 0;
 -- alter table pokemon add column chaomeng int default 0;
+
+-- 场景Q 清明
+-- alter table pokemon add column xiaoladae int default 0;
+-- alter table pokemon add column guisi int default 0;
+-- alter table pokemon add column miaomiaoe int default 0;
+-- alter table pokemon add column heianya int default 0;
+-- alter table pokemon add column chounie int default 0;
+-- alter table pokemon add column mengyao int default 0;
+-- alter table pokemon add column dailubi int default 0;
+-- alter table pokemon add column guisitong int default 0;
+-- alter table pokemon add column niula int default 0;
+-- alter table pokemon add column galagalagui int default 0;
+-- alter table pokemon add column banjila int default 0;
+-- alter table pokemon add column genggui int default 0;
+-- alter table pokemon add column xuelabi int default 0;
