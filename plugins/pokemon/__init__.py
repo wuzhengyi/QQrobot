@@ -76,7 +76,7 @@ async def chooseD(session: CommandSession):
 
 
 @on_command('Q', aliases=('q',), only_to_me=False)
-async def chooseD(session: CommandSession):
+async def chooseQ(session: CommandSession):
     global GameList
     QQ = session.ctx['user_id']
     if QQ in GameList:
