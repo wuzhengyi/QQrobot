@@ -143,16 +143,10 @@ class Pokemon():
     def __init__(self, QQ: int):
         self.QQ = QQ
         self.reset()
-        # self.sceneMsg = '欢迎来到宝可梦的世界，请选择你需要探索的地点:\n' + '\n'.join([
-        #     f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）" for choice, scene in Scenes.items()])
-        # self.sceneErrorMsg = '对不起，当前只开放了场景\n' + ''.join([
-        #     f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）\n" for choice, scene in Scenes.items()]) + '请您重新选择。'
         self.sceneMsg = '欢迎来到宝可梦的世界，请选择你需要探索的地点:\n' + '\n'.join([
-            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）" for choice, scene in
-            {Choice.A: sceneA, Choice.B: sceneB}.items()])
+            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）" for choice, scene in Scenes.items()])
         self.sceneErrorMsg = '对不起，当前只开放了场景\n' + ''.join([
-            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）\n" for choice, scene in
-            {Choice.A: sceneA, Choice.B: sceneB}.items()]) + '请您重新选择。'
+            f"{choice.name}.{scene.name}（{scene.enterCost}钻石/次）\n" for choice, scene in Scenes.items()]) + '请您重新选择。'
 
     def reset(self):
         self.state = State.init
