@@ -324,7 +324,7 @@ async def diamonDraw(session: CommandSession):
         if ticketNum > 0:
             user.addTicket(QQ, ticketNum)
             message = message + getImage('ticket') + \
-                      '\n恭喜你获得' + str(ticketNum) + '奖券\n'
+                '\n恭喜你获得' + str(ticketNum) + '奖券\n'
         cardNum = ans.count('card')
         if cardNum > 0:
             cardIndex = [random.randint(0, 11) for i in range(cardNum)]
@@ -333,34 +333,34 @@ async def diamonDraw(session: CommandSession):
                 if num > 0:
                     user.addCons(QQ, i, num)
                     message = message + getConsImage(i) + '\n恭喜你获得' + \
-                              str(num) + '张' + consName[i] + '卡片\n'
+                        str(num) + '张' + consName[i] + '卡片\n'
         diamondSum = sum([int(i) for i in ans if i.isdigit()])
         if diamondSum > 0:
             user.addDiamond(QQ, diamondSum)
             if diamondSum in [30, 60, 120, 300]:
                 message = message + \
-                          getImage(str(diamondSum) + 'diamond') + \
-                          '\n恭喜你获得' + str(diamondSum) + '钻石\n'
+                    getImage(str(diamondSum) + 'diamond') + \
+                    '\n恭喜你获得' + str(diamondSum) + '钻石\n'
             else:
                 message = message + '恭喜你获得' + str(diamondSum) + '钻石\n'
         evelsBall = ans.count('evelsBall')
         if evelsBall > 0:
             user.addEvelsBall(QQ, evelsBall)
             message = message + \
-                      getBallImage('evelsBall') + '\n恭喜你获得' + \
-                      str(evelsBall) + '个精灵球\n'
+                getBallImage('evelsBall') + '\n恭喜你获得' + \
+                str(evelsBall) + '个精灵球\n'
         superBall = ans.count('superBall')
         if superBall > 0:
             user.addSuperBall(QQ, superBall)
             message = message + \
-                      getBallImage('superBall') + '\n恭喜你获得' + \
-                      str(superBall) + '个超级球\n'
+                getBallImage('superBall') + '\n恭喜你获得' + \
+                str(superBall) + '个超级球\n'
         masterBall = ans.count('masterBall')
         if masterBall > 0:
             user.addMasterBall(QQ, masterBall)
             message = message + \
-                      getBallImage('masterBall') + '\n恭喜你获得' + \
-                      str(masterBall) + '个大师球\n欢迎下次光临。'
+                getBallImage('masterBall') + '\n恭喜你获得' + \
+                str(masterBall) + '个大师球\n欢迎下次光临。'
         await session.send(message)
     else:
         await session.send('你的钻石不足，快去找老蛋赚钻石吧。')
@@ -656,56 +656,140 @@ async def register(session: CommandSession):
 
 @on_command('清空积分', aliases=('积分清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetScore(session: CommandSession):
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip()
+    if args.isdigit():
+        user = userSQL()
+        user.resetScore(int(args))
+        user.close()
+        await session.send(f'用户{args}的积分已清空')
+        return
+    bot = nonebot.get_bot()
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    QQList = [x['user_id'] for x in memberList]
     user = userSQL()
-    user.resetScore()
+    for QQ in QQList:
+        user.resetScore(QQ)
     user.close()
     await session.send('全体积分清空成功')
 
 
 @on_command('清空奖券', aliases=('奖券清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetTicket(session: CommandSession):
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip()
+    if args.isdigit():
+        user = userSQL()
+        user.resetTicket(int(args))
+        user.close()
+        await session.send(f'用户{args}的奖券已清空')
+        return
+    bot = nonebot.get_bot()
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    QQList = [x['user_id'] for x in memberList]
     user = userSQL()
-    user.resetTicket()
+    for QQ in QQList:
+        user.resetTicket(QQ)
     user.close()
     await session.send('全体奖券清空成功')
 
 
 @on_command('清空钻石', aliases=('钻石清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetDiamond(session: CommandSession):
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip()
+    if args.isdigit():
+        user = userSQL()
+        user.resetDiamond(int(args))
+        user.close()
+        await session.send(f'用户{args}的钻石已清空')
+        return
+    bot = nonebot.get_bot()
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    QQList = [x['user_id'] for x in memberList]
     user = userSQL()
-    user.resetDiamond()
+    for QQ in QQList:
+        user.resetDiamond(QQ)
     user.close()
     await session.send('全体钻石清空成功')
 
 
 @on_command('清空背包', aliases=('背包清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetBackpack(session: CommandSession):
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip()
+    if args.isdigit():
+        user = userSQL()
+        user.resetBackpack(int(args))
+        user.close()
+        await session.send(f'用户{args}的背包已清空')
+        return
+    bot = nonebot.get_bot()
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    QQList = [x['user_id'] for x in memberList]
     user = userSQL()
-    user.resetBackpack()
+    for QQ in QQList:
+        user.resetBackpack(QQ)
     user.close()
     await session.send('全体背包清空成功')
 
 
 @on_command('清空宠物', aliases=('宠物清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetPokemon(session: CommandSession):
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip()
+    if args.isdigit():
+        user = userSQL()
+        user.resetPokemon(int(args))
+        user.close()
+        await session.send(f'用户{args}的宠物已清空')
+        return
+    bot = nonebot.get_bot()
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    QQList = [x['user_id'] for x in memberList]
     user = userSQL()
-    user.resetPokemon()
+    for QQ in QQList:
+        user.resetPokemon(QQ)
     user.close()
     await session.send('全体宠物清空成功')
 
 
 @on_command('清空精灵球', aliases=('精灵球清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetBall(session: CommandSession):
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip()
+    if args.isdigit():
+        user = userSQL()
+        user.resetBall(int(args))
+        user.close()
+        await session.send(f'用户{args}的精灵球已清空')
+        return
+    bot = nonebot.get_bot()
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    QQList = [x['user_id'] for x in memberList]
     user = userSQL()
-    user.resetBall()
+    for QQ in QQList:
+        user.resetBall(QQ)
     user.close()
     await session.send('全体精灵球清空成功')
 
 
 @on_command('清空星座卡', aliases=('星座卡清零',), only_to_me=False, permission=permission.SUPERUSER)
 async def resetCons(session: CommandSession):
+    inpt = session.state.get('message') or session.current_arg
+    args = inpt.strip()
+    if args.isdigit():
+        user = userSQL()
+        user.resetCons(int(args))
+        user.close()
+        await session.send(f'用户{args}的星座卡已清空')
+        return
+    bot = nonebot.get_bot()
+    memberList = await bot.get_group_member_list(group_id=session.ctx['group_id'])
+    QQList = [x['user_id'] for x in memberList]
     user = userSQL()
-    user.resetCons()
+    for QQ in QQList:
+        user.resetCons(QQ)
     user.close()
     await session.send('全体星座卡清空成功')
 

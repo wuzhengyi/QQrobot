@@ -250,29 +250,29 @@ class userSQL():
             self.c.execute("UPDATE Constellation set %s=%s-%d where QQ=%d" %
                            (consNameCov[item], consNameCov[item], value, QQ))
 
-    def resetScore(self):
-        self.c.execute("UPDATE user set Score = 0")
+    def resetScore(self, QQ: int):
+        self.c.execute(f"UPDATE user set Score = 0 WHERE QQ={QQ}")
 
-    def resetTicket(self):
-        self.c.execute("UPDATE user set Ticket = 0")
+    def resetTicket(self, QQ: int):
+        self.c.execute(f"UPDATE user set Ticket = 0 WHERE QQ={QQ}")
 
-    def resetDiamond(self):
-        self.c.execute("UPDATE user set Diamond = 0")
+    def resetDiamond(self, QQ: int):
+        self.c.execute(f"UPDATE user set Diamond = 0 WHERE QQ={QQ}")
 
-    def resetBackpack(self):
-        self.resetCons()
-        self.resetBall()
+    def resetBackpack(self, QQ: int):
+        self.resetCons(QQ)
+        self.resetBall(QQ)
 
-    def resetPokemon(self):
-        self.c.execute(f"UPDATE pokemon SET {'=0,'.join(pokeNameEng)}=0")
+    def resetPokemon(self, QQ: int):
+        self.c.execute(f"UPDATE pokemon SET {'=0,'.join(pokeNameEng)}=0 WHERE QQ={QQ}")
 
-    def resetCons(self):
+    def resetCons(self, QQ: int):
         self.c.execute(
-            f"UPDATE constellation SET {'=0,'.join(cons_database)}=0")
+            f"UPDATE constellation SET {'=0,'.join(cons_database)}=0 WHERE QQ={QQ}")
 
-    def resetBall(self):
+    def resetBall(self, QQ: int):
         self.c.execute(
-            "UPDATE pokemon SET evelsBall=0, superBall=0, masterBall = 0")
+            f"UPDATE pokemon SET evelsBall=0, superBall=0, masterBall = 0 WHERE QQ={QQ}")
 
     def close(self):
         self.conn.commit()
