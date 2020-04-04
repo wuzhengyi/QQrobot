@@ -84,6 +84,16 @@ async def chooseQ(session: CommandSession):
         message = game.next(Choice.Q)
         await session.send(message)
 
+@on_command('PQ', aliases=('pq','Pq','pQ'), only_to_me=False)
+async def choosePQ(session: CommandSession):
+    global GameList
+    QQ = session.ctx['user_id']
+    if QQ in GameList:
+        game = GameList[QQ]
+        game.begin()
+        message = game.next(Choice.Q)
+        await session.send(message)
+
 
 def echoReward(reward: {}) -> str:
     ''':reward: {'group_id': int,
