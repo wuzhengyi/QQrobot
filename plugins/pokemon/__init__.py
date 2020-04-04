@@ -90,9 +90,12 @@ async def choosePQ(session: CommandSession):
     QQ = session.ctx['user_id']
     if QQ in GameList:
         game = GameList[QQ]
-        game.begin()
-        message = game.next(Choice.Q)
-        await session.send(message)
+    else:
+        GameList[QQ] = Pokemon(QQ)
+        game = GameList[QQ]
+    game.begin()
+    message = game.next(Choice.Q)
+    await session.send(message)
 
 
 def echoReward(reward: {}) -> str:
