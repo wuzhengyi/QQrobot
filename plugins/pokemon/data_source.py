@@ -8,7 +8,8 @@ sys.path.append(os.path.join('plugins', 'pokemon'))
 from header import State, Choice, PokeLevel, ballEng2Chn, ballChn2Eng, allPokemon, pokeNameChn2Eng, consNameChn2Eng
 import sceneA, sceneB, sceneQ
 
-Scenes = {Choice.A: sceneA, Choice.B: sceneB, Choice.Q: sceneQ}
+# Scenes = {Choice.A: sceneA, Choice.B: sceneB, Choice.Q: sceneQ}
+Scenes = {Choice.A: sceneA, Choice.B: sceneB}
 
 DEBUG = False
 
